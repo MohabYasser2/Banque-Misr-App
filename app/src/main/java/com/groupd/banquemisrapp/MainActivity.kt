@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.groupd.banquemisrapp.ui.theme.BanqueMisrAppTheme
 
@@ -33,19 +36,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Column {
-        Text(
-            text = "Hello Magdy!",
-            modifier = modifier
-        )
-        Text(
-            text = "Hello Mohab!",
-            modifier = modifier
-        )
-        Text(
-            text = "Hello Ahmed!",
-            modifier = modifier
-        )
+    Column (
+        modifier = modifier.fillMaxSize()
+            .background(
+                Brush.verticalGradient(
+                listOf(
+                  Color.White,
+                    Color.Red.copy(alpha = 0.2f)
+                )
+            ))
+
+    ){
+
     }
 
 }
