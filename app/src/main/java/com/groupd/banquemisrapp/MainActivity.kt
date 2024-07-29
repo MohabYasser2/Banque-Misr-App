@@ -39,26 +39,15 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     Column (
         modifier = modifier.fillMaxSize()
             .background(
-                Brush.horizontalGradient(
+                Brush.verticalGradient(
                 listOf(
                   Color.White,
-                    Color.Red
+                    Color.Red.copy(alpha = 0.2f)
                 )
             ))
 
     ){
-        Text(
-            text = "Hello Magdy!",
-            modifier = modifier
-        )
-        Text(
-            text = "Hello Mohab!",
-            modifier = modifier
-        )
-        Text(
-            text = "Hello Ahmed!",
-            modifier = modifier
-        )
+
     }
 
 }
