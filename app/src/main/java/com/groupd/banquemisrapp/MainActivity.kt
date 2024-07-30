@@ -26,15 +26,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            ProfileScreen()
+            SplashScreen()
 
         }
 
-        /*Handler(Looper.getMainLooper()).postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, OnBoardingActivity::class.java)
             startActivity(intent)
             finish()
-        }, 3000)*/
+        }, 3000)
     }
 }
 
