@@ -55,7 +55,7 @@ class OnBoardingActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-          ProfileScreen()
+         SignUpSecond()
         }
 
     }

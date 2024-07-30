@@ -119,7 +119,7 @@ fun namedField(
                         )
                     }
             },
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (passwordVisible || !isPassord    ) VisualTransformation.None else PasswordVisualTransformation(),
 
             )
     }

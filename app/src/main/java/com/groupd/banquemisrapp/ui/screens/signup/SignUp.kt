@@ -3,6 +3,7 @@ package com.groupd.banquemisrapp.ui.screens.signup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,12 +12,17 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -104,11 +110,11 @@ fun SignUpFirst(modifier: Modifier = Modifier) {
             value = password,
             isPassord = true,
             onValueChange = { password = it })
-        namedField(text = "Re-enter Password",
+        /*namedField(text = "Re-enter Password",
             message = "Re- enter your password",
             value = secondPassword,
             isPassord = true,
-            onValueChange = { secondPassword = it })
+            onValueChange = { secondPassword = it })*/
 
         Button(
             onClick = { /*TODO*/ },
@@ -148,6 +154,8 @@ fun SignUpFirst(modifier: Modifier = Modifier) {
 fun SignUpSecond(modifier: Modifier = Modifier) {
     val sheetState = rememberModalBottomSheetState()
     var isSheetOpen by rememberSaveable { mutableStateOf(false) }
+    var selectedCountry by remember { mutableStateOf("") }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -168,10 +176,10 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
         namedField(
             text = "Country",
             message = "Select your Country",
-            value = "",
-            onClick =  {
+            value = selectedCountry,
+            onClick = {
 
-                    isSheetOpen = !isSheetOpen
+                isSheetOpen = !isSheetOpen
 
             },
             onValueChange = { },
@@ -183,7 +191,7 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
             text = "Date Of Birth",
             message = "DD/MM/YYYY",
             value = "",
-            onClick =  {
+            onClick = {
 
                 isSheetOpen = !isSheetOpen
 
@@ -193,20 +201,23 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
             trailingIconOn = true,
             isReadOnly = true,
 
-        )
+            )
 
         if (isSheetOpen) {
             ModalBottomSheet(
                 onDismissRequest = { isSheetOpen = !isSheetOpen },
-                sheetState = sheetState
-            )
-            {
+                sheetState = sheetState,
 
+                ) {
+                CountryList(currentCountry = selectedCountry, onCountrySelected = {
+                    isSheetOpen = !isSheetOpen
+                    selectedCountry = it
+                })
             }
         }
 
         Button(
-            onClick = {isSheetOpen = !isSheetOpen},
+            onClick = { isSheetOpen = !isSheetOpen },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()
@@ -218,6 +229,84 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
         }
 
 
+    }
+}
+
+@Composable
+
+fun CountryList(
+    currentCountry: String = "", onCountrySelected: (String) -> Unit = {}
+) {
+    val selectedCountry = remember { mutableStateOf("") }
+    val countries = listOf(
+        Pair("Egypt", "🇪🇬"),
+        Pair("United States", "\uD83C\uDDFA\uD83C\uDDF8"),
+        Pair("Canada", "\uD83C\uDDE8\uD83C\uDDE6"),
+        Pair("India", "\uD83C\uDDEE\uD83C\uDDF3"),
+
+        Pair("Germany", "\uD83C\uDDE9\uD83C\uDDEA"),
+        Pair("France", "\uD83C\uDDEB\uD83C\uDDF7"),
+        Pair("Japan", "\uD83C\uDDEF\uD83C\uDDF5"),
+        Pair("China", "\uD83C\uDDE8\uD83C\uDDF3"),
+        Pair("Brazil", "\uD83C\uDDE7\uD83C\uDDF7"),
+        Pair("Australia", "\uD83C\uDDE6\uD83C\uDDFA"),
+        Pair("Russia", "\uD83C\uDDF7\uD83C\uDDFA"),
+        Pair("United Kingdom", "\uD83C\uDDEC\uD83C\uDDE7"),
+        Pair("Spain", "\uD83C\uDDEA\uD83C\uDDF8"),
+        Pair("Italy", "\uD83C\uDDEE\uD83C\uDDF9"),
+
+        )
+
+    LazyColumn(
+        modifier = Modifier.heightIn(max = 300.dp)
+    ) {
+        items(countries) { (country, flag) ->
+
+            Card(
+                modifier = Modifier
+                    .padding(vertical = 4.dp, horizontal = 16.dp)
+                    .clickable {
+                        selectedCountry.value = country
+                        onCountrySelected(country)
+
+                    },
+                colors = if (currentCountry == country) CardDefaults.cardColors(Maroon.copy(alpha = 0.2f)) else CardDefaults.cardColors(
+                    Color.White
+                ),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            vertical = 8.dp, horizontal = 16.dp
+                        ), verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+
+
+                        Text(
+
+                            text = flag, fontSize = 24.sp, modifier = Modifier.padding(end = 16.dp)
+                        )
+                        Text(
+                            text = country, fontWeight = FontWeight.Medium
+                        )
+                    }
+                    if (currentCountry == country) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = Maroon,
+                            modifier = Modifier.padding(start = 8.dp)
+
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
