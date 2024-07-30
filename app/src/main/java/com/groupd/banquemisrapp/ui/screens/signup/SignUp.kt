@@ -1,4 +1,4 @@
-package com.groupd.banquemisrapp.ui.screens.signin
+package com.groupd.banquemisrapp.ui.screens.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,13 +7,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +44,9 @@ fun namedField(
         id = R.drawable.loading_dot
     ), trailingIconOn: Boolean = false, isPassord: Boolean = false
 ) {
+    var passwordVisible by remember { mutableStateOf(false) }
+    val passwordIcon = if (passwordVisible) painterResource(id = R.drawable.show)
+    else painterResource(id = R.drawable.hide)
     Column {
         Text(
             text = text,
@@ -61,9 +70,20 @@ fun namedField(
                 .fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             trailingIcon = {
-                if(trailingIconOn)
+
+
+
+                if(trailingIconOn && isPassord)
                 Image(painter = imageRes, contentDescription = "")
                 if (isPassord)
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Image(
+                        painter = passwordIcon,
+                        contentDescription = "",
+                        modifier = Modifier.padding(end = 15.dp)
+                            .size(24.dp)
+                    )
+                }
             },
 
         )
@@ -81,10 +101,11 @@ fun SignUpFirst(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
-        val fullName = ""
-        val email = ""
-        val password = ""
-        val secondPassword = ""
+        val fullName by remember { mutableStateOf("") }
+        val email  by remember { mutableStateOf("") }
+        val password by remember { mutableStateOf("") }
+        val secondPassword  by remember { mutableStateOf("") }
+
 
         Text(
             text = "Sign Up",
@@ -100,11 +121,11 @@ fun SignUpFirst(modifier: Modifier = Modifier) {
         )
         namedField(text = "Full name", message = "Enter your full name", value = fullName)
         namedField(text = "Email", message = "Enter your password", value = email)
-        namedField(text = "Password", message = "Enter your password", value = password)
+        namedField(text = "Password", message = "Enter your password", value = password , isPassord = true)
         namedField(
             text = "Re-enter Password",
             message = "Re- enter your password",
-            value = secondPassword
+            value = secondPassword, isPassord = true
         )
 
         Button(

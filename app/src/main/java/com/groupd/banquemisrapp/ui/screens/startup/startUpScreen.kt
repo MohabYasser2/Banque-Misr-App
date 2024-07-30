@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.ui.screens.signup.SignUpFirst
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
@@ -51,7 +52,7 @@ class OnBoardingActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            OnBoardingScreen()
+            SignUpFirst()
 
         }
 
@@ -264,9 +265,11 @@ fun OnBoardingScreen(modifier: Modifier = Modifier) {
     {
 
             Text(text = "Skip", color = Color.Black, fontSize = 20.sp,
-                modifier = Modifier.padding(top = 64.dp, end = 16.dp).clickable {
-                    //nav to sign up
-                })
+                modifier = Modifier
+                    .padding(top = 64.dp, end = 16.dp)
+                    .clickable {
+                        //nav to sign up
+                    })
 
     }
     HorizontalPager(
