@@ -1,5 +1,7 @@
 package com.groupd.banquemisrapp.ui.screens.signup
 
+import android.annotation.SuppressLint
+import android.text.format.Formatter
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +25,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +36,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,6 +63,9 @@ import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 
 
 @Composable
@@ -109,8 +117,7 @@ fun SignUpFirst(modifier: Modifier = Modifier) {
             message = "Enter your password",
             value = password,
             isPassord = true,
-            onValueChange = { password = it })
-        /*namedField(text = "Re-enter Password",
+            onValueChange = { password = it })/*namedField(text = "Re-enter Password",
             message = "Re- enter your password",
             value = secondPassword,
             isPassord = true,
@@ -149,13 +156,17 @@ fun SignUpFirst(modifier: Modifier = Modifier) {
     }
 }
 
+@SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpSecond(modifier: Modifier = Modifier) {
-    val sheetState = rememberModalBottomSheetState()
-    var isSheetOpen by rememberSaveable { mutableStateOf(false) }
+    val sheetStateOne = rememberModalBottomSheetState()
+    var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
     var selectedCountry by remember { mutableStateOf("") }
-
+    val openDialog = remember { mutableStateOf(false) }
+    var selectedDate by remember { mutableStateOf("") }
+    val datePickerState = rememberDatePickerState()
+    val formatter = SimpleDateFormat("dd/MM/yyyy")
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -179,7 +190,7 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
             value = selectedCountry,
             onClick = {
 
-                isSheetOpen = !isSheetOpen
+                isSheetOneOpen = !isSheetOneOpen
 
             },
             onValueChange = { },
@@ -190,11 +201,9 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
         namedField(
             text = "Date Of Birth",
             message = "DD/MM/YYYY",
-            value = "",
+            value = selectedDate,
             onClick = {
-
-                isSheetOpen = !isSheetOpen
-
+                openDialog.value = true
             },
             onValueChange = { },
             imageRes = painterResource(id = R.drawable.ic_calendar),
@@ -203,21 +212,45 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
 
             )
 
-        if (isSheetOpen) {
+        if (isSheetOneOpen) {
             ModalBottomSheet(
-                onDismissRequest = { isSheetOpen = !isSheetOpen },
-                sheetState = sheetState,
+                onDismissRequest = { isSheetOneOpen = !isSheetOneOpen },
+                sheetState = sheetStateOne,
 
                 ) {
                 CountryList(currentCountry = selectedCountry, onCountrySelected = {
-                    isSheetOpen = !isSheetOpen
+                    isSheetOneOpen = !isSheetOneOpen
                     selectedCountry = it
                 })
             }
         }
+        if (openDialog.value) {
+            DatePickerDialog(
+                onDismissRequest = { openDialog.value = false },
+                confirmButton = {
+                    Text(
+                        text = "Confirm", modifier = Modifier.padding(16.dp).clickable {
+                            openDialog.value = false
+                            val calendar = Calendar.getInstance()
+                            calendar.timeInMillis = datePickerState.selectedDateMillis!!
+                            selectedDate = formatter.format(calendar.time)
+
+                        },
+                        color = Maroon,
+
+                    )
+                }
+            ) {
+                DatePicker(state = datePickerState)
+            }
+        }
+
+
+
+
 
         Button(
-            onClick = { isSheetOpen = !isSheetOpen },
+            onClick = { },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()
@@ -227,10 +260,10 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
             Text(text = "Continue", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
 
         }
-
-
     }
+
 }
+
 
 @Composable
 
@@ -279,12 +312,13 @@ fun CountryList(
                         .fillMaxWidth()
                         .padding(
                             vertical = 8.dp, horizontal = 16.dp
-                        ), verticalAlignment = Alignment.CenterVertically,
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row (
+                    Row(
                         verticalAlignment = Alignment.CenterVertically
-                    ){
+                    ) {
 
 
                         Text(
@@ -313,6 +347,6 @@ fun CountryList(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    SignUpFirst()
+    SignUpSecond()
 }
 
