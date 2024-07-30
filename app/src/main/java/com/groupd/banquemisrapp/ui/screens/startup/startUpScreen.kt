@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.screens.signup.SignUpFirst
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
@@ -58,7 +59,6 @@ class OnBoardingActivity : ComponentActivity() {
 
     }
 }
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

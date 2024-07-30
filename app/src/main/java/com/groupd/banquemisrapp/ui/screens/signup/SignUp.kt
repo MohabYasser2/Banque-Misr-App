@@ -28,67 +28,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration.Companion.Underline
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
 
-@Composable
-fun namedField(
-    text: String, message: String, modifier: Modifier = Modifier, value: String,
-    imageRes: Painter = painterResource(
-        id = R.drawable.loading_dot
-    ), trailingIconOn: Boolean = false, isPassord: Boolean = false
-) {
-    var passwordVisible by remember { mutableStateOf(false) }
-    val passwordIcon = if (passwordVisible) painterResource(id = R.drawable.show)
-    else painterResource(id = R.drawable.hide)
-    Column {
-        Text(
-            text = text,
-            modifier = modifier
-                .align(Alignment.Start)
-                .padding(start = 24.dp, top = 8.dp),
-        )
-
-        OutlinedTextField(
-            label = {
-                Text(
-                    text = message,
-                    fontSize = 16.sp,
-                    color = Color.Black.copy(alpha = 0.5f)
-                )
-            },
-            value = value,
-            onValueChange = { },
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
-            trailingIcon = {
-
-
-
-                if(trailingIconOn && isPassord)
-                Image(painter = imageRes, contentDescription = "")
-                if (isPassord)
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Image(
-                        painter = passwordIcon,
-                        contentDescription = "",
-                        modifier = Modifier.padding(end = 15.dp)
-                            .size(24.dp)
-                    )
-                }
-            },
-
-        )
-    }
-}
 
 @Composable
 fun SignUpFirst(modifier: Modifier = Modifier) {
@@ -101,10 +52,10 @@ fun SignUpFirst(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
-        val fullName by remember { mutableStateOf("") }
-        val email  by remember { mutableStateOf("") }
-        val password by remember { mutableStateOf("") }
-        val secondPassword  by remember { mutableStateOf("") }
+        var fullName by remember { mutableStateOf("") }
+        var email by remember { mutableStateOf("") }
+        var password by remember { mutableStateOf("") }
+        var secondPassword by remember { mutableStateOf("") }
 
 
         Text(
@@ -119,13 +70,26 @@ fun SignUpFirst(modifier: Modifier = Modifier) {
             modifier = modifier.padding(40.dp),
             fontWeight = FontWeight(500)
         )
-        namedField(text = "Full name", message = "Enter your full name", value = fullName)
-        namedField(text = "Email", message = "Enter your password", value = email)
-        namedField(text = "Password", message = "Enter your password", value = password , isPassord = true)
+        namedField(
+            text = "Full name",
+            message = "Enter your full name",
+            value = fullName,
+            onValueChange = { fullName = it })
+        namedField(
+            text = "Email",
+            message = "Enter your password",
+            value = email,
+            onValueChange = { email = it })
+        namedField(
+            text = "Password",
+            message = "Enter your password",
+            value = password,
+            isPassord = true,
+            onValueChange = { password = it })
         namedField(
             text = "Re-enter Password",
             message = "Re- enter your password",
-            value = secondPassword, isPassord = true
+            value = secondPassword, isPassord = true, onValueChange = { secondPassword = it }
         )
 
         Button(
