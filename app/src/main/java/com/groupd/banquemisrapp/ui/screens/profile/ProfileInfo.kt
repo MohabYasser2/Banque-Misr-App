@@ -13,13 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.theme.background2
 
 @Composable
-fun ProfileInformationScreen(modifier: Modifier = Modifier) {
+fun ProfileInformationScreen(navController: NavController, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -60,5 +62,5 @@ fun ProfileDetail(label: String, value: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun ProfileInformationScreenPreview() {
-    ProfileInformationScreen()
+    ProfileInformationScreen(navController = NavController(LocalContext.current))
 }

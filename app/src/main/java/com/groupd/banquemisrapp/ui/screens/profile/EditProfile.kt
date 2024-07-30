@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.namedField
@@ -39,7 +41,7 @@ import com.groupd.banquemisrapp.ui.theme.background
 import com.groupd.banquemisrapp.ui.theme.background2
 
 @Composable
-fun EditProfileScreen(modifier: Modifier = Modifier) {
+fun EditProfileScreen(navController: NavController, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -94,7 +96,7 @@ fun EditProfileScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PasswordChangeScreen(modifier: Modifier = Modifier) {
+fun PasswordChangeScreen(navController: NavController,modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -141,5 +143,5 @@ fun PasswordChangeScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileScreenPreview() {
-    PasswordChangeScreen()
+    PasswordChangeScreen(navController = NavController(LocalContext.current))
 }

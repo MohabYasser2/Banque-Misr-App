@@ -15,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.groupd.banquemisrapp.routes.AppNavHost
 import com.groupd.banquemisrapp.ui.screens.profile.ProfileScreen
 import com.groupd.banquemisrapp.ui.screens.startup.OnBoardingActivity
 import com.groupd.banquemisrapp.ui.screens.startup.OnBoardingScreen
@@ -26,7 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            SplashScreen()
+            AppNavHost()
 
         }
 
@@ -39,7 +41,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen( navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()

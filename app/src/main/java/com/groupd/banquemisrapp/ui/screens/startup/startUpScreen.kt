@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.screens.profile.ProfileScreen
@@ -55,7 +57,7 @@ class OnBoardingActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-         SignUpSecond()
+            OnBoardingScreen()
         }
 
     }
@@ -292,7 +294,7 @@ fun OnBoardingScreen(modifier: Modifier = Modifier) {
                 }
             } else {
                 // Navigate to the Sign in
-
+                
             }
         },
         shape = RoundedCornerShape(8.dp),

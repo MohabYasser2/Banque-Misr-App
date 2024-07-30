@@ -14,16 +14,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.ProfileOptionItem
 import com.groupd.banquemisrapp.ui.theme.background2
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,6 +56,6 @@ fun SettingsScreen() {
 @Preview(showBackground = true)
 @Composable
 private fun SettingsScreenPreview() {
-    SettingsScreen()
+    SettingsScreen(navController = NavController(LocalContext.current))
     
 }

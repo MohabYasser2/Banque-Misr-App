@@ -60,6 +60,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.theme.Maroon
@@ -70,7 +71,7 @@ import java.util.Date
 
 
 @Composable
-fun SignUpFirst(modifier: Modifier = Modifier) {
+fun SignUpFirst(navController: NavController, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -165,7 +166,7 @@ fun SignUpFirst(modifier: Modifier = Modifier) {
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpSecond(modifier: Modifier = Modifier) {
+fun SignUpSecond(navController: NavController,modifier: Modifier = Modifier) {
     val sheetStateOne = rememberModalBottomSheetState()
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
     var selectedCountry by remember { mutableStateOf("") }
@@ -366,6 +367,6 @@ fun CountryList(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    SignUpFirst()
+    //SignUpFirst()
 }
 
