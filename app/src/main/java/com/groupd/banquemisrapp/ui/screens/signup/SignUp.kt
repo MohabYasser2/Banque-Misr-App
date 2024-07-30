@@ -62,6 +62,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.routes.Route.SIGNIN
+import com.groupd.banquemisrapp.routes.Route.SIGNUP2
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
@@ -126,7 +128,7 @@ fun SignUpFirst(navController: NavController, modifier: Modifier = Modifier) {
             onValueChange = { secondPassword = it })*/
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(SIGNUP2) },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()
@@ -146,7 +148,7 @@ fun SignUpFirst(navController: NavController, modifier: Modifier = Modifier) {
 
             },
                 modifier = Modifier.align(Alignment.CenterVertically),fontSize = 16.sp)
-            TextButton(onClick = {/*Navigate to sign in*/ }) {
+            TextButton(onClick = { navController.navigate(SIGNIN) }) {
                 Text(text = buildAnnotatedString {
                     withStyle(SpanStyle(color = Maroon, textDecoration = Underline)) {
                         append("Sign In")

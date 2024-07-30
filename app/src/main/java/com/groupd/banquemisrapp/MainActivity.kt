@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            AppNavHost()
+            SplashScreen()
 
         }
 
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SplashScreen( navController: NavController) {
+fun SplashScreen( ) {
     Box(
         modifier = Modifier
             .fillMaxSize()

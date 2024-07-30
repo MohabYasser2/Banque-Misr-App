@@ -43,6 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.routes.AppNavHost
+import com.groupd.banquemisrapp.routes.Route.SIGNIN
+import com.groupd.banquemisrapp.routes.Route.SIGNUP
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.screens.profile.ProfileScreen
 import com.groupd.banquemisrapp.ui.screens.signup.SignUpFirst
@@ -57,7 +60,7 @@ class OnBoardingActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            OnBoardingScreen()
+            AppNavHost()
         }
 
     }
@@ -259,7 +262,7 @@ fun OnBoardingScreen3(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnBoardingScreen(modifier: Modifier = Modifier) {
+fun OnBoardingScreen(navController: NavController,modifier: Modifier = Modifier) {
 
     val pagerState = rememberPagerState(pageCount = { 3 })
     val coroutineScope = rememberCoroutineScope()
@@ -272,6 +275,7 @@ fun OnBoardingScreen(modifier: Modifier = Modifier) {
                     .padding(top = 64.dp, end = 16.dp)
                     .clickable {
                         //nav to sign up
+                        navController.navigate(SIGNIN)
                     })
 
     }
@@ -294,7 +298,8 @@ fun OnBoardingScreen(modifier: Modifier = Modifier) {
                 }
             } else {
                 // Navigate to the Sign in
-                
+                navController.navigate(SIGNIN)
+
             }
         },
         shape = RoundedCornerShape(8.dp),
@@ -320,5 +325,5 @@ fun OnBoardingScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    OnBoardingScreen()
+    OnBoardingScreen(NavController(LocalContext.current))
 }
