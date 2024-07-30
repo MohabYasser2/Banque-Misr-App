@@ -140,7 +140,7 @@ fun ProfileOptionItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp)
+            .padding(vertical = 24.dp)
             .clickable { /* Handle click */ },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -166,15 +166,14 @@ fun ProfileOptionItem(
         }
         Spacer(modifier = modifier.width(16.dp))
         Column {
-            Text(text = option, style = MaterialTheme.typography.bodyMedium)
-            Text(text = info, color = Color.LightGray)
+            Text(text = option,  fontWeight = FontWeight(500))
+            Text(text = info, color = Color.Black.copy(alpha = 0.5f))
         }
         Spacer(modifier = modifier.weight(1f))
         Icon(
             painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
             contentDescription = null,
-            tint = Color.LightGray,
-            modifier = modifier.size(24.dp)
+            modifier = modifier.size(20.dp).alpha(0.5f)
         )
 
     }

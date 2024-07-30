@@ -43,12 +43,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.ProfileOptionItem
 import com.groupd.banquemisrapp.ui.theme.BanqueMisrAppTheme
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
+import com.groupd.banquemisrapp.ui.theme.background2
 
 @Composable
 fun ProfileScreen() {
@@ -56,7 +58,7 @@ fun ProfileScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(
-                background
+                background2
             )
             .padding(16.dp)
     ) {
@@ -64,14 +66,14 @@ fun ProfileScreen() {
         ProfileHeader()
         Spacer(modifier = Modifier.height(16.dp))
 
-        ProfileOptionItem("Personal information"  , "Your information" ,painterResource(id = R.drawable.user))
+        ProfileOptionItem("Personal information"  , "Your information" ,painterResource(id = R.drawable.ic_profile))
         HorizontalDivider()
         ProfileOptionItem("Settings"  , "Change your settings" ,painterResource(id = R.drawable.setting))
         HorizontalDivider()
         ProfileOptionItem("Payment history"  , "View your transactions" ,painterResource(id = R.drawable.history))
         HorizontalDivider()
         ProfileOptionItem("My favourite list"  , "View your favourites" ,painterResource(id = R.drawable.favorite))
-        HorizontalDivider()
+
     }
 }
 
@@ -83,7 +85,7 @@ fun ProfileHeader(modifier: Modifier = Modifier) {
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = "Profile Picture",
             modifier = Modifier
-                .size(64.dp)
+                .size(40.dp)
                 .clip(CircleShape)
                 .background(Color.Gray)
         )
@@ -92,7 +94,8 @@ fun ProfileHeader(modifier: Modifier = Modifier) {
             Text(
                 text = "Asmaa Dosuky",
                 style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight(500)
+                fontWeight = FontWeight(500),
+                fontSize = 24.sp
             )
         }
     }

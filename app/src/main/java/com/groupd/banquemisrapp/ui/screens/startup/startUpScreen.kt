@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.ui.partials.namedField
+import com.groupd.banquemisrapp.ui.screens.profile.ProfileScreen
 import com.groupd.banquemisrapp.ui.screens.signup.SignUpFirst
 import com.groupd.banquemisrapp.ui.screens.signup.SignUpSecond
 import com.groupd.banquemisrapp.ui.theme.Black
@@ -54,8 +55,7 @@ class OnBoardingActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            SignUpSecond()
-
+          ProfileScreen()
         }
 
     }
