@@ -181,8 +181,20 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
         Text(
             text = "Speedo Transfer",
             fontSize = 24.sp,
-            modifier = modifier.padding(40.dp),
+            modifier = modifier.padding(40.dp).padding(top = 120.dp),
             fontWeight = FontWeight(500)
+        )
+        Text(
+            text = "Welcome to Banque Misr!",
+            fontSize = 24.sp,
+            modifier = modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp),
+            fontWeight = FontWeight(500)
+        )
+        Text(
+            text = "Lets Complete your Profile",
+            fontSize = 18.sp,
+            modifier = modifier.padding(20.dp),
+            fontWeight = FontWeight(350)
         )
         namedField(
             text = "Country",
@@ -347,6 +359,6 @@ fun CountryList(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    SignUpSecond()
+    SignUpFirst()
 }
 
