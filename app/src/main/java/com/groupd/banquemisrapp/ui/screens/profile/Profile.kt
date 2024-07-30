@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -43,45 +44,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.ui.partials.CustomHeader
+import com.groupd.banquemisrapp.ui.partials.ProfileOptionItem
 import com.groupd.banquemisrapp.ui.theme.BanqueMisrAppTheme
 import com.groupd.banquemisrapp.ui.theme.Maroon
-
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            BanqueMisrAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Magdy ",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        Color.White,
-                        Color.Red.copy(alpha = 0.2f)
-                    )
-                )
-            )
-
-    ) {
-
-    }
-
-}
+import com.groupd.banquemisrapp.ui.theme.background
 
 @Composable
 fun ProfileScreen() {
@@ -89,55 +56,22 @@ fun ProfileScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(
-                Brush.verticalGradient(
-                    listOf(
-                        Color.White,
-                        Color.Red.copy(alpha = 0.2f)
-                    )
-                )
+                background
             )
             .padding(16.dp)
     ) {
         CustomHeader(title = "Profile", onBackClick = {})
         ProfileHeader()
         Spacer(modifier = Modifier.height(16.dp))
-        val options = listOf("Personal information", "Setting", "Payment history", "My Favourite list")
 
         ProfileOptionItem("Personal information"  , "Your information" ,painterResource(id = R.drawable.user))
-        Divider()
+        HorizontalDivider()
         ProfileOptionItem("Settings"  , "Change your settings" ,painterResource(id = R.drawable.setting))
-        Divider()
+        HorizontalDivider()
         ProfileOptionItem("Payment history"  , "View your transactions" ,painterResource(id = R.drawable.history))
-        Divider()
+        HorizontalDivider()
         ProfileOptionItem("My favourite list"  , "View your favourites" ,painterResource(id = R.drawable.favorite))
-        Divider()
-    }
-}
-
-@Composable
-fun CustomHeader(title: String, onBackClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 4.dp, vertical = 12.dp)
-            .height(56.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(onClick = {/*todo*/ }) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
-                contentDescription = "Back button",
-            )
-        }
-        Spacer(modifier = Modifier.width(90.dp))
-        Text(
-            text = title,
-            style = MaterialTheme.typography.headlineSmall,
-            color = Color.Black,
-            fontWeight = FontWeight(400)
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        // Add more elements here if needed
+        HorizontalDivider()
     }
 }
 
@@ -164,55 +98,6 @@ fun ProfileHeader(modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-fun ProfileOptionItem(
-    option: String,
-    info : String,
-    imageRes: Painter,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp)
-            .clickable { /* Handle click */ },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Card (
-            modifier = modifier.size(width = 40.dp, height = 40.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFDAC7CA))
-        ){
-            Column (
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.End
-            ){
-                Icon(
-                    painter = imageRes ,
-                    contentDescription = "$option + Icon",
-                    tint = Maroon,
-                    modifier = modifier
-                        .padding(8.dp)
-                        .fillMaxSize()
-                )
-            }
-
-        }
-        Spacer(modifier = modifier.width(16.dp))
-        Column {
-            Text(text = option, style = MaterialTheme.typography.bodyMedium)
-            Text(text = info, color = Color.LightGray)
-        }
-        Spacer(modifier = modifier.weight(1f))
-        Icon(
-            painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-            contentDescription = null,
-            tint = Color.LightGray,
-            modifier = modifier.size(24.dp)
-        )
-
-    }
-}
 
 @Preview(showBackground = true)
 @Composable

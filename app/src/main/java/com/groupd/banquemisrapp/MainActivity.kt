@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
+import com.groupd.banquemisrapp.ui.screens.profile.ProfileScreen
 import com.groupd.banquemisrapp.ui.screens.startup.OnBoardingActivity
 import com.groupd.banquemisrapp.ui.screens.startup.OnBoardingScreen
 
@@ -25,15 +26,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            SplashScreen()
+            ProfileScreen()
 
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        /*Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, OnBoardingActivity::class.java)
             startActivity(intent)
             finish()
-        }, 3000)
+        }, 3000)*/
     }
 }
 
