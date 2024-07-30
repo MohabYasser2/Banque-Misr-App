@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.screens.signup.SignUpFirst
+import com.groupd.banquemisrapp.ui.screens.signup.SignUpSecond
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
@@ -53,7 +54,7 @@ class OnBoardingActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            SignUpFirst()
+            SignUpSecond()
 
         }
 

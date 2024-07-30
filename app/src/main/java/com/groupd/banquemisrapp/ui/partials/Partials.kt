@@ -1,6 +1,7 @@
 package com.groupd.banquemisrapp.ui.partials
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -31,12 +33,12 @@ fun namedField(
     message: String,
     modifier: Modifier = Modifier,
     value: String,
-    imageRes: Painter = painterResource(
-        id = R.drawable.loading_dot
-    ),
+    imageRes: Painter = painterResource(id = R.drawable.loading_dot),
     trailingIconOn: Boolean = false,
     isPassord: Boolean = false,
-    onValueChange: (String) -> Unit = {}
+    onValueChange: (String) -> Unit = {},
+    onClick: () -> Unit = {},
+    isReadOnly: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
     val passwordIcon = if (passwordVisible) painterResource(id = R.drawable.show)
@@ -46,7 +48,8 @@ fun namedField(
             text = text,
             modifier = modifier
                 .align(Alignment.Start)
-                .padding(start = 24.dp, top = 8.dp),
+                .padding(start = 24.dp, top = 8.dp)
+
         )
 
         OutlinedTextField(
@@ -55,19 +58,33 @@ fun namedField(
                     text = message,
                     fontSize = 16.sp,
                     color = Color.Black.copy(alpha = 0.5f)
+
                 )
             },
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .padding(horizontal = 24.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .clickable { onClick() },
             shape = RoundedCornerShape(8.dp),
+            readOnly = isReadOnly,
             trailingIcon = {
 
 
-                if (trailingIconOn && isPassord)
-                    Image(painter = imageRes, contentDescription = "")
+                if (trailingIconOn && !isPassord)
+                    Image(
+                        painter = imageRes,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(end = 15.dp)
+                            .size(24.dp)
+                            .clickable {
+                                onClick()
+                            }
+                            .alpha(0.6f)
+
+                    )
                 if (isPassord)
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Image(
@@ -76,6 +93,7 @@ fun namedField(
                             modifier = Modifier
                                 .padding(end = 15.dp)
                                 .size(24.dp)
+                                .alpha(0.6f)
                         )
                     }
             },
