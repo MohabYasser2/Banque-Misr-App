@@ -1,4 +1,4 @@
-package com.groupd.banquemisrapp.activities
+package com.groupd.banquemisrapp
 
 import android.content.Intent
 import android.os.Bundle
@@ -15,6 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
+import com.groupd.banquemisrapp.ui.screens.profile.ProfileScreen
+import com.groupd.banquemisrapp.ui.screens.startup.OnBoardingActivity
+import com.groupd.banquemisrapp.ui.screens.startup.OnBoardingScreen
 
 import com.groupd.banquemisrapp.ui.theme.Maroon
 

@@ -13,12 +13,12 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.BanqueMisrApp"
     tools:targetApi="31">
-        <activity android:name=".activities.OnBoardingActivity">
+        <activity android:name=".ui.screens.startup.OnBoardingActivity">
 
         </activity>
         <activity
             android:theme="@style/Theme.BanqueMisrApp"
-            android:name=".activities.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name" >
             <intent-filter>
