@@ -1,61 +1,59 @@
 package com.groupd.banquemisrapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import com.groupd.banquemisrapp.ui.theme.BanqueMisrAppTheme
+import androidx.compose.ui.unit.sp
+import com.groupd.banquemisrapp.ui.screens.startup.OnBoardingActivity
+import com.groupd.banquemisrapp.ui.screens.startup.OnBoardingScreen
+
+import com.groupd.banquemisrapp.ui.theme.Maroon
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            BanqueMisrAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Magdy ",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+
+            SplashScreen()
+
         }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this, OnBoardingActivity::class.java)
+            startActivity(intent)
+            finish()
+        }, 3000)
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Column (
-        modifier = modifier.fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                listOf(
-                  Color.White,
-                    Color.Red.copy(alpha = 0.2f)
-                )
-            ))
-
-    ){
-
+fun SplashScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Maroon),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Speedo Transfer",
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 24.sp,
+            style = MaterialTheme.typography.headlineSmall
+        )
     }
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    BanqueMisrAppTheme {
-        Greeting("Magdy")
-    }
-}
+
+
