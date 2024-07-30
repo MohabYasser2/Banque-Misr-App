@@ -61,8 +61,11 @@ fun namedField(
                 .fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             trailingIcon = {
+                if(trailingIconOn)
                 Image(painter = imageRes, contentDescription = "")
-            }
+                if (isPassord)
+            },
+
         )
     }
 }
