@@ -35,6 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -107,7 +108,7 @@ fun SignUpFirst(modifier: Modifier = Modifier) {
         )
         namedField(
             text = "Email",
-            message = "Enter your password",
+            message = "Enter your email address",
             value = email,
             onValueChange = { email = it },
             imageRes = painterResource(id = R.drawable.ic_email),
@@ -142,19 +143,24 @@ fun SignUpFirst(modifier: Modifier = Modifier) {
                     append("Already have an account? ")
                 }
 
-            })
-            ClickableText(onClick = {/*Navigate to sign in*/ }, text = buildAnnotatedString {
-                withStyle(SpanStyle(color = Maroon, textDecoration = Underline)) {
-                    append("Sign In")
-                }
+            },
+                modifier = Modifier.align(Alignment.CenterVertically),fontSize = 16.sp)
+            TextButton(onClick = {/*Navigate to sign in*/ }) {
+                Text(text = buildAnnotatedString {
+                    withStyle(SpanStyle(color = Maroon, textDecoration = Underline)) {
+                        append("Sign In")
+                    }
+                },fontSize = 16.sp)
+
             }
-
-
-            )
         }
 
+
+
     }
+
 }
+
 
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -181,7 +187,9 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
         Text(
             text = "Speedo Transfer",
             fontSize = 24.sp,
-            modifier = modifier.padding(40.dp).padding(top = 120.dp),
+            modifier = modifier
+                .padding(40.dp)
+                .padding(top = 120.dp),
             fontWeight = FontWeight(500)
         )
         Text(
@@ -196,8 +204,7 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
             modifier = modifier.padding(20.dp),
             fontWeight = FontWeight(350)
         )
-        namedField(
-            text = "Country",
+        namedField(text = "Country",
             message = "Select your Country",
             value = selectedCountry,
             onClick = {
@@ -237,22 +244,22 @@ fun SignUpSecond(modifier: Modifier = Modifier) {
             }
         }
         if (openDialog.value) {
-            DatePickerDialog(
-                onDismissRequest = { openDialog.value = false },
-                confirmButton = {
-                    Text(
-                        text = "Confirm", modifier = Modifier.padding(16.dp).clickable {
+            DatePickerDialog(onDismissRequest = { openDialog.value = false }, confirmButton = {
+                Text(
+                    text = "Confirm",
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .clickable {
                             openDialog.value = false
                             val calendar = Calendar.getInstance()
                             calendar.timeInMillis = datePickerState.selectedDateMillis!!
                             selectedDate = formatter.format(calendar.time)
 
                         },
-                        color = Maroon,
+                    color = Maroon,
 
                     )
-                }
-            ) {
+            }) {
                 DatePicker(state = datePickerState)
             }
         }
