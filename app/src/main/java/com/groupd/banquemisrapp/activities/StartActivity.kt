@@ -22,11 +22,18 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -44,20 +51,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.routes.AppNavHost
+import com.groupd.banquemisrapp.routes.MainNavHost
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.HOME
 import com.groupd.banquemisrapp.routes.Route.SIGNIN
+import com.groupd.banquemisrapp.ui.partials.iconNamedVertically
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
+import com.groupd.banquemisrapp.ui.theme.background2
 import kotlinx.coroutines.launch
 
 class StartActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppNavHost()
+
+            Scaffold()
+
+            { innerPadding ->
+                AppNavHost()
+            }
         }
 
     }
@@ -89,9 +106,7 @@ fun OnBoardingScreen1(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .padding(top = 112.dp)
-            .background(
-                background
-            ),
+            ,
         horizontalAlignment = Alignment.CenterHorizontally
     )
     {
@@ -161,9 +176,7 @@ fun OnBoardingScreen2(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .padding(top = 112.dp)
-            .background(
-                background
-            ),
+            ,
         horizontalAlignment = Alignment.CenterHorizontally
     )
     {
@@ -222,9 +235,7 @@ fun OnBoardingScreen3(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .padding(top = 112.dp)
-            .background(
-                background
-            ),
+            ,
         horizontalAlignment = Alignment.CenterHorizontally
     )
     {
@@ -286,13 +297,14 @@ fun OnBoardingScreen(navController: NavController,modifier: Modifier = Modifier)
 
     HorizontalPager(
         state = pagerState,
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(background),
     ) { page ->
         when (page) {
 
             0 -> OnBoardingScreen1()
             1 -> OnBoardingScreen2()
             2 -> OnBoardingScreen3()
+
         }
     }
     Row(modifier = Modifier.fillMaxWidth(),  horizontalArrangement = Arrangement.End)
@@ -345,5 +357,5 @@ fun OnBoardingScreen(navController: NavController,modifier: Modifier = Modifier)
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    OnBoardingScreen(NavController(LocalContext.current))
+    //AppNavHost()
 }

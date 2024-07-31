@@ -76,7 +76,7 @@ fun AppNavHost() {
     }*/
 
         val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = HOME) {
+        NavHost(navController = navController, startDestination = SPLASH) {
 
             composable(route = SPLASH) { SplashScreen(navController = navController) }
             composable(route = HOME) { OnBoardingScreen(navController = navController) }

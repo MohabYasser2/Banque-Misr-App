@@ -13,17 +13,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
-    onSecondary = Color.White
+    primary = Maroon,
+    secondary = Maroon,
+    tertiary = Maroon,
+
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-    onSecondary = Color.White
+    primary = Maroon,
+    secondary = Maroon,
+    tertiary = Maroon,
+
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -49,7 +49,7 @@ fun BanqueMisrAppTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> LightColorScheme
+        darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
 

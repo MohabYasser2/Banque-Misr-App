@@ -1,6 +1,7 @@
 package com.groupd.banquemisrapp.ui.screens.signup
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.text.format.Formatter
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -62,6 +64,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.activities.MainActivity
 import com.groupd.banquemisrapp.routes.Route.SIGNIN
 import com.groupd.banquemisrapp.routes.Route.SIGNUP2
 import com.groupd.banquemisrapp.ui.partials.namedField
@@ -69,7 +72,7 @@ import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
+
 
 
 @Composable
@@ -176,6 +179,7 @@ fun SignUpSecond(navController: NavController,modifier: Modifier = Modifier) {
     var selectedDate by remember { mutableStateOf("") }
     val datePickerState = rememberDatePickerState()
     val formatter = SimpleDateFormat("dd/MM/yyyy")
+    val context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -272,7 +276,8 @@ fun SignUpSecond(navController: NavController,modifier: Modifier = Modifier) {
 
 
         Button(
-            onClick = { },
+            onClick = { val intent = Intent(context, MainActivity::class.java)
+                context.startActivity(intent) },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()
@@ -369,6 +374,6 @@ fun CountryList(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    //SignUpFirst()
+    SignUpFirst(navController = NavController(LocalContext.current))
 }
 
