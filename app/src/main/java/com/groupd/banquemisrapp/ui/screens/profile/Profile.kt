@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.routes.Route.PROFILE_INFO
+import com.groupd.banquemisrapp.routes.Route.SETTINGS
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.ProfileOptionItem
 import com.groupd.banquemisrapp.ui.theme.background2
@@ -46,13 +48,34 @@ fun ProfileScreen(navController: NavController) {
         ProfileHeader()
         Spacer(modifier = Modifier.height(16.dp))
 
-        ProfileOptionItem("Personal information"  , "Your information" ,painterResource(id = R.drawable.ic_profile))
+        ProfileOptionItem(
+            "Personal information",
+            "Your information",
+            painterResource(id = R.drawable.ic_profile),
+            onClick = { navController.navigate(PROFILE_INFO) })
         HorizontalDivider()
-        ProfileOptionItem("Settings"  , "Change your settings" ,painterResource(id = R.drawable.setting))
+        ProfileOptionItem(
+            "Settings",
+            "Change your settings",
+            painterResource(id = R.drawable.setting),
+            onClick = {
+                navController.navigate(
+                    SETTINGS
+                )
+            })
         HorizontalDivider()
-        ProfileOptionItem("Payment history"  , "View your transactions" ,painterResource(id = R.drawable.history))
+        ProfileOptionItem(
+            "Payment history",
+            "View your transactions",
+            painterResource(id = R.drawable.history),
+
+        )
         HorizontalDivider()
-        ProfileOptionItem("My favourite list"  , "View your favourites" ,painterResource(id = R.drawable.ic_favourite))
+        ProfileOptionItem(
+            "My favourite list",
+            "View your favourites",
+            painterResource(id = R.drawable.ic_favourite)
+        )
 
     }
 }

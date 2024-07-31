@@ -39,6 +39,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -139,13 +141,13 @@ fun ProfileOptionItem(
     option: String,
     info: String,
     imageRes: Painter,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 24.dp)
-            .clickable { /* Handle click */ },
+            .padding(vertical = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Card(
@@ -179,7 +181,7 @@ fun ProfileOptionItem(
             contentDescription = null,
             modifier = modifier
                 .size(20.dp)
-                .alpha(0.5f)
+                .alpha(0.5f).clickable { onClick() }
         )
 
     }
@@ -190,6 +192,7 @@ fun MoreOptionItem(
     option: String,
     imageRes: Painter,
     isArrow: Boolean = true,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -198,32 +201,27 @@ fun MoreOptionItem(
             .clickable { /* Handle click */ },
         verticalAlignment = Alignment.CenterVertically
     ) {
-       
-                Icon(
-                    painter = imageRes,
-                    contentDescription = "$option + Icon",
-                    modifier = modifier
 
-                        .fillMaxSize()
-                        .size(24.dp),
-                    tint = Color.Black.copy(alpha = 0.5f),
+        Icon(
+            painter = imageRes,
+            contentDescription = "$option + Icon",
+            modifier = modifier
+                .size(24.dp),
+            tint = Color.Black.copy(alpha = 0.5f),
 
-                    )
-            }
-
-        }
-
-        Column {
-            Text(
-                text = option,
-                fontWeight = FontWeight(500),
-                color = Color.Black.copy(alpha = 0.5f),
-                fontSize = 20.sp
             )
-        }
+
+        Text(
+            text = option,
+            fontWeight = FontWeight(500),
+            color = Color.Black.copy(alpha = 0.5f),
+            fontSize = 20.sp,
+            modifier = modifier.padding(20.dp)
+        )
+
         Spacer(modifier = modifier.weight(1f))
         if (isArrow) {
-            IconButton(onClick = { /* Handle click */ }) {
+            IconButton(onClick = { onClick() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
                     contentDescription = null,
@@ -241,11 +239,13 @@ fun MoreOptionItem(
 @Composable
 fun CustomHeader(title: String, onBackClick: () -> Unit) {
     CenterAlignedTopAppBar(
-        title = { Text(
-            text = title,
-            color = Color.Black,
+        title = {
+            Text(
+                text = title,
+                color = Color.Black,
 
-            ) },
+                )
+        },
         navigationIcon = {
             IconButton(onClick = { /* doSomething() */ }) {
                 Icon(
@@ -267,7 +267,8 @@ fun iconNamedVertically(
     onClick: () -> Unit,
     isSelected: Boolean = false,
     imageRes: Painter,
-    text: String,
+    text: String = "",
+    annotatedString: AnnotatedString = buildAnnotatedString {append(text)},
     imageDescription: String = "",
     modifier: Modifier = Modifier
 ) {
@@ -277,7 +278,7 @@ fun iconNamedVertically(
         verticalArrangement = Arrangement.Center,
         modifier = modifier.clickable { onClick() }
     ) {
-    IconButton(onClick = onClick) {
+        IconButton(onClick = onClick) {
 
             Icon(
                 painter = imageRes,
@@ -289,7 +290,7 @@ fun iconNamedVertically(
             )
         }
         Text(
-            text = text,
+            text = annotatedString,
             modifier = modifier.padding(bottom = 8.dp),
             fontSize = 14.sp,
             color = if (isSelected) Maroon else Color.Black.copy(alpha = 0.5f),

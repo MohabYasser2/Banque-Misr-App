@@ -1,6 +1,8 @@
 package com.groupd.banquemisrapp.ui.screens.profile
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,12 +14,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,12 +45,24 @@ import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.namedField
+import com.groupd.banquemisrapp.ui.screens.signup.CountryList
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
 import com.groupd.banquemisrapp.ui.theme.background2
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
+@SuppressLint("SimpleDateFormat")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(navController: NavController, modifier: Modifier = Modifier) {
+    val sheetStateOne = rememberModalBottomSheetState()
+    var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
+    var selectedCountry by remember { mutableStateOf("") }
+    val openDialog = remember { mutableStateOf(false) }
+    var selectedDate by remember { mutableStateOf("") }
+    val datePickerState = rememberDatePickerState()
+    val formatter = SimpleDateFormat("dd/MM/yyyy")
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -70,78 +91,139 @@ fun EditProfileScreen(navController: NavController, modifier: Modifier = Modifie
         )
         namedField(
             text = "Email",
-            message = "Enter your password",
+            message = "Enter your Email",
             value = email,
             onValueChange = { email = it },
             imageRes = painterResource(id = R.drawable.ic_email),
             trailingIconOn = true
         )
+        namedField(
+            text = "Country",
+            message = "Select your Country",
+            value = selectedCountry,
+            onClick = {
+
+                isSheetOneOpen = !isSheetOneOpen
+
+            },
+            onValueChange = { },
+            imageRes = painterResource(id = R.drawable.ic_down),
+            trailingIconOn = true,
+            isReadOnly = true
+        )
+        namedField(
+            text = "Date Of Birth",
+            message = "DD/MM/YYYY",
+            value = selectedDate,
+            onClick = {
+                openDialog.value = true
+            },
+            onValueChange = { },
+            imageRes = painterResource(id = R.drawable.ic_calendar),
+            trailingIconOn = true,
+            isReadOnly = true,
+
+            )
+
+        if (isSheetOneOpen) {
+            ModalBottomSheet(
+                onDismissRequest = { isSheetOneOpen = !isSheetOneOpen },
+                sheetState = sheetStateOne,
+
+                ) {
+                CountryList(currentCountry = selectedCountry, onCountrySelected = {
+                    isSheetOneOpen = !isSheetOneOpen
+                    selectedCountry = it
+                })
+            }
+        }
+        if (openDialog.value) {
+            DatePickerDialog(onDismissRequest = { openDialog.value = false }, confirmButton = {
+                Text(
+                    text = "Confirm",
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .clickable {
+                            openDialog.value = false
+                            val calendar = Calendar.getInstance()
+                            calendar.timeInMillis = datePickerState.selectedDateMillis!!
+                            selectedDate = formatter.format(calendar.time)
+
+                        },
+                    color = Maroon,
+
+                    )
+            }) {
+                DatePicker(state = datePickerState)
+            }
 
 
 
-        Button(
-            onClick = { /*TODO*/ },
-            shape = RoundedCornerShape(8.dp),
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            colors = ButtonDefaults.buttonColors(Maroon),
-        ) {
-            Text(text = "Save", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
+            Button(
+                onClick = { /*TODO*/ },
+                shape = RoundedCornerShape(8.dp),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                colors = ButtonDefaults.buttonColors(Maroon),
+            ) {
+                Text(text = "Save", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
 
+            }
         }
 
 
+        }
     }
-}
 
-@Composable
-fun PasswordChangeScreen(navController: NavController,modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(
-                background2
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-
-        ) {
-
-        var password by remember { mutableStateOf("") }
-        var secondPassword by remember { mutableStateOf("") }
-
-
-
-        CustomHeader(title = "Change Password") {
-            
-        }
-        namedField(text = "Current Password",
-            message = "Enter your password",
-            value = password,
-            isPassord = true,
-            onValueChange = { password = it })
-        namedField(text = "New Password",
-            message = "Enter new password",
-            value = secondPassword,
-            isPassord = true,
-            onValueChange = { secondPassword = it })
-
-        Button(
-            onClick = { /*TODO*/ },
-            shape = RoundedCornerShape(8.dp),
+    @Composable
+    fun PasswordChangeScreen(navController: NavController, modifier: Modifier = Modifier) {
+        Column(
             modifier = modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            colors = ButtonDefaults.buttonColors(Maroon),
-        ) {
-            Text(text = "Save", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
+                .fillMaxSize()
+                .background(
+                    background2
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
 
+            ) {
+
+            var password by remember { mutableStateOf("") }
+            var secondPassword by remember { mutableStateOf("") }
+
+
+
+            CustomHeader(title = "Change Password") {
+
+            }
+            namedField(text = "Current Password",
+                message = "Enter your password",
+                value = password,
+                isPassord = true,
+                onValueChange = { password = it })
+            namedField(text = "New Password",
+                message = "Enter new password",
+                value = secondPassword,
+                isPassord = true,
+                onValueChange = { secondPassword = it })
+
+            Button(
+                onClick = { /*TODO*/ },
+                shape = RoundedCornerShape(8.dp),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                colors = ButtonDefaults.buttonColors(Maroon),
+            ) {
+                Text(text = "Save", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
+
+            }
         }
     }
-}
+
 
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileScreenPreview() {
-    PasswordChangeScreen(navController = NavController(LocalContext.current))
+
 }
