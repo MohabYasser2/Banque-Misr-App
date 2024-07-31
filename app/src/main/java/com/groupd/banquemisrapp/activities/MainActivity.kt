@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -148,8 +149,16 @@ fun MoreScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CustomHeader(title = "More") {}
-
+        MoreOptionItem(imageRes = painterResource(id = R.drawable.ic_website), option = "Transfer From Website")
+        HorizontalDivider()
+        MoreOptionItem(imageRes = painterResource(id = R.drawable.ic_favourite), option = "Favourites")
+        HorizontalDivider()
         MoreOptionItem(imageRes = painterResource(id = R.drawable.ic_profile), option = "Profile")
+        HorizontalDivider()
+        MoreOptionItem(imageRes = painterResource(id = R.drawable.ic_help), option = "Help")
+        HorizontalDivider()
+        MoreOptionItem(imageRes = painterResource(id = R.drawable.ic_logout), option = "Logout", isArrow = false)
+        HorizontalDivider()
 
     }
 

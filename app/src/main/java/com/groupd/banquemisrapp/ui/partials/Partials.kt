@@ -189,53 +189,51 @@ fun ProfileOptionItem(
 fun MoreOptionItem(
     option: String,
     imageRes: Painter,
+    isArrow: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 24.dp)
             .clickable { /* Handle click */ },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Card(
-            modifier = modifier.size(width = 40.dp, height = 40.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0x00DAC7CA))
-        ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.End
-            ) {
+       
                 Icon(
                     painter = imageRes,
                     contentDescription = "$option + Icon",
                     modifier = modifier
-                        .padding(8.dp)
+
                         .fillMaxSize()
                         .size(24.dp),
                     tint = Color.Black.copy(alpha = 0.5f),
 
+                    )
+            }
+
+        }
+
+        Column {
+            Text(
+                text = option,
+                fontWeight = FontWeight(500),
+                color = Color.Black.copy(alpha = 0.5f),
+                fontSize = 20.sp
+            )
+        }
+        Spacer(modifier = modifier.weight(1f))
+        if (isArrow) {
+            IconButton(onClick = { /* Handle click */ }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
+                    contentDescription = null,
+                    modifier = modifier
+                        .size(20.dp)
+                        .alpha(0.5f)
                 )
             }
 
         }
-        Spacer(modifier = modifier.width(16.dp))
-        Column {
-            Text(text = option, fontWeight = FontWeight(500), color = Color.Black.copy(alpha = 0.5f), fontSize =24.sp)
-        }
-        Spacer(modifier = modifier.weight(1f))
-
-        IconButton(onClick = { /* Handle click */ }) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),
-                contentDescription = null,
-                modifier = modifier
-                    .size(20.dp)
-                    .alpha(0.5f)
-            )
-        }
-
     }
 }
 
