@@ -4,11 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.groupd.banquemisrapp.SplashScreen
 import com.groupd.banquemisrapp.routes.Route.CHANGE_PASSWORD
 import com.groupd.banquemisrapp.routes.Route.EDIT_PROFILE
 import com.groupd.banquemisrapp.routes.Route.HOME
-import com.groupd.banquemisrapp.routes.Route.PROFILE
 import com.groupd.banquemisrapp.routes.Route.PROFILE_INFO
 import com.groupd.banquemisrapp.routes.Route.SETTINGS
 import com.groupd.banquemisrapp.routes.Route.SIGNIN
@@ -17,12 +15,13 @@ import com.groupd.banquemisrapp.routes.Route.SIGNUP2
 import com.groupd.banquemisrapp.ui.screens.profile.EditProfileScreen
 import com.groupd.banquemisrapp.ui.screens.profile.PasswordChangeScreen
 import com.groupd.banquemisrapp.ui.screens.profile.ProfileInformationScreen
-import com.groupd.banquemisrapp.ui.screens.profile.ProfileScreen
 import com.groupd.banquemisrapp.ui.screens.profile.SettingsScreen
 import com.groupd.banquemisrapp.ui.screens.signin.SignInScreen
 import com.groupd.banquemisrapp.ui.screens.signup.SignUpFirst
 import com.groupd.banquemisrapp.ui.screens.signup.SignUpSecond
-import com.groupd.banquemisrapp.ui.screens.startup.OnBoardingScreen
+import com.groupd.banquemisrapp.activities.OnBoardingScreen
+import com.groupd.banquemisrapp.activities.SplashScreen
+import com.groupd.banquemisrapp.routes.Route.SPLASH
 
 
 object Route {
@@ -35,13 +34,15 @@ object Route {
     const val SETTINGS = "settings"
     const val EDIT_PROFILE = "edit_profile"
     const val CHANGE_PASSWORD = "change_password"
+    const val SPLASH = "splash"
 }
 
 
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = HOME) {
+    NavHost(navController = navController, startDestination = SPLASH) {
+        composable(route = SPLASH) { SplashScreen(navController = navController) }
         composable(route = HOME) { OnBoardingScreen(navController = navController) }
         composable(route = SIGNUP) { SignUpFirst(navController = navController) }
         composable(route = SIGNUP2) { SignUpSecond(navController = navController) }

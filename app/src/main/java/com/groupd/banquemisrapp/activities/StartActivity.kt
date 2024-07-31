@@ -1,13 +1,14 @@
-package com.groupd.banquemisrapp.ui.screens.startup
+package com.groupd.banquemisrapp.activities
 
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -44,28 +46,42 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.routes.AppNavHost
+import com.groupd.banquemisrapp.routes.Route.HOME
 import com.groupd.banquemisrapp.routes.Route.SIGNIN
-import com.groupd.banquemisrapp.routes.Route.SIGNUP
-import com.groupd.banquemisrapp.ui.partials.namedField
-import com.groupd.banquemisrapp.ui.screens.profile.ProfileScreen
-import com.groupd.banquemisrapp.ui.screens.signup.SignUpFirst
-import com.groupd.banquemisrapp.ui.screens.signup.SignUpSecond
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
 import kotlinx.coroutines.launch
 
-class OnBoardingActivity : ComponentActivity() {
+class StartActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             AppNavHost()
         }
 
     }
 }
+@Composable
+fun SplashScreen(navController: NavController ) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Maroon),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Speedo Transfer",
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 24.sp,
+            style = MaterialTheme.typography.headlineSmall
+        )
+    }
+    Handler(Looper.getMainLooper()).postDelayed({
+        navController.navigate(HOME)
+    }, 3000)
 
+}
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnBoardingScreen1(modifier: Modifier = Modifier) {
@@ -267,18 +283,7 @@ fun OnBoardingScreen(navController: NavController,modifier: Modifier = Modifier)
     val pagerState = rememberPagerState(pageCount = { 3 })
     val coroutineScope = rememberCoroutineScope()
 
-    Row(modifier = Modifier.fillMaxWidth(),  horizontalArrangement = Arrangement.End)
-    {
 
-            Text(text = "Skip", color = Color.Black, fontSize = 20.sp,
-                modifier = Modifier
-                    .padding(top = 64.dp, end = 16.dp)
-                    .clickable {
-                        //nav to sign up
-                        navController.navigate(SIGNIN)
-                    })
-
-    }
     HorizontalPager(
         state = pagerState,
         modifier = Modifier.fillMaxSize(),
@@ -288,6 +293,21 @@ fun OnBoardingScreen(navController: NavController,modifier: Modifier = Modifier)
             0 -> OnBoardingScreen1()
             1 -> OnBoardingScreen2()
             2 -> OnBoardingScreen3()
+        }
+    }
+    Row(modifier = Modifier.fillMaxWidth(),  horizontalArrangement = Arrangement.End)
+    {
+        TextButton(onClick = {
+            navController.navigate(SIGNIN)
+        }
+        ){
+
+
+            Text(text = "Skip", color = Color.Black, fontSize = 20.sp,
+                modifier = Modifier
+                    .padding(top = 60.dp, end = 16.dp)
+            )
+
         }
     }
     Button(
