@@ -3,6 +3,7 @@ package com.groupd.banquemisrapp.ui.screens.errors
 import androidx.compose.runtime.Composable
 
 import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.activities.MainActivity
@@ -42,6 +44,8 @@ fun ServerErrorScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -75,7 +79,12 @@ fun ServerErrorScreen(
         Spacer(modifier = modifier.height(16.dp))
         // Call Us Button
         Button(
-            onClick = { /*todo*/ },
+            onClick = {
+                val intent =
+                    Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "19888"))
+                startActivity(context, intent, null)
+
+            },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()
@@ -86,7 +95,20 @@ fun ServerErrorScreen(
 
         }
         Button(
-            onClick = { /*todo*/ },
+            onClick = {
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data =
+                        Uri.parse("mailto:") // Only email apps should handle this
+                    putExtra(
+                        Intent.EXTRA_EMAIL,
+                        arrayOf("BM19888@banquemisr.com")
+                    ) // Recipients
+                    putExtra(Intent.EXTRA_SUBJECT, "Server Error Report") // Subject
+                    putExtra(Intent.EXTRA_TEXT, "Server Error Report") // Body
+                }
+
+                context.startActivity(intent)
+            },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()
