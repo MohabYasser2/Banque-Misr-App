@@ -2,6 +2,7 @@ package com.groupd.banquemisrapp.routes
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -59,7 +60,6 @@ object Route {
 
 @Composable
 fun AppNavHost() {
-    val navController = rememberNavController()
     /*NavHost(navController = navController, startDestination = SPLASH) {
         composable(route = SPLASH) { SplashScreen(navController = navController) }
         composable(route = HOME) { OnBoardingScreen(navController = navController) }
@@ -68,22 +68,37 @@ fun AppNavHost() {
         composable(route = SIGNIN) { SignInScreen(navController = navController) }
     }*/
 
-        NavHost(navController = navController, startDestination = MORE) {
+        val navController = rememberNavController()
+        NavHost(navController = navController, startDestination = HOME) {
 
-
-             composable(route = PROFILE) { ProfileScreen(navController = navController) }
-            composable(route = PROFILE_INFO) { ProfileInformationScreen(navController = navController) }
-            composable(route = MORE) { MoreScreen(navController = navController) }
-            composable(route = SETTINGS) { SettingsScreen(navController = navController) }
-            composable(route = EDIT_PROFILE) { EditProfileScreen(navController = navController) }
-            composable(route = CHANGE_PASSWORD) { PasswordChangeScreen(navController = navController) }
-            composable(route = HOME_SCREEN) { HomeScreen(navController = navController) }
-            composable(route = TRANSFER) { TransferScreen(navController = navController) }
-            composable(route = TRANSACTIONS) { TransactionsScreen(navController = navController) }
-            composable(route = CARDS) { MyCardsScreen(navController = navController) }
-
+            composable(route = SPLASH) { SplashScreen(navController = navController) }
+            composable(route = HOME) { OnBoardingScreen(navController = navController) }
+            composable(route = SIGNUP) { SignUpFirst(navController = navController) }
+            composable(route = SIGNUP2) { SignUpSecond(navController = navController) }
+            composable(route = SIGNIN) { SignInScreen(navController = navController) }
 
         }
     }
+
+
+@Composable
+fun MainNavHost(navController :NavHostController) {
+    //val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = MORE) {
+
+        composable(route = PROFILE) { ProfileScreen(navController = navController) }
+        composable(route = PROFILE_INFO) { ProfileInformationScreen(navController = navController) }
+        composable(route = MORE) { MoreScreen(navController = navController) }
+        composable(route = SETTINGS) { SettingsScreen(navController = navController) }
+        composable(route = EDIT_PROFILE) { EditProfileScreen(navController = navController) }
+        composable(route = CHANGE_PASSWORD) { PasswordChangeScreen(navController = navController) }
+        composable(route = HOME_SCREEN) { HomeScreen(navController = navController) }
+        composable(route = TRANSFER) { TransferScreen(navController = navController) }
+        composable(route = TRANSACTIONS) { TransactionsScreen(navController = navController) }
+        composable(route = CARDS) { MyCardsScreen(navController = navController) }
+
+
+    }
+}
 
 

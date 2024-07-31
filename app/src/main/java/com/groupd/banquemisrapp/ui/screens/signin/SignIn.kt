@@ -1,5 +1,7 @@
 package com.groupd.banquemisrapp.ui.screens.signin
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,8 +32,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.activities.MainActivity
 import com.groupd.banquemisrapp.routes.Route.SIGNUP
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.theme.Maroon
@@ -52,6 +56,7 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier) {
         var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
         var secondPassword by remember { mutableStateOf("") }
+        val context = navController.context
 
 
         Text(
@@ -81,7 +86,10 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier) {
             isPassord = true,
             onValueChange = { password = it })
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                        val intent = Intent(context, MainActivity::class.java)
+                        context.startActivity(intent)
+                      },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()

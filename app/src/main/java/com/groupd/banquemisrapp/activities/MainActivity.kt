@@ -53,6 +53,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.routes.AppNavHost
+import com.groupd.banquemisrapp.routes.MainNavHost
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.MoreOptionItem
@@ -69,12 +70,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-
+            val navController = rememberNavController()
             Scaffold(
                 bottomBar = {
                     var isSelected by remember { mutableStateOf("More") }
                     val context = LocalContext.current
-                    val navController = rememberNavController( )
                     Card(
                         colors = CardDefaults.cardColors(White),
                         elevation = CardDefaults.elevatedCardElevation(0.dp),
@@ -154,7 +154,7 @@ class MainActivity : ComponentActivity() {
             )
 
             { innerPadding ->
-                AppNavHost()
+                MainNavHost(navController = navController)
             }
         }
 
