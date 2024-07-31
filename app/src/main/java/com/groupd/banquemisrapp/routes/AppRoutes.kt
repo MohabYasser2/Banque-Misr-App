@@ -25,11 +25,15 @@ import com.groupd.banquemisrapp.activities.OnBoardingScreen
 import com.groupd.banquemisrapp.activities.SplashScreen
 import com.groupd.banquemisrapp.routes.Route.CARDS
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
+import com.groupd.banquemisrapp.routes.Route.INTERNET_ERROR
 import com.groupd.banquemisrapp.routes.Route.MORE
 import com.groupd.banquemisrapp.routes.Route.PROFILE
+import com.groupd.banquemisrapp.routes.Route.SERVER_ERROR
 import com.groupd.banquemisrapp.routes.Route.SPLASH
 import com.groupd.banquemisrapp.routes.Route.TRANSACTIONS
 import com.groupd.banquemisrapp.routes.Route.TRANSFER
+import com.groupd.banquemisrapp.ui.screens.errors.InternetConnectionErrorScreen
+import com.groupd.banquemisrapp.ui.screens.errors.ServerErrorScreen
 import com.groupd.banquemisrapp.ui.screens.main.HomeScreen
 import com.groupd.banquemisrapp.ui.screens.main.MoreScreen
 import com.groupd.banquemisrapp.ui.screens.main.MyCardsScreen
@@ -55,6 +59,9 @@ object Route {
     const val TRANSACTIONS = "transactions"
     const val CARDS = "cards"
     const val HOME_SCREEN = "home_screen"
+    const val INTERNET_ERROR = "internet_error"
+    const val SERVER_ERROR = "server_error"
+
 }
 
 
@@ -96,6 +103,8 @@ fun MainNavHost(navController :NavHostController) {
         composable(route = TRANSFER) { TransferScreen(navController = navController) }
         composable(route = TRANSACTIONS) { TransactionsScreen(navController = navController) }
         composable(route = CARDS) { MyCardsScreen(navController = navController) }
+        composable(route = INTERNET_ERROR) { InternetConnectionErrorScreen(navController = navController) }
+        composable(route = SERVER_ERROR) { ServerErrorScreen(navController = navController) }
 
 
     }
