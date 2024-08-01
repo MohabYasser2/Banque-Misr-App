@@ -1,15 +1,11 @@
-package com.groupd.banquemisrapp.ui.screens.main
+package com.groupd.banquemisrapp.ui.screens.cards
 
 
 
-import android.content.Intent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,10 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
-import com.groupd.banquemisrapp.activities.MainActivity
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.theme.Black
-import com.groupd.banquemisrapp.ui.theme.Green
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
 
@@ -61,7 +56,9 @@ fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier) {
         }
 
 
-        CardList()
+        CardList(){
+            navController.navigate(Route.ADD_CARD)
+        }
 
 
 
@@ -74,7 +71,7 @@ fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier) {
 
 
 @Composable
-fun CardList(modifier: Modifier = Modifier) {
+fun CardList(modifier: Modifier = Modifier , onClick : () -> Unit) {
     Column (modifier = modifier.verticalScroll(rememberScrollState())){
         CardItem("Asmaa Dosuky", "Account xxxx7890" , true)
         CardItem("Asmaa Dosuky", "Account xxxx7890" , false)
@@ -84,7 +81,7 @@ fun CardList(modifier: Modifier = Modifier) {
 
 
         Button(
-            onClick = {},
+            onClick = { onClick() },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()

@@ -310,11 +310,17 @@ fun CountryList(
         Pair("United Kingdom", "\uD83C\uDDEC\uD83C\uDDE7"),
         Pair("Spain", "\uD83C\uDDEA\uD83C\uDDF8"),
         Pair("Italy", "\uD83C\uDDEE\uD83C\uDDF9"),
+        // i added them to test the scrolling
+        Pair("Mexico", "🇲🇽"),
+        Pair("Argentina", "🇦🇷"),
+        Pair("South Korea", "🇰🇷"),
+        Pair("Saudi Arabia", "🇸🇦"),
+        Pair("South Africa", "🇿🇦"),
 
         )
 
     LazyColumn(
-        modifier = Modifier.heightIn(max = 300.dp)
+        modifier = Modifier.heightIn(max = 400.dp)
     ) {
         items(countries) { (country, flag) ->
 
