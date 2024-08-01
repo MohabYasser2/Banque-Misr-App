@@ -27,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,9 +41,13 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration.Companion.Underline
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,6 +55,7 @@ import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.APP_CONNECTION
+import com.groupd.banquemisrapp.routes.Route.SIGNIN
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
@@ -126,11 +132,25 @@ fun OTPEnteredScreen(navController: NavController , modifier: Modifier = Modifie
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Don't receive OTP? Resend OTP",
-                textAlign = TextAlign.Center,
-                color = Color.Red
-            )
+            Row {
+
+
+                Text(text = buildAnnotatedString {
+                    withStyle(SpanStyle(color = Color.Black.copy(alpha = 0.5f))) {
+                        append("Don't receive OTP? ")
+                    }
+
+                },
+                    modifier = Modifier.align(Alignment.CenterVertically),fontSize = 16.sp)
+                TextButton(onClick = {}) {
+                    Text(text = buildAnnotatedString {
+                        withStyle(SpanStyle(color = Maroon)) {
+                            append("Resend OTP")
+                        }
+                    },fontSize = 16.sp)
+
+                }
+            }
             Spacer(modifier = Modifier.height(200.dp))
 
             // Check if all fields are filled
