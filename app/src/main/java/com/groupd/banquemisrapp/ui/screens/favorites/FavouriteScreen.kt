@@ -108,7 +108,9 @@ fun FavouritsList(modifier: Modifier = Modifier) {
                     isSheetOpen = !isSheetOpen
                     selectedItemIndex = index
                 },
-                onDelete = { favourites.removeAt(index) },
+                onDelete = {
+                    favourites.removeAt(index)
+                           },
                 isEditable = true
             )
             if (isSheetOpen && selectedItemIndex == index) {
