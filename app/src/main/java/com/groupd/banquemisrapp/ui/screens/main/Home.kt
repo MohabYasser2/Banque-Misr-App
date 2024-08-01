@@ -7,26 +7,36 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,7 +51,9 @@ import com.groupd.banquemisrapp.routes.Route.TRANSACTIONS
 import com.groupd.banquemisrapp.routes.Route.TRANSFER
 import com.groupd.banquemisrapp.ui.partials.iconNamedVertically
 import com.groupd.banquemisrapp.ui.theme.Gold
+import com.groupd.banquemisrapp.ui.theme.Green
 import com.groupd.banquemisrapp.ui.theme.Maroon
+import com.groupd.banquemisrapp.ui.theme.Red
 import com.groupd.banquemisrapp.ui.theme.White
 import com.groupd.banquemisrapp.ui.theme.background
 import com.groupd.banquemisrapp.ui.theme.background2
@@ -102,7 +114,9 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             Image(
                 painter = painterResource(id = R.drawable.ic_bell_2x),
                 contentDescription = "bell icon",
-                Modifier.size(40.dp).clickable { navController.navigate(Route.NOTIFICATIONS) }
+                Modifier
+                    .size(40.dp)
+                    .clickable { navController.navigate(Route.NOTIFICATIONS) }
             )
         }
         Card(
@@ -136,114 +150,231 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                 )
             }
         }
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-            colors = CardDefaults.cardColors(White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
-        )
-        {
-            Column {
+
+        Column (
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ){
+            Card(
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+            )
+            {
+                Column {
+                    Text(
+                        text = "Services",
+                        fontSize = 20.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight(500),
+                        modifier = Modifier.padding(16.dp)
+
+                    )
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        iconNamedVertically(
+                            onClick = {
+                                navController.navigate(Route.TRANSFER)
+                            },
+                            imageRes = painterResource(id = R.drawable.ic_transfer_3x),
+                            text = "Transfer",
+                            imageSize = 44.dp,
+                            fontSize = 14.sp,
+                            tint = Gold,
+                            textColor = Color.Black
+
+                        )
+                        iconNamedVertically(
+                            onClick = {
+                                navController.navigate(Route.TRANSACTIONS)
+
+                            },
+                            imageRes = painterResource(id = R.drawable.ic_history_3x),
+                            text = "Transactions",
+                            imageSize = 44.dp,
+                            fontSize = 14.sp,
+                            tint = Gold,
+                            textColor = Color.Black
+
+                        )
+                        iconNamedVertically(
+                            onClick = {
+                                navController.navigate(Route.CARDS)
+
+                            },
+                            imageRes = painterResource(id = R.drawable.ic_card_3x),
+                            text = "My cards",
+                            imageSize = 44.dp,
+                            fontSize = 14.sp,
+                            tint = Gold,
+                            textColor = Color.Black
+
+                        )
+                        iconNamedVertically(
+                            onClick = {
+                                navController.navigate(Route.PROFILE)
+
+                            },
+                            imageRes = painterResource(id = R.drawable.ic_account_3x),
+                            text = "Account",
+                            imageSize = 44.dp,
+                            fontSize = 14.sp,
+                            tint = Gold,
+                            textColor = Color.Black
+
+
+                        )
+                    }
+                }
+            }
+
+
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = "Services",
+                    text = "Recent transactions",
                     fontSize = 20.sp,
                     color = Color.Black,
                     fontWeight = FontWeight(500),
-                    modifier = Modifier.padding(16.dp)
-
                 )
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    iconNamedVertically(
-                        onClick = {
-                            navController.navigate(Route.TRANSFER)
-                        },
-                        imageRes = painterResource(id = R.drawable.ic_transfer_3x),
-                        text = "Transfer",
-                        imageSize = 44.dp,
-                        fontSize = 14.sp,
-                        tint = Gold,
-                        textColor = Color.Black
-
-                    )
-                    iconNamedVertically(
-                        onClick = {
-                            navController.navigate(Route.TRANSACTIONS)
-
-                        },
-                        imageRes = painterResource(id = R.drawable.ic_history_3x),
-                        text = "Transactions",
-                        imageSize = 44.dp,
-                        fontSize = 14.sp,
-                        tint = Gold,
-                        textColor = Color.Black
-
-                    )
-                    iconNamedVertically(
-                        onClick = {
-                            navController.navigate(Route.CARDS)
-
-                        },
-                        imageRes = painterResource(id = R.drawable.ic_card_3x),
-                        text = "My cards",
-                        imageSize = 44.dp,
-                        fontSize = 14.sp,
-                        tint = Gold,
-                        textColor = Color.Black
-
-                    )
-                    iconNamedVertically(
-                        onClick = {
-                            navController.navigate(Route.PROFILE)
-
-                        },
-                        imageRes = painterResource(id = R.drawable.ic_account_3x),
-                        text = "Account",
-                        imageSize = 44.dp,
-                        fontSize = 14.sp,
-                        tint = Gold,
-                        textColor = Color.Black
-
-
-                    )
-                }
+                Text(
+                    text = "View All",
+                    fontSize = 20.sp,
+                    color = Color.Black.copy(alpha = 0.5f),
+                    fontWeight = FontWeight(500),
+                    modifier = Modifier.clickable { navController.navigate(Route.TRANSACTIONS) }
+                )
             }
+
+
+
+
+            Card (
+                modifier = modifier.padding(horizontal = 16.dp)
+            ){
+                TransactionItem(
+                    "Ahmed Mohamed",
+                    "Visa  - 1234\nToday 11:00 - Received",
+                    "$1000",
+                    painterResource(id = R.drawable.visa),
+                    onClick = {}
+                )
+                HorizontalDivider()
+                TransactionItem(
+                    "Ahmed Mohamed",
+                    "Master Card - 1234\nToday 11:00 - Received",
+                    "$1000",
+                    painterResource(id = R.drawable.visa),
+                    onClick = {}
+                )
+                HorizontalDivider()
+
+                TransactionItem(
+                    "Ahmed Mohamed",
+                    "Visa - 1234\nToday 11:00 - Received",
+                    "$1000",
+                    painterResource(id = R.drawable.visa),
+                    onClick = {}
+                )
+            }
+
+
         }
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Recent transactions",
-                fontSize = 20.sp,
-                color = Color.Black,
-                fontWeight = FontWeight(500),
-            )
-            Text(
-                text = "View All",
-                fontSize = 20.sp,
-                color = Color.Black.copy(alpha = 0.5f),
-                fontWeight = FontWeight(500),
-                modifier = Modifier.clickable { navController.navigate(Route.TRANSACTIONS) }
-            )
-        }
+
+
+
 
         //TODO: add recent transactions
     }
 
 
 }
+
+
+
+
+
+
+
+@Composable
+fun TransactionItem(
+    name: String,
+    details: String,
+    amount: String,
+    iconRes: Painter,
+    onClick : () -> Unit = {}
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            //.padding(12.dp)
+        , elevation = CardDefaults.elevatedCardElevation(40.dp),
+        shape = RoundedCornerShape(0.dp),
+        colors = CardDefaults.cardColors(Color.White)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Card(
+                modifier = Modifier.size(width = 50.dp, height = 50.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFDAC7CA))
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Image(
+                        painter = iconRes,
+                        contentDescription = "Transaction Icon",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxSize()
+                    )
+                    // Icon(painter = iconRes, contentDescription = "Transaction Icon")
+                }
+
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = name, fontWeight = FontWeight.Bold)
+                Text(text = details, color = Color.Gray , textAlign = TextAlign.Start , modifier = Modifier.fillMaxWidth())
+
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Text(
+                text = amount,
+                fontWeight = FontWeight(500),
+                fontSize = 20.sp,
+                color = Maroon,
+                modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
+            )
+
+        }
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
