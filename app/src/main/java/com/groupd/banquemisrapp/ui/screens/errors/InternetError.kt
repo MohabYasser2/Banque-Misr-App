@@ -43,7 +43,7 @@ fun InternetConnectionErrorScreen(
         modifier = modifier
             .fillMaxSize()
             //.padding(16.dp)
-            .background(background),
+            ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

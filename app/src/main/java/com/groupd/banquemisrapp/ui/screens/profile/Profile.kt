@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +35,8 @@ import com.groupd.banquemisrapp.routes.Route.PROFILE_INFO
 import com.groupd.banquemisrapp.routes.Route.SETTINGS
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.ProfileOptionItem
+import com.groupd.banquemisrapp.ui.theme.Black
+import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background2
 
 @Composable
@@ -41,9 +44,7 @@ fun ProfileScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                background2
-            )
+
             .padding(16.dp)
     ) {
         CustomHeader(title = "Profile", onBackClick = {})
@@ -59,7 +60,7 @@ fun ProfileScreen(navController: NavController) {
         ProfileOptionItem(
             "Settings",
             "Change your settings",
-            painterResource(id = R.drawable.setting),
+            painterResource(id = R.drawable.ic_settings),
             onClick = {
                 navController.navigate(
                     SETTINGS
@@ -69,7 +70,7 @@ fun ProfileScreen(navController: NavController) {
         ProfileOptionItem(
             "Payment history",
             "View your transactions",
-            painterResource(id = R.drawable.history),
+            painterResource(id = R.drawable.ic_history_3x),
             onClick = {navController.navigate(Route.TRANSACTIONS)},
 
         )
@@ -90,14 +91,17 @@ fun ProfileScreen(navController: NavController) {
 fun ProfileHeader(modifier: Modifier = Modifier) {
 
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = "Profile Picture",
+        IconButton(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(Color.Gray)
-        )
+                .background(Black.copy(alpha = 0.1f)),
+            onClick = { /*TODO*/ },
+        ) {
+            Text(text = "AD", fontSize = 24.sp,color = Black.copy(alpha = 0.6f), fontWeight = FontWeight(500))
+
+
+        }
         Spacer(modifier = Modifier.width(16.dp))
         Column {
             Text(

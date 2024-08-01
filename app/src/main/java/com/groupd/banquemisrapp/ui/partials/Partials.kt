@@ -47,6 +47,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
@@ -277,9 +279,13 @@ fun iconNamedVertically(
     isSelected: Boolean = false,
     imageRes: Painter,
     text: String = "",
-    annotatedString: AnnotatedString = buildAnnotatedString {append(text)},
+    annotatedString: AnnotatedString = buildAnnotatedString { append(text) },
     imageDescription: String = "",
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    fontSize: TextUnit = 14.sp,
+    imageSize: Dp = 28.dp,
+    textColor: Color = Color.Black.copy(alpha = 0.5f),
+    tint: Color = Color.Black.copy(alpha = 0.5f)
 ) {
 
     Column(
@@ -287,27 +293,38 @@ fun iconNamedVertically(
         verticalArrangement = Arrangement.Center,
         modifier = modifier.clickable { onClick() }
     ) {
-        IconButton(onClick = onClick) {
+        IconButton(
+            onClick = onClick,
+            modifier = modifier
+                .size(imageSize+16.dp)
+                .clip(
+                    RoundedCornerShape(20f)
+                )
+                .background(Color.White.copy(alpha = 0.1f)),
+
+        )
+        {
 
             Icon(
                 painter = imageRes,
                 contentDescription = imageDescription,
                 modifier = modifier
-                    .size(24.dp)
+                    .size(imageSize)
                     .padding(bottom = 4.dp),
-                tint = if (isSelected) Maroon else Color.Black.copy(alpha = 0.5f)
+                tint = if (isSelected) Maroon else tint
             )
         }
         Text(
             text = annotatedString,
             modifier = modifier.padding(bottom = 8.dp),
-            fontSize = 14.sp,
-            color = if (isSelected) Maroon else Color.Black.copy(alpha = 0.5f),
+            fontSize = fontSize,
+            color = if (isSelected) Maroon else textColor,
             fontWeight = FontWeight(500)
         )
 
     }
 }
+
 @Composable
 fun FavouriteItem(
     name: String,
@@ -328,20 +345,22 @@ fun FavouriteItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-IconButton(onClick = { /*TODO*/ },
-    Modifier
-        .clip(CircleShape)
-        .background(Maroon.copy(alpha = 0.1f)),) {
+            IconButton(
+                onClick = { /*TODO*/ },
+                Modifier
+                    .clip(CircleShape)
+                    .background(Maroon.copy(alpha = 0.1f)),
+            ) {
 
 
-    Icon(
-        painter = painterResource(id = R.drawable.ic_bank),
-        contentDescription = "Bank Icon",
-        Modifier
-            .size(36.dp)
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_bank),
+                    contentDescription = "Bank Icon",
+                    Modifier
+                        .size(36.dp)
 
-        )
-}
+                )
+            }
 
             Column(
                 modifier = modifier

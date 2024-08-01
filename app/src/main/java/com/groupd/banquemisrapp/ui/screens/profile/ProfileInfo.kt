@@ -25,7 +25,6 @@ fun ProfileInformationScreen(navController: NavController, modifier: Modifier = 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(background2)
             .padding(16.dp)
     ) {
         CustomHeader(title = "Profile Information") {

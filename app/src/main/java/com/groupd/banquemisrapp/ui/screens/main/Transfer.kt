@@ -16,8 +16,7 @@ fun TransferScreen(navController: NavController, modifier: Modifier = Modifier) 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                background),
+            ,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     )

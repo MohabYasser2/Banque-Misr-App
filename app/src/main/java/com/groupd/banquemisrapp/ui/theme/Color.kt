@@ -15,7 +15,7 @@ val Maroon = Color(0xFF631627)
 
 val Black = Color(0xFF000000)
 val White = Color(0xFFE4E4E4)
-
+val Gold = Color(0xFFAC8B09)
 val background = Brush.verticalGradient(
     listOf(
         Color.White,

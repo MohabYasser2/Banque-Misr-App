@@ -80,9 +80,7 @@ fun SignUpFirst(navController: NavController, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                background
-            ),
+            ,
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
@@ -183,9 +181,7 @@ fun SignUpSecond(navController: NavController,modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                background
-            ),
+           ,
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {

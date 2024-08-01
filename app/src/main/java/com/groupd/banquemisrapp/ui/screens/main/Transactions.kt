@@ -64,7 +64,7 @@ fun TransactionsScreen(navController: NavController , modifier: Modifier = Modif
         modifier = modifier
             .fillMaxSize()
             //.padding(16.dp)
-            .background(background2)
+
     ) {
         CustomHeader(title = "Transactions") {
 
@@ -85,7 +85,7 @@ fun TransactionsScreen(navController: NavController , modifier: Modifier = Modif
             "Visa - Master Card - 1234\nToday 11:00 - Received",
             "$1000",
             "Successful",
-            painterResource(id = R.drawable.ic_card),
+            painterResource(id = R.drawable.visa),
             true,
             onClick = { navController.navigate(TRANSACTION_DETAILS)}
         ) , TransactionItem(
@@ -93,7 +93,7 @@ fun TransactionsScreen(navController: NavController , modifier: Modifier = Modif
             "Visa - Master Card - 1234\nToday 11:00 - Received",
             "$1000",
             "Failed",
-            painterResource(id = R.drawable.ic_bank),
+            painterResource(id = R.drawable.visa),
             false,
             onClick = { navController.navigate(TRANSACTION_DETAILS)}
         ) , TransactionItem(
@@ -101,7 +101,7 @@ fun TransactionsScreen(navController: NavController , modifier: Modifier = Modif
             "Visa - Master Card - 1234\nToday 11:00 - Received",
             "$1000",
             "Successful",
-            painterResource(id = R.drawable.ic_card),
+            painterResource(id = R.drawable.visa),
             true,
             onClick = { navController.navigate(TRANSACTION_DETAILS)}
         )
@@ -146,10 +146,9 @@ fun TransactionItem(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.End
                 ) {
-                    Icon(
+                    Image(
                         painter = iconRes,
                         contentDescription = "Transaction Icon",
-                        tint = Maroon,
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxSize()
@@ -221,7 +220,7 @@ fun TransactionItem(
 
 
 @Composable
-fun TransactionDetailsScreen(navController: NavController) {
+fun TransactionDetailsScreen(navController: NavController , modifier: Modifier = Modifier) {
     val amount = "1000 USD"
     val from = "Asmaa Dosuky"
     val to = "Jonathon Smith"
@@ -233,7 +232,7 @@ fun TransactionDetailsScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(background2),
+           ,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 

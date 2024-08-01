@@ -22,11 +22,10 @@ import com.groupd.banquemisrapp.ui.partials.ProfileOptionItem
 import com.groupd.banquemisrapp.ui.theme.background2
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(background2)
             .padding(16.dp)
     ) {
         //Text("Settings", style = MaterialTheme.typography.headlineSmall)

@@ -66,9 +66,7 @@ fun EditProfileScreen(navController: NavController, modifier: Modifier = Modifie
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                background2
-            ),
+            ,
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
@@ -181,9 +179,7 @@ fun EditProfileScreen(navController: NavController, modifier: Modifier = Modifie
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(
-                    background2
-                ),
+                ,
             horizontalAlignment = Alignment.CenterHorizontally,
 
             ) {

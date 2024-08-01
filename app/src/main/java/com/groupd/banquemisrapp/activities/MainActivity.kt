@@ -3,6 +3,7 @@ package com.groupd.banquemisrapp.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -65,6 +66,7 @@ import com.groupd.banquemisrapp.routes.Route.CARDS
 import com.groupd.banquemisrapp.routes.Route.HOME
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
 import com.groupd.banquemisrapp.routes.Route.MORE
+import com.groupd.banquemisrapp.routes.Route.SIGNIN
 import com.groupd.banquemisrapp.routes.Route.TRANSACTIONS
 import com.groupd.banquemisrapp.routes.Route.TRANSFER
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
@@ -84,6 +86,8 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val navController = rememberNavController()
+
+            
             Scaffold(bottomBar = {
 
 
@@ -93,7 +97,7 @@ class MainActivity : ComponentActivity() {
 
                     isSelected = destination.route ?: HOME_SCREEN
                 }
-
+                Log.d("TAG", "onCreate: $isSelected")
 
 
                 Card(
@@ -120,9 +124,9 @@ class MainActivity : ComponentActivity() {
                                 }
 
                             },
-                            imageRes = painterResource(id = R.drawable.ic_nav_home),
+                            imageRes = painterResource(id = R.drawable.ic_home_3x),
                             text = "Home",
-                            isSelected = if (navController.currentDestination?.route == HOME_SCREEN) true else false
+                            isSelected =  isSelected == HOME_SCREEN
                         )
                         iconNamedVertically(
                             onClick = {
@@ -131,7 +135,7 @@ class MainActivity : ComponentActivity() {
                                     isSelected = navController.currentDestination?.route ?: "transfer"
                                 }
                             },
-                            imageRes = painterResource(id = R.drawable.ic_nav_transfer),
+                            imageRes = painterResource(id = R.drawable.ic_transfer_3x),
                             text = "Transfer",
                             isSelected = isSelected == "Transfer" || isSelected == TRANSFER
                         )
@@ -143,7 +147,7 @@ class MainActivity : ComponentActivity() {
                                  }
 
                             },
-                            imageRes = painterResource(id = R.drawable.ic_nav_transactions),
+                            imageRes = painterResource(id = R.drawable.ic_history_3x),
                             text = "Transactions",
                             isSelected = isSelected == "Transactions" || isSelected == TRANSACTIONS
                         )
@@ -154,7 +158,7 @@ class MainActivity : ComponentActivity() {
                                      isSelected = navController.currentDestination?.route ?: "cards"
                                  }
                             },
-                            imageRes = painterResource(id = R.drawable.ic_nav_cards),
+                            imageRes = painterResource(id = R.drawable.ic_card_3x),
                             text = "My cards",
                             isSelected = isSelected == "My cards" || isSelected == CARDS
                         )
@@ -165,7 +169,7 @@ class MainActivity : ComponentActivity() {
                                     isSelected = navController.currentDestination?.route ?: "more"
                                 }
                             },
-                            imageRes = painterResource(id = R.drawable.ic_nav_more),
+                            imageRes = painterResource(id = R.drawable.ic_more),
                             text = "More",
                             isSelected = isSelected == "More" || isSelected == MORE
                         )
@@ -179,7 +183,21 @@ class MainActivity : ComponentActivity() {
             )
 
             { innerPadding ->
-                MainNavHost(navController = navController)
+                var backgroundColor by remember { mutableStateOf(background) }
+                navController.addOnDestinationChangedListener { _, destination, _ ->
+                    backgroundColor = if (destination.route == Route.SIGNIN /*ADD PAGES LIKE ADD NEW CARD ETC*/) {
+                        background
+                    } else {
+                        background2
+                    }
+
+                }
+                Box(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
+                    MainNavHost(
+                        navController = navController,
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
             }
         }
 

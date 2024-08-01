@@ -55,9 +55,7 @@ fun FavouriteScreen(navController: NavController, modifier: Modifier = Modifier)
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                background
-            ),
+            ,
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {

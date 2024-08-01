@@ -51,10 +51,7 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                background
 
-            )
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

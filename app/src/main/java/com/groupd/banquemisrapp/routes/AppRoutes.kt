@@ -1,6 +1,8 @@
 package com.groupd.banquemisrapp.routes
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -28,6 +30,7 @@ import com.groupd.banquemisrapp.routes.Route.FAVOURITES
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
 import com.groupd.banquemisrapp.routes.Route.INTERNET_ERROR
 import com.groupd.banquemisrapp.routes.Route.MORE
+import com.groupd.banquemisrapp.routes.Route.NOTIFICATIONS
 import com.groupd.banquemisrapp.routes.Route.PROFILE
 import com.groupd.banquemisrapp.routes.Route.SERVER_ERROR
 import com.groupd.banquemisrapp.routes.Route.SPLASH
@@ -43,8 +46,10 @@ import com.groupd.banquemisrapp.ui.screens.main.MyCardsScreen
 import com.groupd.banquemisrapp.ui.screens.main.TransactionDetailsScreen
 import com.groupd.banquemisrapp.ui.screens.main.TransactionsScreen
 import com.groupd.banquemisrapp.ui.screens.main.TransferScreen
+import com.groupd.banquemisrapp.ui.screens.profile.NotificationScreen
 import com.groupd.banquemisrapp.ui.screens.profile.PasswordChangeScreen
 import com.groupd.banquemisrapp.ui.screens.profile.ProfileScreen
+
 
 
 object Route {
@@ -67,6 +72,7 @@ object Route {
     const val INTERNET_ERROR = "internet_error"
     const val SERVER_ERROR = "server_error"
     const val FAVOURITES = "favourites"
+    const val NOTIFICATIONS = "notifications"
 
 }
 
@@ -95,24 +101,26 @@ fun AppNavHost() {
 
 
 @Composable
-fun MainNavHost(navController :NavHostController) {
+fun MainNavHost(navController :NavHostController , modifier: Modifier) {
     //val navController = rememberNavController()
     NavHost(navController = navController, startDestination = HOME_SCREEN) {
 
-        composable(route = PROFILE) { ProfileScreen(navController = navController) }
-        composable(route = PROFILE_INFO) { ProfileInformationScreen(navController = navController) }
-        composable(route = MORE) { MoreScreen(navController = navController) }
-        composable(route = SETTINGS) { SettingsScreen(navController = navController) }
-        composable(route = EDIT_PROFILE) { EditProfileScreen(navController = navController) }
-        composable(route = CHANGE_PASSWORD) { PasswordChangeScreen(navController = navController) }
-        composable(route = HOME_SCREEN) { HomeScreen(navController = navController) }
-        composable(route = TRANSFER) { TransferScreen(navController = navController) }
-        composable(route = TRANSACTIONS) { TransactionsScreen(navController = navController) }
-        composable(route = TRANSACTION_DETAILS) { TransactionDetailsScreen(navController = navController) }
-        composable(route = CARDS) { MyCardsScreen(navController = navController) }
-        composable(route = INTERNET_ERROR) { InternetConnectionErrorScreen(navController = navController) }
-        composable(route = SERVER_ERROR) { ServerErrorScreen(navController = navController) }
-        composable(route = FAVOURITES) { FavouriteScreen(navController= navController)}
+        composable(route = PROFILE) { ProfileScreen(navController = navController ) }
+        composable(route = PROFILE_INFO) { ProfileInformationScreen(navController = navController, modifier = modifier ) }
+        composable(route = MORE) { MoreScreen(navController = navController, modifier = modifier ) }
+        composable(route = SETTINGS) { SettingsScreen(navController = navController, modifier = modifier ) }
+        composable(route = EDIT_PROFILE) { EditProfileScreen(navController = navController, modifier = modifier ) }
+        composable(route = CHANGE_PASSWORD) { PasswordChangeScreen(navController = navController, modifier = modifier ) }
+        composable(route = HOME_SCREEN) { HomeScreen(navController = navController, modifier = modifier ) }
+        composable(route = TRANSFER) { TransferScreen(navController = navController, modifier = modifier ) }
+        composable(route = TRANSACTIONS) { TransactionsScreen(navController = navController, modifier = modifier ) }
+        composable(route = TRANSACTION_DETAILS) { TransactionDetailsScreen(navController = navController, modifier = modifier ) }
+        composable(route = CARDS) { MyCardsScreen(navController = navController, modifier = modifier ) }
+        composable(route = INTERNET_ERROR) { InternetConnectionErrorScreen(navController = navController, modifier = modifier ) }
+        composable(route = SERVER_ERROR) { ServerErrorScreen(navController = navController, modifier = modifier ) }
+        composable(route = FAVOURITES) { FavouriteScreen(navController= navController, modifier = modifier )}
+        composable(route = NOTIFICATIONS) { NotificationScreen(navController= navController, modifier = modifier )}
+
 
 
 
