@@ -47,7 +47,7 @@ fun ProfileScreen(navController: NavController) {
 
             .padding(16.dp)
     ) {
-        CustomHeader(title = "Profile", onBackClick = {})
+        CustomHeader(title = "Profile", onBackClick = {navController.popBackStack()})
         ProfileHeader()
         Spacer(modifier = Modifier.height(16.dp))
 

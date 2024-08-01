@@ -142,7 +142,9 @@ fun NotificationScreen(navController: NavController, modifier: Modifier = Modifi
                     date = notificationList[index].get("date").toString(),
                     iconRes = notificationList[index].get("iconRes") as Painter,
 
-                )
+                ){
+                    navController.navigate(TRANSACTION_DETAILS)
+                }
 
             }
         }
@@ -155,12 +157,12 @@ fun NotificationItem(
     details: String,
     date: String,
     iconRes: Painter,
-
+    onClick :() -> Unit
     ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-
+            .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 4.dp),
         elevation = CardDefaults.elevatedCardElevation(40.dp),
         shape = RoundedCornerShape(8.dp),

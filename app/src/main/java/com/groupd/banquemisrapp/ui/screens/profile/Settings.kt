@@ -30,7 +30,7 @@ fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) 
     ) {
         //Text("Settings", style = MaterialTheme.typography.headlineSmall)
         CustomHeader(title = "Setting") {
-            
+            navController.popBackStack()
         }
         Spacer(modifier = Modifier.height(16.dp))
         ProfileOptionItem(

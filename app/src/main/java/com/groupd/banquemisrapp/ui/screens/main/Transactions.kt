@@ -54,7 +54,9 @@ import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.routes.Route.TRANSACTION_DETAILS
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
+import com.groupd.banquemisrapp.ui.theme.Green
 import com.groupd.banquemisrapp.ui.theme.Maroon
+import com.groupd.banquemisrapp.ui.theme.Red
 import com.groupd.banquemisrapp.ui.theme.background2
 
 
@@ -67,7 +69,7 @@ fun TransactionsScreen(navController: NavController , modifier: Modifier = Modif
 
     ) {
         CustomHeader(title = "Transactions") {
-
+            navController.popBackStack()
         }
         Text(
             text = "Your Last Transactions",
@@ -183,7 +185,7 @@ fun TransactionItem(
                     ) {
                         Text(
                             text = status,
-                            color = Color.Green,
+                            color = Green,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(8.dp)
                         )
@@ -196,7 +198,7 @@ fun TransactionItem(
                     ) {
                         Text(
                             text = status,
-                            color = Color.Red,
+                            color = Red,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(8.dp)
                         )
@@ -237,7 +239,7 @@ fun TransactionDetailsScreen(navController: NavController , modifier: Modifier =
     ) {
 
         CustomHeader(title = "Successful Transaction") {
-
+            navController.popBackStack()
         }
         // Status Icon
         Icon(
@@ -487,6 +489,6 @@ fun TransactionDetailItem() {
 @Composable
 private fun TransactionsScreenPreview() {
    // TransactionDetails()
-    TransactionDetailsScreen(navController = NavController(LocalContext.current))
-    //TransactionsScreen(navController = NavController(LocalContext.current))
+    //TransactionDetailsScreen(navController = NavController(LocalContext.current))
+    TransactionsScreen(navController = NavController(LocalContext.current))
 }

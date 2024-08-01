@@ -28,7 +28,7 @@ fun ProfileInformationScreen(navController: NavController, modifier: Modifier = 
             .padding(16.dp)
     ) {
         CustomHeader(title = "Profile Information") {
-
+            navController.popBackStack()
         }
         Spacer(modifier = modifier.height(16.dp))
         ProfileDetail("Full Name", "Asmaa Dosuky")

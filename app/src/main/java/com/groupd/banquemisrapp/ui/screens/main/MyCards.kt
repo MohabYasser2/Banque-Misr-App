@@ -24,6 +24,9 @@ fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier) {
     )
     {
         Text(text = "My Cards")
+
+
+
     }
 
 

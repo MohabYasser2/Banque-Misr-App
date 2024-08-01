@@ -76,7 +76,7 @@ fun EditProfileScreen(navController: NavController, modifier: Modifier = Modifie
         var dateOfBirth by remember { mutableStateOf("") }
 
         CustomHeader(title = "Edit Profile") {
-
+            navController.popBackStack()
         }
 
         namedField(
@@ -190,7 +190,7 @@ fun EditProfileScreen(navController: NavController, modifier: Modifier = Modifie
 
 
             CustomHeader(title = "Change Password") {
-
+                navController.popBackStack()
             }
             namedField(text = "Current Password",
                 message = "Enter your password",
