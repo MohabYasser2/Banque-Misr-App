@@ -2,6 +2,7 @@ package com.groupd.banquemisrapp.ui.screens.main
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -57,7 +58,10 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CustomHeader(title = "More") {}
+        CustomHeader(title = "More") {
+            navController.popBackStack()
+            Log.d("TAG", "MoreScreen: ${navController.currentDestination?.route}")
+        }
         MoreOptionItem(
             imageRes = painterResource(id = R.drawable.ic_website),
             option = "Transfer From Website"

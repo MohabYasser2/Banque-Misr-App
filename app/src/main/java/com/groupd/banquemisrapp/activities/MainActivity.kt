@@ -61,6 +61,12 @@ import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.routes.AppNavHost
 import com.groupd.banquemisrapp.routes.MainNavHost
 import com.groupd.banquemisrapp.routes.Route
+import com.groupd.banquemisrapp.routes.Route.CARDS
+import com.groupd.banquemisrapp.routes.Route.HOME
+import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
+import com.groupd.banquemisrapp.routes.Route.MORE
+import com.groupd.banquemisrapp.routes.Route.TRANSACTIONS
+import com.groupd.banquemisrapp.routes.Route.TRANSFER
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.MoreOptionItem
 import com.groupd.banquemisrapp.ui.partials.iconNamedVertically
@@ -81,8 +87,12 @@ class MainActivity : ComponentActivity() {
             Scaffold(bottomBar = {
 
 
-                var isSelected by remember { mutableStateOf("Home") }
+                var isSelected by remember { mutableStateOf(HOME_SCREEN) }
                 val context = LocalContext.current
+                navController.addOnDestinationChangedListener { _, destination, _ ->
+
+                    isSelected = destination.route ?: HOME_SCREEN
+                }
 
 
 
@@ -104,63 +114,60 @@ class MainActivity : ComponentActivity() {
 
                         iconNamedVertically(
                             onClick = {
-                                if (isSelected != "Home") {
+                                if (isSelected != HOME_SCREEN) {
                                     navController.navigate(Route.HOME_SCREEN)
-                                    isSelected = "Home"
+                                    isSelected = navController.currentDestination?.route ?: "home_screen"
                                 }
 
                             },
                             imageRes = painterResource(id = R.drawable.ic_nav_home),
                             text = "Home",
-                            isSelected = isSelected == "Home"
+                            isSelected = if (navController.currentDestination?.route == HOME_SCREEN) true else false
                         )
                         iconNamedVertically(
                             onClick = {
-                                if (isSelected != "Transfer") {
-                                    isSelected = "Transfer"
-
-                                    navController.navigate(Route.TRANSFER)
+                                if (isSelected != TRANSFER) {
+                                    navController.navigate(TRANSFER)
+                                    isSelected = navController.currentDestination?.route ?: "transfer"
                                 }
                             },
                             imageRes = painterResource(id = R.drawable.ic_nav_transfer),
                             text = "Transfer",
-                            isSelected = isSelected == "Transfer"
+                            isSelected = isSelected == "Transfer" || isSelected == TRANSFER
                         )
                         iconNamedVertically(
                             onClick = {
-                                if (isSelected != "Transactions") {
-                                    isSelected = "Transactions"
+                                 if (isSelected != TRANSACTIONS){
+                                     navController.navigate(Route.TRANSACTIONS)
+                                     isSelected = navController.currentDestination?.route ?: "transactions"
+                                 }
 
-                                    navController.navigate(Route.TRANSACTIONS)
-                                }
                             },
                             imageRes = painterResource(id = R.drawable.ic_nav_transactions),
                             text = "Transactions",
-                            isSelected = isSelected == "Transactions"
+                            isSelected = isSelected == "Transactions" || isSelected == TRANSACTIONS
                         )
                         iconNamedVertically(
                             onClick = {
-                                if (isSelected != "My cards") {
-
-                                    isSelected = "My cards"
-
-                                    navController.navigate(Route.CARDS)
-                                }
+                                 if (isSelected != CARDS){
+                                     navController.navigate(Route.CARDS)
+                                     isSelected = navController.currentDestination?.route ?: "cards"
+                                 }
                             },
                             imageRes = painterResource(id = R.drawable.ic_nav_cards),
                             text = "My cards",
-                            isSelected = isSelected == "My cards"
+                            isSelected = isSelected == "My cards" || isSelected == CARDS
                         )
                         iconNamedVertically(
                             onClick = {
-                                if (isSelected != "More") {
-                                    isSelected = "More"
+                                if (isSelected != MORE) {
                                     navController.navigate(Route.MORE)
+                                    isSelected = navController.currentDestination?.route ?: "more"
                                 }
                             },
                             imageRes = painterResource(id = R.drawable.ic_nav_more),
                             text = "More",
-                            isSelected = isSelected == "More"
+                            isSelected = isSelected == "More" || isSelected == MORE
                         )
 
 

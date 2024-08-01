@@ -62,7 +62,7 @@ fun FavouriteScreen(navController: NavController, modifier: Modifier = Modifier)
 
         ) {
         CustomHeader(title = "Favourite") {
-
+            navController.popBackStack()
 
         }
         Text(

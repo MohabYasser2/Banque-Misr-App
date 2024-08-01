@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.FAVOURITES
 import com.groupd.banquemisrapp.routes.Route.PROFILE_INFO
 import com.groupd.banquemisrapp.routes.Route.SETTINGS
@@ -69,6 +70,7 @@ fun ProfileScreen(navController: NavController) {
             "Payment history",
             "View your transactions",
             painterResource(id = R.drawable.history),
+            onClick = {navController.navigate(Route.TRANSACTIONS)},
 
         )
         HorizontalDivider()
