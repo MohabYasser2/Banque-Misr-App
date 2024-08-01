@@ -1,4 +1,4 @@
-package com.groupd.banquemisrapp.ui.screens.main
+package com.groupd.banquemisrapp.ui.screens.cards
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.groupd.banquemisrapp.routes.Route.SIGNUP2
+import com.groupd.banquemisrapp.routes.Route.ADD_CARD_DETAILS
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.screens.signup.CountryList
 import com.groupd.banquemisrapp.ui.theme.Maroon
@@ -37,7 +37,7 @@ fun AddCardScreen(navController: NavController ,modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize()
     ){
         CustomHeader(title = "Select Currency") {
-            
+            navController.popBackStack()
         }
 
 
@@ -47,7 +47,7 @@ fun AddCardScreen(navController: NavController ,modifier: Modifier = Modifier) {
         })
 
         Button(
-            onClick = { },
+            onClick = { navController.navigate(ADD_CARD_DETAILS)},
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()

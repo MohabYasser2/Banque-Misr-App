@@ -1,9 +1,7 @@
 package com.groupd.banquemisrapp.routes
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,12 +24,15 @@ import com.groupd.banquemisrapp.ui.screens.signup.SignUpSecond
 import com.groupd.banquemisrapp.activities.OnBoardingScreen
 import com.groupd.banquemisrapp.activities.SplashScreen
 import com.groupd.banquemisrapp.routes.Route.ADD_CARD
+import com.groupd.banquemisrapp.routes.Route.ADD_CARD_DETAILS
+import com.groupd.banquemisrapp.routes.Route.APP_CONNECTION
 import com.groupd.banquemisrapp.routes.Route.CARDS
 import com.groupd.banquemisrapp.routes.Route.FAVOURITES
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
 import com.groupd.banquemisrapp.routes.Route.INTERNET_ERROR
 import com.groupd.banquemisrapp.routes.Route.MORE
 import com.groupd.banquemisrapp.routes.Route.NOTIFICATIONS
+import com.groupd.banquemisrapp.routes.Route.OTP
 import com.groupd.banquemisrapp.routes.Route.PROFILE
 import com.groupd.banquemisrapp.routes.Route.SERVER_ERROR
 import com.groupd.banquemisrapp.routes.Route.SPLASH
@@ -41,10 +42,13 @@ import com.groupd.banquemisrapp.routes.Route.TRANSFER
 import com.groupd.banquemisrapp.ui.screens.errors.InternetConnectionErrorScreen
 import com.groupd.banquemisrapp.ui.screens.errors.ServerErrorScreen
 import com.groupd.banquemisrapp.ui.screens.favorites.FavouriteScreen
-import com.groupd.banquemisrapp.ui.screens.main.AddCardScreen
+import com.groupd.banquemisrapp.ui.screens.cards.AddCardScreen
+import com.groupd.banquemisrapp.ui.screens.cards.CardDetailsScreen
+import com.groupd.banquemisrapp.ui.screens.cards.ConnectingScreen
 import com.groupd.banquemisrapp.ui.screens.main.HomeScreen
 import com.groupd.banquemisrapp.ui.screens.main.MoreScreen
-import com.groupd.banquemisrapp.ui.screens.main.MyCardsScreen
+import com.groupd.banquemisrapp.ui.screens.cards.MyCardsScreen
+import com.groupd.banquemisrapp.ui.screens.cards.OTPEnteredScreen
 import com.groupd.banquemisrapp.ui.screens.main.TransactionDetailsScreen
 import com.groupd.banquemisrapp.ui.screens.main.TransactionsScreen
 import com.groupd.banquemisrapp.ui.screens.main.TransferScreen
@@ -71,11 +75,14 @@ object Route {
     const val TRANSACTION_DETAILS = "transaction_details"
     const val CARDS = "cards"
     const val ADD_CARD = "add_card"
+    const val ADD_CARD_DETAILS = "add_card_Details"
+    const val OTP = "otp"
     const val HOME_SCREEN = "home_screen"
     const val INTERNET_ERROR = "internet_error"
     const val SERVER_ERROR = "server_error"
     const val FAVOURITES = "favourites"
     const val NOTIFICATIONS = "notifications"
+    const val APP_CONNECTION = "app_connection"
 
 }
 
@@ -124,6 +131,9 @@ fun MainNavHost(navController :NavHostController , modifier: Modifier) {
         composable(route = FAVOURITES) { FavouriteScreen(navController= navController, modifier = modifier )}
         composable(route = NOTIFICATIONS) { NotificationScreen(navController= navController, modifier = modifier )}
         composable(route = ADD_CARD) { AddCardScreen(navController= navController, modifier = modifier ) }
+        composable(route = ADD_CARD_DETAILS) { CardDetailsScreen(navController= navController, modifier = modifier ) }
+        composable(route = APP_CONNECTION) { ConnectingScreen(navController= navController, modifier = modifier ) }
+        composable(route = OTP) { OTPEnteredScreen(navController= navController, modifier = modifier ) }
 
 
 

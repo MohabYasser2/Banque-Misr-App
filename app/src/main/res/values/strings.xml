@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Banque Misr App</string>
+    <string name="title_activity_card">CardActivity</string>
 </resources>
