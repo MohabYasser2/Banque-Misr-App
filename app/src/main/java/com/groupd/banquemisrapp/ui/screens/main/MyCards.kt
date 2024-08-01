@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.activities.MainActivity
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Green
@@ -61,7 +62,9 @@ fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier) {
         }
 
 
-        CardList()
+        CardList(){
+            navController.navigate(Route.ADD_CARD)
+        }
 
 
 
@@ -74,7 +77,7 @@ fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier) {
 
 
 @Composable
-fun CardList(modifier: Modifier = Modifier) {
+fun CardList(modifier: Modifier = Modifier , onClick : () -> Unit) {
     Column (modifier = modifier.verticalScroll(rememberScrollState())){
         CardItem("Asmaa Dosuky", "Account xxxx7890" , true)
         CardItem("Asmaa Dosuky", "Account xxxx7890" , false)
@@ -84,7 +87,7 @@ fun CardList(modifier: Modifier = Modifier) {
 
 
         Button(
-            onClick = {},
+            onClick = { onClick() },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()

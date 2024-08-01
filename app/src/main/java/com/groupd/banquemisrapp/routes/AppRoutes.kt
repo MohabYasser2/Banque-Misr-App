@@ -25,6 +25,7 @@ import com.groupd.banquemisrapp.ui.screens.signup.SignUpFirst
 import com.groupd.banquemisrapp.ui.screens.signup.SignUpSecond
 import com.groupd.banquemisrapp.activities.OnBoardingScreen
 import com.groupd.banquemisrapp.activities.SplashScreen
+import com.groupd.banquemisrapp.routes.Route.ADD_CARD
 import com.groupd.banquemisrapp.routes.Route.CARDS
 import com.groupd.banquemisrapp.routes.Route.FAVOURITES
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
@@ -40,6 +41,7 @@ import com.groupd.banquemisrapp.routes.Route.TRANSFER
 import com.groupd.banquemisrapp.ui.screens.errors.InternetConnectionErrorScreen
 import com.groupd.banquemisrapp.ui.screens.errors.ServerErrorScreen
 import com.groupd.banquemisrapp.ui.screens.favorites.FavouriteScreen
+import com.groupd.banquemisrapp.ui.screens.main.AddCardScreen
 import com.groupd.banquemisrapp.ui.screens.main.HomeScreen
 import com.groupd.banquemisrapp.ui.screens.main.MoreScreen
 import com.groupd.banquemisrapp.ui.screens.main.MyCardsScreen
@@ -68,6 +70,7 @@ object Route {
     const val TRANSACTIONS = "transactions"
     const val TRANSACTION_DETAILS = "transaction_details"
     const val CARDS = "cards"
+    const val ADD_CARD = "add_card"
     const val HOME_SCREEN = "home_screen"
     const val INTERNET_ERROR = "internet_error"
     const val SERVER_ERROR = "server_error"
@@ -120,6 +123,8 @@ fun MainNavHost(navController :NavHostController , modifier: Modifier) {
         composable(route = SERVER_ERROR) { ServerErrorScreen(navController = navController, modifier = modifier ) }
         composable(route = FAVOURITES) { FavouriteScreen(navController= navController, modifier = modifier )}
         composable(route = NOTIFICATIONS) { NotificationScreen(navController= navController, modifier = modifier )}
+        composable(route = ADD_CARD) { AddCardScreen(navController= navController, modifier = modifier ) }
+
 
 
 
