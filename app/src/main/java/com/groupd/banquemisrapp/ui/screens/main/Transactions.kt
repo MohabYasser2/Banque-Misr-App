@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -67,6 +68,7 @@ fun TransactionsScreen(navController: NavController , modifier: Modifier = Modif
             .fillMaxSize()
             //.padding(16.dp)
 
+
     ) {
         CustomHeader(title = "Transactions") {
             navController.popBackStack()
@@ -82,6 +84,18 @@ fun TransactionsScreen(navController: NavController , modifier: Modifier = Modif
                 .fillMaxWidth()
         )
 
+        TransactionList(){
+            navController.navigate(TRANSACTION_DETAILS)
+        }
+
+    }
+}
+
+
+@Composable
+fun TransactionList(modifier: Modifier = Modifier,onClick: () -> Unit){
+
+    Column (modifier = modifier.verticalScroll(rememberScrollState())){
         val list = listOf(TransactionItem(
             "Ahmed Mohamed",
             "Visa - Master Card - 1234\nToday 11:00 - Received",
@@ -89,7 +103,7 @@ fun TransactionsScreen(navController: NavController , modifier: Modifier = Modif
             "Successful",
             painterResource(id = R.drawable.visa),
             true,
-            onClick = { navController.navigate(TRANSACTION_DETAILS)}
+            onClick = { onClick() }
         ) , TransactionItem(
             "Ahmed Mohamed",
             "Visa - Master Card - 1234\nToday 11:00 - Received",
@@ -97,7 +111,7 @@ fun TransactionsScreen(navController: NavController , modifier: Modifier = Modif
             "Failed",
             painterResource(id = R.drawable.visa),
             false,
-            onClick = { navController.navigate(TRANSACTION_DETAILS)}
+            onClick = { onClick()}
         ) , TransactionItem(
             "Ahmed Mohamed",
             "Visa - Master Card - 1234\nToday 11:00 - Received",
@@ -105,13 +119,30 @@ fun TransactionsScreen(navController: NavController , modifier: Modifier = Modif
             "Successful",
             painterResource(id = R.drawable.visa),
             true,
-            onClick = { navController.navigate(TRANSACTION_DETAILS)}
+            onClick = { onClick()}
+        ),TransactionItem(
+            "Ahmed Mohamed",
+            "Visa - Master Card - 1234\nToday 11:00 - Received",
+            "$1000",
+            "Successful",
+            painterResource(id = R.drawable.visa),
+            true,
+            onClick = { onClick()}
+        ),TransactionItem(
+            "Ahmed Mohamed",
+            "Visa - Master Card - 1234\nToday 11:00 - Received",
+            "$1000",
+            "Successful",
+            painterResource(id = R.drawable.visa),
+            true,
+            onClick = { onClick() }
         )
         )
-
-
     }
+
+
 }
+
 
 @Composable
 fun TransactionItem(
@@ -301,7 +332,7 @@ fun TransactionDetailsScreen(navController: NavController , modifier: Modifier =
 fun TransactionDetails() {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState()) // For scrolling if content overflows
     ) {
@@ -344,6 +375,7 @@ fun TransactionDetails() {
         Spacer(modifier = Modifier.height(16.dp))
 
         TransactionDetailItem()
+
     }
 }
 
@@ -419,7 +451,7 @@ fun TransactionDetailItem() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding( 8.dp)
+                    .padding(8.dp)
             ) {
                 Text(
                     text = "Transfer amount",
@@ -437,7 +469,7 @@ fun TransactionDetailItem() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding( 8.dp)
+                    .padding(8.dp)
             ) {
                 Text(
                     text = "Reference",
@@ -454,7 +486,7 @@ fun TransactionDetailItem() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding( 8.dp)
+                    .padding(8.dp)
             ) {
                 Text(
                     text = "Date",
