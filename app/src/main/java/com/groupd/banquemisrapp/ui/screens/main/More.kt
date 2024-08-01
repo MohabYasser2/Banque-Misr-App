@@ -65,7 +65,10 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier) {
         HorizontalDivider()
         MoreOptionItem(
             imageRes = painterResource(id = R.drawable.ic_favourite),
-            option = "Favourites"
+            option = "Favourites",
+            onClick = {
+                navController.navigate(Route.FAVOURITES)
+            }
         )
         HorizontalDivider()
         MoreOptionItem(
@@ -104,7 +107,7 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier) {
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.CenterVertically),
-                        colors = CardDefaults.cardColors(White),
+
                         shape = RoundedCornerShape(5.dp),
                         elevation = CardDefaults.cardElevation(2.dp)
                     ) {
@@ -159,7 +162,6 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier) {
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.CenterVertically),
-                        colors = CardDefaults.cardColors(White),
                         shape = RoundedCornerShape(5.dp),
                         elevation = CardDefaults.cardElevation(2.dp)
                     ) {

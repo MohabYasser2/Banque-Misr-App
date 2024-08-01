@@ -29,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,6 +64,7 @@ import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
 import com.groupd.banquemisrapp.ui.theme.background2
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class StartActivity : ComponentActivity() {
@@ -94,9 +96,10 @@ fun SplashScreen(navController: NavController ) {
             style = MaterialTheme.typography.headlineSmall
         )
     }
-    Handler(Looper.getMainLooper()).postDelayed({
+    LaunchedEffect(HOME) {
+        delay(3000)
         navController.navigate(HOME)
-    }, 3000)
+    }
 
 }
 @OptIn(ExperimentalFoundationApi::class)

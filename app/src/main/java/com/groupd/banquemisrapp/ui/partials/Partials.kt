@@ -1,6 +1,7 @@
 package com.groupd.banquemisrapp.ui.partials
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,7 +48,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
+import com.groupd.banquemisrapp.ui.theme.whiteBackground
 
 
 /* contain
@@ -299,4 +302,80 @@ fun iconNamedVertically(
         )
 
     }
+}
+@Composable
+fun FavouriteItem(
+    name: String,
+    account: String,
+    isEditable: Boolean = false,
+    onEdit: () -> Unit = {},
+    onDelete: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .fillMaxWidth(),
+
+        ) {
+        Row(
+            modifier = modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Card(
+                colors = CardDefaults.cardColors(Maroon.copy(alpha = 0.1f)),
+                modifier = modifier
+                    .size(40.dp)
+                    .align(Alignment.CenterVertically),
+                shape = CardDefaults.shape,
+                elevation = CardDefaults.cardElevation(10.dp)
+            ) {
+
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_bank),
+                    contentDescription = "Bank Icon",
+                    Modifier
+                        .size(36.dp)
+                        .padding(top = 4.dp, start = 4.dp),
+
+                    )
+            }
+            Column(
+                modifier = modifier
+                    .padding(start = 16.dp, end = 16.dp)
+                    .weight(1f)
+            ) {
+                Text(
+                    text = name,
+                    fontWeight = FontWeight(500),
+                    fontSize = 18.sp,
+                    modifier = modifier.padding(bottom = 8.dp)
+                )
+                Text(text = account, color = Black.copy(alpha = 0.5f))
+
+            }
+            if (isEditable) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_edit),
+                    contentDescription = "Edit Icon",
+                    Modifier
+                        .size(24.dp)
+                        .clickable { onEdit() },
+                    tint = Black.copy(alpha = 0.5f)
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_delete),
+                    contentDescription = "Delete Icon",
+                    tint = Maroon,
+                    modifier = modifier
+                        .padding(start = 16.dp)
+                        .size(24.dp)
+                        .clickable { onDelete() }
+                )
+
+            }
+        }
+    }
+
+
 }

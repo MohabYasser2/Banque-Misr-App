@@ -24,6 +24,7 @@ import com.groupd.banquemisrapp.ui.screens.signup.SignUpSecond
 import com.groupd.banquemisrapp.activities.OnBoardingScreen
 import com.groupd.banquemisrapp.activities.SplashScreen
 import com.groupd.banquemisrapp.routes.Route.CARDS
+import com.groupd.banquemisrapp.routes.Route.FAVOURITES
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
 import com.groupd.banquemisrapp.routes.Route.INTERNET_ERROR
 import com.groupd.banquemisrapp.routes.Route.MORE
@@ -35,6 +36,7 @@ import com.groupd.banquemisrapp.routes.Route.TRANSACTION_DETAILS
 import com.groupd.banquemisrapp.routes.Route.TRANSFER
 import com.groupd.banquemisrapp.ui.screens.errors.InternetConnectionErrorScreen
 import com.groupd.banquemisrapp.ui.screens.errors.ServerErrorScreen
+import com.groupd.banquemisrapp.ui.screens.favorites.FavouriteScreen
 import com.groupd.banquemisrapp.ui.screens.main.HomeScreen
 import com.groupd.banquemisrapp.ui.screens.main.MoreScreen
 import com.groupd.banquemisrapp.ui.screens.main.MyCardsScreen
@@ -64,6 +66,7 @@ object Route {
     const val HOME_SCREEN = "home_screen"
     const val INTERNET_ERROR = "internet_error"
     const val SERVER_ERROR = "server_error"
+    const val FAVOURITES = "favourites"
 
 }
 
@@ -94,7 +97,7 @@ fun AppNavHost() {
 @Composable
 fun MainNavHost(navController :NavHostController) {
     //val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = MORE) {
+    NavHost(navController = navController, startDestination = HOME_SCREEN) {
 
         composable(route = PROFILE) { ProfileScreen(navController = navController) }
         composable(route = PROFILE_INFO) { ProfileInformationScreen(navController = navController) }
@@ -109,6 +112,7 @@ fun MainNavHost(navController :NavHostController) {
         composable(route = CARDS) { MyCardsScreen(navController = navController) }
         composable(route = INTERNET_ERROR) { InternetConnectionErrorScreen(navController = navController) }
         composable(route = SERVER_ERROR) { ServerErrorScreen(navController = navController) }
+        composable(route = FAVOURITES) { FavouriteScreen(navController= navController)}
 
 
 

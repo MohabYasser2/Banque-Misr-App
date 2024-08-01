@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.routes.Route.FAVOURITES
 import com.groupd.banquemisrapp.routes.Route.PROFILE_INFO
 import com.groupd.banquemisrapp.routes.Route.SETTINGS
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
@@ -74,7 +75,10 @@ fun ProfileScreen(navController: NavController) {
         ProfileOptionItem(
             "My favourite list",
             "View your favourites",
-            painterResource(id = R.drawable.ic_favourite)
+            painterResource(id = R.drawable.ic_favourite),
+            onClick = {
+                navController.navigate(FAVOURITES)
+            }
         )
 
     }

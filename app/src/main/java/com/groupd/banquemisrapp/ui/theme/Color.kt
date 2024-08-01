@@ -31,4 +31,12 @@ val background2 = Brush.verticalGradient(
 
 
     )
+
+)
+
+val whiteBackground = Brush.verticalGradient(
+    listOf(
+        Color.White.copy(alpha = 0.9999f),
+        White.copy(alpha = 0.1f)
+    )
 )
