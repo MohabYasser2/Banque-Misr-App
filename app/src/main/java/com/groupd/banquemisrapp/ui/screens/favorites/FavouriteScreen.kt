@@ -47,6 +47,7 @@ import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.screens.signup.CountryList
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
+import com.groupd.banquemisrapp.ui.theme.White
 import com.groupd.banquemisrapp.ui.theme.background
 
 @Composable
@@ -117,6 +118,7 @@ fun FavouritsList(modifier: Modifier = Modifier) {
                 ModalBottomSheet(
                     onDismissRequest = { isSheetOpen = !isSheetOpen },
                     sheetState = sheetState,
+                    containerColor = White
 
                     ) {
                     Column(

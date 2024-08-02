@@ -39,6 +39,8 @@ import com.groupd.banquemisrapp.routes.Route.SPLASH
 import com.groupd.banquemisrapp.routes.Route.TRANSACTIONS
 import com.groupd.banquemisrapp.routes.Route.TRANSACTION_DETAILS
 import com.groupd.banquemisrapp.routes.Route.TRANSFER
+import com.groupd.banquemisrapp.routes.Route.TRANSFER_THREE
+import com.groupd.banquemisrapp.routes.Route.TRANSFER_TWO
 import com.groupd.banquemisrapp.ui.screens.errors.InternetConnectionErrorScreen
 import com.groupd.banquemisrapp.ui.screens.errors.ServerErrorScreen
 import com.groupd.banquemisrapp.ui.screens.favorites.FavouriteScreen
@@ -51,7 +53,9 @@ import com.groupd.banquemisrapp.ui.screens.cards.MyCardsScreen
 import com.groupd.banquemisrapp.ui.screens.cards.OTPEnteredScreen
 import com.groupd.banquemisrapp.ui.screens.main.TransactionDetailsScreen
 import com.groupd.banquemisrapp.ui.screens.main.TransactionsScreen
-import com.groupd.banquemisrapp.ui.screens.main.TransferScreen
+import com.groupd.banquemisrapp.ui.screens.main.TransferScreenOne
+import com.groupd.banquemisrapp.ui.screens.main.TransferScreenThree
+import com.groupd.banquemisrapp.ui.screens.main.TransferScreenTwo
 import com.groupd.banquemisrapp.ui.screens.profile.NotificationScreen
 import com.groupd.banquemisrapp.ui.screens.profile.PasswordChangeScreen
 import com.groupd.banquemisrapp.ui.screens.profile.ProfileScreen
@@ -71,6 +75,8 @@ object Route {
     const val SPLASH = "splash"
     const val MORE = "more"
     const val TRANSFER = "transfer"
+    const val TRANSFER_TWO = "transfer_details"
+    const val TRANSFER_THREE = "transfer_confirmation"
     const val TRANSACTIONS = "transactions"
     const val TRANSACTION_DETAILS = "transaction_details"
     const val CARDS = "cards"
@@ -83,6 +89,7 @@ object Route {
     const val FAVOURITES = "favourites"
     const val NOTIFICATIONS = "notifications"
     const val APP_CONNECTION = "app_connection"
+
 
 }
 
@@ -122,7 +129,9 @@ fun MainNavHost(navController :NavHostController , modifier: Modifier) {
         composable(route = EDIT_PROFILE) { EditProfileScreen(navController = navController, modifier = modifier ) }
         composable(route = CHANGE_PASSWORD) { PasswordChangeScreen(navController = navController, modifier = modifier ) }
         composable(route = HOME_SCREEN) { HomeScreen(navController = navController, modifier = modifier ) }
-        composable(route = TRANSFER) { TransferScreen(navController = navController, modifier = modifier ) }
+        composable(route = TRANSFER) { TransferScreenOne(navController = navController, modifier = modifier ) }
+        composable(route = TRANSFER_TWO) { TransferScreenTwo(navController = navController, modifier = modifier ) }
+        composable(route = TRANSFER_THREE) { TransferScreenThree(navController = navController, modifier = modifier ) }
         composable(route = TRANSACTIONS) { TransactionsScreen(navController = navController, modifier = modifier ) }
         composable(route = TRANSACTION_DETAILS) { TransactionDetailsScreen(navController = navController, modifier = modifier ) }
         composable(route = CARDS) { MyCardsScreen(navController = navController, modifier = modifier ) }
@@ -134,6 +143,7 @@ fun MainNavHost(navController :NavHostController , modifier: Modifier) {
         composable(route = ADD_CARD_DETAILS) { CardDetailsScreen(navController= navController, modifier = modifier ) }
         composable(route = APP_CONNECTION) { ConnectingScreen(navController= navController, modifier = modifier ) }
         composable(route = OTP) { OTPEnteredScreen(navController= navController, modifier = modifier ) }
+
 
 
 

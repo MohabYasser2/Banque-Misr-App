@@ -95,6 +95,7 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier) {
             ModalBottomSheet(
                 onDismissRequest = { isSheetOpen = !isSheetOpen },
                 sheetState = sheetState,
+                containerColor = White
 
                 ) {
                 Row(
@@ -110,6 +111,7 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier) {
                             .align(Alignment.CenterVertically),
 
                         shape = RoundedCornerShape(5.dp),
+                        colors = CardDefaults.cardColors(containerColor = White, disabledContainerColor = White),
                         elevation = CardDefaults.cardElevation(2.dp)
                     ) {
                         Column(
@@ -164,6 +166,7 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier) {
                             .padding(16.dp)
                             .align(Alignment.CenterVertically),
                         shape = RoundedCornerShape(5.dp),
+                        colors = CardDefaults.cardColors(containerColor = White, disabledContainerColor = White),
                         elevation = CardDefaults.cardElevation(2.dp)
                     ) {
                         Column(

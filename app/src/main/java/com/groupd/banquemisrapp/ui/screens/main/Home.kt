@@ -73,7 +73,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(16.dp)
-                .padding(top = 32.dp)
+                .padding(top = 16.dp)
         ) {
             IconButton(
                 modifier = Modifier
@@ -122,7 +122,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
         Card(
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
-                .padding(16.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                 .fillMaxWidth(),
             colors = CardDefaults.cardColors(Maroon),
             elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
@@ -151,164 +151,155 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             }
         }
 
-        Column (
-            modifier = modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ){
-            Card(
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-                colors = CardDefaults.cardColors(White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
-            )
-            {
-                Column {
-                    Text(
-                        text = "Services",
-                        fontSize = 20.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight(500),
-                        modifier = Modifier.padding(16.dp)
 
-                    )
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        iconNamedVertically(
-                            onClick = {
-                                navController.navigate(Route.TRANSFER)
-                            },
-                            imageRes = painterResource(id = R.drawable.ic_transfer_3x),
-                            text = "Transfer",
-                            imageSize = 44.dp,
-                            fontSize = 14.sp,
-                            tint = Gold,
-                            textColor = Color.Black
-
-                        )
-                        iconNamedVertically(
-                            onClick = {
-                                navController.navigate(Route.TRANSACTIONS)
-
-                            },
-                            imageRes = painterResource(id = R.drawable.ic_history_3x),
-                            text = "Transactions",
-                            imageSize = 44.dp,
-                            fontSize = 14.sp,
-                            tint = Gold,
-                            textColor = Color.Black
-
-                        )
-                        iconNamedVertically(
-                            onClick = {
-                                navController.navigate(Route.CARDS)
-
-                            },
-                            imageRes = painterResource(id = R.drawable.ic_card_3x),
-                            text = "My cards",
-                            imageSize = 44.dp,
-                            fontSize = 14.sp,
-                            tint = Gold,
-                            textColor = Color.Black
-
-                        )
-                        iconNamedVertically(
-                            onClick = {
-                                navController.navigate(Route.PROFILE)
-
-                            },
-                            imageRes = painterResource(id = R.drawable.ic_account_3x),
-                            text = "Account",
-                            imageSize = 44.dp,
-                            fontSize = 14.sp,
-                            tint = Gold,
-                            textColor = Color.Black
-
-
-                        )
-                    }
-                }
-            }
-
-
-            Row(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        Card(
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors(White),
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        )
+        {
+            Column {
                 Text(
-                    text = "Recent transactions",
+                    text = "Services",
                     fontSize = 20.sp,
                     color = Color.Black,
                     fontWeight = FontWeight(500),
+                    modifier = Modifier.padding(16.dp)
+
                 )
-                Text(
-                    text = "View All",
-                    fontSize = 20.sp,
-                    color = Color.Black.copy(alpha = 0.5f),
-                    fontWeight = FontWeight(500),
-                    modifier = Modifier.clickable { navController.navigate(Route.TRANSACTIONS) }
-                )
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    iconNamedVertically(
+                        onClick = {
+                            navController.navigate(Route.TRANSFER)
+                        },
+                        imageRes = painterResource(id = R.drawable.ic_transfer_3x),
+                        text = "Transfer",
+                        imageSize = 44.dp,
+                        fontSize = 14.sp,
+                        tint = Gold,
+                        textColor = Color.Black
+
+                    )
+                    iconNamedVertically(
+                        onClick = {
+                            navController.navigate(Route.TRANSACTIONS)
+
+                        },
+                        imageRes = painterResource(id = R.drawable.ic_history_3x),
+                        text = "Transactions",
+                        imageSize = 44.dp,
+                        fontSize = 14.sp,
+                        tint = Gold,
+                        textColor = Color.Black
+
+                    )
+                    iconNamedVertically(
+                        onClick = {
+                            navController.navigate(Route.CARDS)
+
+                        },
+                        imageRes = painterResource(id = R.drawable.ic_card_3x),
+                        text = "My cards",
+                        imageSize = 44.dp,
+                        fontSize = 14.sp,
+                        tint = Gold,
+                        textColor = Color.Black
+
+                    )
+                    iconNamedVertically(
+                        onClick = {
+                            navController.navigate(Route.PROFILE)
+
+                        },
+                        imageRes = painterResource(id = R.drawable.ic_account_3x),
+                        text = "Account",
+                        imageSize = 44.dp,
+                        fontSize = 14.sp,
+                        tint = Gold,
+                        textColor = Color.Black
+
+
+                    )
+                }
             }
+        }
 
 
-
-
-            Card (
-                modifier = modifier.padding(horizontal = 16.dp)
-            ){
-                TransactionItem(
-                    "Ahmed Mohamed",
-                    "Visa  - 1234\nToday 11:00 - Received",
-                    "$1000",
-                    painterResource(id = R.drawable.visa),
-                    onClick = {}
-                )
-                HorizontalDivider()
-                TransactionItem(
-                    "Ahmed Mohamed",
-                    "Master Card - 1234\nToday 11:00 - Received",
-                    "$1000",
-                    painterResource(id = R.drawable.visa),
-                    onClick = {}
-                )
-                HorizontalDivider()
-
-                TransactionItem(
-                    "Ahmed Mohamed",
-                    "Visa - 1234\nToday 11:00 - Received",
-                    "$1000",
-                    painterResource(id = R.drawable.visa),
-                    onClick = {}
-                )
-            }
-
-
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Recent transactions",
+                fontSize = 20.sp,
+                color = Color.Black,
+                fontWeight = FontWeight(500),
+            )
+            Text(
+                text = "View All",
+                fontSize = 20.sp,
+                color = Color.Black.copy(alpha = 0.5f),
+                fontWeight = FontWeight(500),
+                modifier = Modifier.clickable { navController.navigate(Route.TRANSACTIONS) }
+            )
         }
 
 
 
 
-        //TODO: add recent transactions
+        Card (
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+        ){
+
+
+            TransactionItem(
+                "Ahmed Mohamed",
+                "Visa  - 1234\nToday 11:00 - Received",
+                "$1000",
+                painterResource(id = R.drawable.visa),
+                onClick = {}
+            )
+            HorizontalDivider()
+            TransactionItem(
+                "Ahmed Mohamed",
+                "Master Card - 1234\nToday 11:00 - Received",
+                "$1000",
+                painterResource(id = R.drawable.visa),
+                onClick = {}
+            )
+            HorizontalDivider()
+
+            TransactionItem(
+                "Ahmed Mohamed",
+                "Visa - 1234\nToday 11:00 - Received",
+                "$1000",
+                painterResource(id = R.drawable.visa),
+                onClick = {}
+            )
+
+
+        }
     }
 
 
+    //TODO: add recent transactions
 }
-
-
-
-
-
 
 
 @Composable
@@ -317,13 +308,13 @@ fun TransactionItem(
     details: String,
     amount: String,
     iconRes: Painter,
-    onClick : () -> Unit = {}
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            //.padding(12.dp)
+        //.padding(12.dp)
         , elevation = CardDefaults.elevatedCardElevation(40.dp),
         shape = RoundedCornerShape(0.dp),
         colors = CardDefaults.cardColors(Color.White)
@@ -358,7 +349,12 @@ fun TransactionItem(
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(text = name, fontWeight = FontWeight.Bold)
-                Text(text = details, color = Color.Gray , textAlign = TextAlign.Start , modifier = Modifier.fillMaxWidth())
+                Text(
+                    text = details,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
             }
             Spacer(modifier = Modifier.width(16.dp))
@@ -379,11 +375,7 @@ fun TransactionItem(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(background)
-    )
+
     HomeScreen(navController = NavController(LocalContext.current))
 
 }

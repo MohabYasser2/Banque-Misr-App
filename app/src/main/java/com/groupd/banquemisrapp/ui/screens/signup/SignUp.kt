@@ -69,6 +69,7 @@ import com.groupd.banquemisrapp.routes.Route.SIGNIN
 import com.groupd.banquemisrapp.routes.Route.SIGNUP2
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.theme.Maroon
+import com.groupd.banquemisrapp.ui.theme.White
 import com.groupd.banquemisrapp.ui.theme.background
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -238,6 +239,7 @@ fun SignUpSecond(navController: NavController,modifier: Modifier = Modifier) {
             ModalBottomSheet(
                 onDismissRequest = { isSheetOneOpen = !isSheetOneOpen },
                 sheetState = sheetStateOne,
+                containerColor = White
 
                 ) {
                 CountryList(currentCountry = selectedCountry, onCountrySelected = {

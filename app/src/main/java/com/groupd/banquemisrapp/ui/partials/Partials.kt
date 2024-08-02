@@ -1,5 +1,6 @@
 package com.groupd.banquemisrapp.ui.partials
 
+import android.graphics.Rect
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,7 +27,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
@@ -55,6 +58,7 @@ import androidx.navigation.compose.rememberNavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
+import com.groupd.banquemisrapp.ui.theme.White
 import com.groupd.banquemisrapp.ui.theme.whiteBackground
 
 
@@ -88,60 +92,69 @@ fun namedField(
             text = text,
             modifier = modifier
                 .align(Alignment.Start)
-                .padding(start = 24.dp, top = 8.dp)
+                .padding(horizontal = 16.dp)
+                .padding(vertical = 8.dp),
+            fontSize = 20.sp,
+            fontWeight = FontWeight(500),
+            color = Color.Black.copy(alpha = 0.8f)
 
         )
 
-        OutlinedTextField(
-            label = {
-                Text(
-                    text = message,
-                    fontSize = 16.sp,
-                    color = Color.Black.copy(alpha = 0.5f)
-
-                )
-            },
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .fillMaxWidth()
-                .clickable { onClick() },
-            shape = RoundedCornerShape(8.dp),
-            readOnly = isReadOnly,
-            trailingIcon = {
 
 
-                if (trailingIconOn && !isPassord)
-                    Image(
-                        painter = imageRes,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(end = 15.dp)
-                            .size(24.dp)
-                            .clickable {
-                                onClick()
-                            }
-                            .alpha(0.6f)
-
-                    )
-                if (isPassord)
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Image(
-                            painter = passwordIcon,
-                            contentDescription = "",
-                            modifier = Modifier
-                                .padding(end = 15.dp)
-                                .size(24.dp)
-                                .alpha(0.6f)
-                        )
-                    }
-            },
-            visualTransformation = if (passwordVisible || !isPassord) VisualTransformation.None else PasswordVisualTransformation(),
+    OutlinedTextField(
+        label = {
+            Text(
+                text = message,
+                fontSize = 16.sp,
+                color = Color.Black.copy(alpha = 0.5f)
 
             )
-    }
+        },
+        value = value,
+        singleLine = true,
+        onValueChange = onValueChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(horizontal = 16.dp),
+        colors = TextFieldDefaults.colors(unfocusedContainerColor = White, focusedContainerColor = White),
+        shape = RoundedCornerShape(8.dp),
+        readOnly = isReadOnly,
+        trailingIcon = {
+
+
+            if (trailingIconOn && !isPassord)
+                Image(
+                    painter = imageRes,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .size(24.dp)
+                        .clickable {
+                            onClick()
+                        }
+                        .alpha(0.6f)
+
+                )
+            if (isPassord)
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Image(
+                        painter = passwordIcon,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .size(24.dp)
+                            .alpha(0.6f)
+                    )
+                }
+        },
+        visualTransformation = if (passwordVisible || !isPassord) VisualTransformation.None else PasswordVisualTransformation(),
+
+        )
 }
+    }
+
 
 
 @Composable
@@ -296,7 +309,7 @@ fun iconNamedVertically(
         IconButton(
             onClick = onClick,
             modifier = modifier
-                .size(imageSize+16.dp)
+                .size(imageSize + 16.dp)
                 .clip(
                     RoundedCornerShape(20f)
                 )

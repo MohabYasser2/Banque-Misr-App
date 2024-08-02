@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
 
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = Color.White , disabledContainerColor = Color.White),
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 10.dp
                     ),

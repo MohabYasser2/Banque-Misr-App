@@ -359,7 +359,7 @@ fun TransactionDetails() {
             modifier = Modifier
                 .fillMaxWidth()
                 //.padding(vertical = 8.dp)
-                .offset(y = (-110).dp)
+                .offset(y = (-140).dp)
         ) {
             //HorizontalDivider()
             Icon(
@@ -368,11 +368,12 @@ fun TransactionDetails() {
                 tint = Color.White,
                 modifier = Modifier
                     .background(Color(0xFFb08645), shape = CircleShape)
-                    .size(35.dp)
+                    .size(42.dp)
+                    .padding(4.dp)
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        //Spacer(modifier = Modifier.height(16.dp))
 
         TransactionDetailItem()
 
@@ -421,15 +422,21 @@ fun TransactionDetailCard(label: String, name: String, account: String, icon: Pa
             Column {
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.bodySmall.copy(color = Maroon)
+                    style = MaterialTheme.typography.bodySmall.copy(color = Maroon),
+                    fontWeight = FontWeight(500),
+                    fontSize = 16.sp
                 )
                 Text(
                     text = name,
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(vertical = 8.dp)
+
                 )
                 Text(
                     text = account,
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
+                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray),
+                    fontSize = 16.sp
                 )
             }
         }
@@ -446,7 +453,6 @@ fun TransactionDetailItem() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp)
         ) {
             Row(
                 modifier = Modifier
