@@ -105,7 +105,12 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
             navController.popBackStack()
         }
 
-        ProgressBar(mode = 1)
+        Column (
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ){
+            ProgressBar(mode = 1)
+        }
+
 
         Text(
             text = "How much are you sending?",
@@ -427,7 +432,7 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
 
                 },
                 shape = RoundedCornerShape(8.dp),
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth(),
 
 
@@ -447,7 +452,7 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
 
                 },
                 shape = RoundedCornerShape(8.dp),
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
 
@@ -488,13 +493,20 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
         ) {
             ProgressBar(mode = 3)
 
-            Image(painter = painterResource(id = R.drawable.check_mark), contentDescription ="" )
-            Text(
-                text = "Your transfer was successful",
-                fontSize = 20.sp,
-                modifier = Modifier.padding(16.dp),
-                fontWeight = FontWeight.Bold
-            )
+            Column (
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Image(painter = painterResource(id = R.drawable.check_mark), contentDescription ="" )
+                Text(
+                    text = "Your transfer was successful",
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(16.dp),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
             // From section
             TransactionDetailCard(
                 label = "From",
@@ -535,7 +547,8 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
             }
             Row(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp).padding(bottom = 16.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp)
 
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -551,14 +564,16 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
                 )
 
             }
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 32.dp))
+            HorizontalDivider(modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 32.dp))
             Button(
                 onClick = {
                     navController.navigate(HOME_SCREEN)
 
                 },
                 shape = RoundedCornerShape(8.dp),
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth(),
 
 
@@ -575,12 +590,12 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
 
             Button(
                 onClick = {
-
+                    navController.popBackStack()
 
 
                 },
                 shape = RoundedCornerShape(8.dp),
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
 
@@ -606,7 +621,7 @@ private fun Preview() {
     Column(Modifier.background(background)) {
 
 
-        TransferScreenThree(navController = NavController(LocalContext.current))
+        TransferScreenOne(navController = NavController(LocalContext.current))
     }
 
 }
@@ -626,7 +641,7 @@ fun ProgressBar(mode: Int, modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+            //.padding(horizontal = 8.dp),
 
         ) {
 
@@ -640,7 +655,7 @@ fun ProgressBar(mode: Int, modifier: Modifier = Modifier) {
                 .padding(top = 16.dp)
                 .fillMaxWidth(),
         ) {
-            Text(text = "01", fontSize = 22.sp, color = colorOne, modifier = Modifier.drawBehind {
+            Text(text = "01", fontSize = 16.sp, color = colorOne, modifier = Modifier.drawBehind {
                 drawCircle(
                     color = White, radius = 20.dp.toPx()
                 )
@@ -657,7 +672,7 @@ fun ProgressBar(mode: Int, modifier: Modifier = Modifier) {
                 thickness = 1.5.dp
             )
 
-            Text(text = "02", fontSize = 22.sp, color = colorTwo, modifier = Modifier.drawBehind {
+            Text(text = "02", fontSize = 16.sp, color = colorTwo, modifier = Modifier.drawBehind {
                 drawCircle(
 
                     color = backColourTwo, radius = 20.dp.toPx()
@@ -675,7 +690,7 @@ fun ProgressBar(mode: Int, modifier: Modifier = Modifier) {
                 color = colorThree,
                 thickness = 1.5.dp
             )
-            Text(text = "03", fontSize = 22.sp, color = colorThree, modifier = Modifier.drawBehind {
+            Text(text = "03", fontSize = 16.sp, color = colorThree, modifier = Modifier.drawBehind {
                 drawCircle(
 
                     color = backColourThree, radius = 20.dp.toPx()
@@ -691,7 +706,7 @@ fun ProgressBar(mode: Int, modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
-                .padding(horizontal = 32.dp)
+                .padding(horizontal = 24.dp)
                 .padding(top = 16.dp, bottom = 16.dp)
                 .fillMaxWidth(),
         ) {

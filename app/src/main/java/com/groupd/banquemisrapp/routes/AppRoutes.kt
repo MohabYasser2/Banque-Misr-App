@@ -33,6 +33,7 @@ import com.groupd.banquemisrapp.routes.Route.INTERNET_ERROR
 import com.groupd.banquemisrapp.routes.Route.MORE
 import com.groupd.banquemisrapp.routes.Route.NOTIFICATIONS
 import com.groupd.banquemisrapp.routes.Route.OTP
+import com.groupd.banquemisrapp.routes.Route.OTP_CONNECTED
 import com.groupd.banquemisrapp.routes.Route.PROFILE
 import com.groupd.banquemisrapp.routes.Route.SERVER_ERROR
 import com.groupd.banquemisrapp.routes.Route.SPLASH
@@ -50,6 +51,7 @@ import com.groupd.banquemisrapp.ui.screens.cards.ConnectingScreen
 import com.groupd.banquemisrapp.ui.screens.main.HomeScreen
 import com.groupd.banquemisrapp.ui.screens.main.MoreScreen
 import com.groupd.banquemisrapp.ui.screens.cards.MyCardsScreen
+import com.groupd.banquemisrapp.ui.screens.cards.OTPConnectedScreen
 import com.groupd.banquemisrapp.ui.screens.cards.OTPEnteredScreen
 import com.groupd.banquemisrapp.ui.screens.main.TransactionDetailsScreen
 import com.groupd.banquemisrapp.ui.screens.main.TransactionsScreen
@@ -83,6 +85,7 @@ object Route {
     const val ADD_CARD = "add_card"
     const val ADD_CARD_DETAILS = "add_card_Details"
     const val OTP = "otp"
+    const val OTP_CONNECTED = "otp_connected"
     const val HOME_SCREEN = "home_screen"
     const val INTERNET_ERROR = "internet_error"
     const val SERVER_ERROR = "server_error"
@@ -143,7 +146,7 @@ fun MainNavHost(navController :NavHostController , modifier: Modifier) {
         composable(route = ADD_CARD_DETAILS) { CardDetailsScreen(navController= navController, modifier = modifier ) }
         composable(route = APP_CONNECTION) { ConnectingScreen(navController= navController, modifier = modifier ) }
         composable(route = OTP) { OTPEnteredScreen(navController= navController, modifier = modifier ) }
-
+        composable(route = OTP_CONNECTED) { OTPConnectedScreen(navController= navController, modifier = modifier ) }
 
 
 

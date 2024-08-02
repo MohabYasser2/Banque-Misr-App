@@ -55,6 +55,7 @@ import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.APP_CONNECTION
+import com.groupd.banquemisrapp.routes.Route.OTP_CONNECTED
 import com.groupd.banquemisrapp.routes.Route.SIGNIN
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.theme.Black
@@ -159,6 +160,7 @@ fun OTPEnteredScreen(navController: NavController , modifier: Modifier = Modifie
             Button(
                 onClick = {
                     // Handle sign-in action
+                    navController.navigate(OTP_CONNECTED)
                 },
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
