@@ -39,26 +39,26 @@ import com.groupd.banquemisrapp.ui.theme.Maroon
 @Composable
 fun OTPConnectedScreen(navController: NavController,modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize()
             .padding(bottom = 40.dp)
     ) {
         CustomHeader(title = "Bank Card OTP") {
             navController.popBackStack()
         }
 
-        Spacer(modifier =  modifier.height(70.dp))
+        Spacer(modifier =  Modifier.height(70.dp))
         Column (
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier.padding(32.dp)
+            modifier = Modifier.padding(32.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_success), // Replace with your icon resource
                 contentDescription = "Success Icon",
                 tint = Color.Unspecified,
-                modifier = modifier.size(120.dp)
+                modifier = Modifier.size(120.dp)
             )
-            Spacer(modifier = modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             Text(
                 text = "Account Connected \nSuccessfully!",
                 fontWeight = FontWeight(500),
@@ -66,20 +66,20 @@ fun OTPConnectedScreen(navController: NavController,modifier: Modifier = Modifie
                 color = Color.Black,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Feel free to connect another account at the same time.",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.Gray,
                 textAlign = TextAlign.Center,
-                modifier = modifier.padding(top = 16.dp)
+                modifier = Modifier.padding(top = 16.dp)
             )
 
         }
         Column (
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier.padding(horizontal = 12.dp , vertical = 32.dp)
+            modifier = Modifier.padding(horizontal = 12.dp , vertical = 32.dp)
                 .fillMaxHeight()
         ) {
             Button(
@@ -87,24 +87,24 @@ fun OTPConnectedScreen(navController: NavController,modifier: Modifier = Modifie
                     navController.navigate(ADD_CARD)
                           },
                 shape = RoundedCornerShape(8.dp),
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
                 colors = ButtonDefaults.buttonColors(Maroon),
             ) {
-                Text(text = "Connect another account", modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
+                Text(text = "Connect another account", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
 
             }
             Button(
                 onClick = { navController.navigate(HOME_SCREEN)  },
                 shape = RoundedCornerShape(8.dp),
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
                 colors = ButtonDefaults.buttonColors(Color.Transparent),
                 border = BorderStroke(1.dp, Maroon)
             ) {
-                Text(text = "Back to home", modifier.padding(12.dp), color = Maroon, fontSize = 18.sp)
+                Text(text = "Back to home", Modifier.padding(12.dp), color = Maroon, fontSize = 18.sp)
 
             }
 

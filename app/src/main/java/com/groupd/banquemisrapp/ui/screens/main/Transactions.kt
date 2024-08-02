@@ -298,7 +298,7 @@ fun TransactionDetailsScreen(navController: NavController , modifier: Modifier =
             color = Maroon
         )
         Spacer(modifier = Modifier.height(16.dp))
-        TransactionDetails()
+        TransactionDetails(modifier = modifier)
         /*TransactionInfoSection(
             from = from,
             to = to,
@@ -329,9 +329,9 @@ fun TransactionDetailsScreen(navController: NavController , modifier: Modifier =
 
 
 @Composable
-fun TransactionDetails() {
+fun TransactionDetails(modifier: Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState()) // For scrolling if content overflows
