@@ -126,7 +126,7 @@ fun MainNavHost(navController :NavHostController , modifier: Modifier) {
     NavHost(navController = navController, startDestination = HOME_SCREEN) {
 
         composable(route = PROFILE) { ProfileScreen(navController = navController ) }
-        composable(route = PROFILE_INFO) { ProfileInformationScreen(navController = navController, modifier = modifier ) }
+            composable(route = PROFILE_INFO) { ProfileInformationScreen(navController = navController, modifier = modifier ) }
         composable(route = MORE) { MoreScreen(navController = navController, modifier = modifier ) }
         composable(route = SETTINGS) { SettingsScreen(navController = navController, modifier = modifier ) }
         composable(route = EDIT_PROFILE) { EditProfileScreen(navController = navController, modifier = modifier ) }

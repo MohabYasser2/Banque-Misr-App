@@ -27,7 +27,9 @@ val background = Brush.verticalGradient(
 )
 val background2 = Brush.verticalGradient(
     listOf(
+
         Color.Yellow.copy(alpha = 0.1f),
+        Color.White,
         Color.Red.copy(alpha = 0.1f),
         //Color.Blue.copy(alpha = 0.05f),
 

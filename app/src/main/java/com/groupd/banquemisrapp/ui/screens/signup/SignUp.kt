@@ -123,11 +123,14 @@ fun SignUpFirst(navController: NavController, modifier: Modifier = Modifier) {
             message = "Enter your password",
             value = password,
             isPassord = true,
-            onValueChange = { password = it })/*namedField(text = "Re-enter Password",
+            onValueChange = { password = it })
+
+                namedField(text = "Re-enter Password",
             message = "Re- enter your password",
             value = secondPassword,
             isPassord = true,
-            onValueChange = { secondPassword = it })*/
+            onValueChange = { secondPassword = it })
+
 
         Button(
             onClick = { navController.navigate(SIGNUP2) },

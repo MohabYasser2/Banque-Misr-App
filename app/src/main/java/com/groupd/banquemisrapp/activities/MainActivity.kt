@@ -62,10 +62,21 @@ import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.routes.AppNavHost
 import com.groupd.banquemisrapp.routes.MainNavHost
 import com.groupd.banquemisrapp.routes.Route
+import com.groupd.banquemisrapp.routes.Route.ADD_CARD
+import com.groupd.banquemisrapp.routes.Route.ADD_CARD_DETAILS
+import com.groupd.banquemisrapp.routes.Route.APP_CONNECTION
 import com.groupd.banquemisrapp.routes.Route.CARDS
+import com.groupd.banquemisrapp.routes.Route.CHANGE_PASSWORD
+import com.groupd.banquemisrapp.routes.Route.EDIT_PROFILE
 import com.groupd.banquemisrapp.routes.Route.HOME
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
+import com.groupd.banquemisrapp.routes.Route.INTERNET_ERROR
 import com.groupd.banquemisrapp.routes.Route.MORE
+import com.groupd.banquemisrapp.routes.Route.OTP
+import com.groupd.banquemisrapp.routes.Route.OTP_CONNECTED
+import com.groupd.banquemisrapp.routes.Route.PROFILE_INFO
+import com.groupd.banquemisrapp.routes.Route.SERVER_ERROR
+import com.groupd.banquemisrapp.routes.Route.SETTINGS
 import com.groupd.banquemisrapp.routes.Route.SIGNIN
 import com.groupd.banquemisrapp.routes.Route.TRANSACTIONS
 import com.groupd.banquemisrapp.routes.Route.TRANSFER
@@ -84,123 +95,159 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
+            var isSelected by remember { mutableStateOf(HOME_SCREEN) }
             val navController = rememberNavController()
-
-            
-            Scaffold(bottomBar = {
-
-
-                var isSelected by remember { mutableStateOf(HOME_SCREEN) }
-                val context = LocalContext.current
-                navController.addOnDestinationChangedListener { _, destination, _ ->
-
-                    isSelected = destination.route ?: HOME_SCREEN
-                }
-                Log.d("TAG", "onCreate: $isSelected")
-
-
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = Color.White , disabledContainerColor = Color.White),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 10.dp
-                    ),
-                    shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-                ) {
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-
-                    ) {
-
-
-                        iconNamedVertically(
-                            onClick = {
-                                if (isSelected != HOME_SCREEN) {
-                                    navController.navigate(Route.HOME_SCREEN)
-                                    isSelected = navController.currentDestination?.route ?: "home_screen"
-                                }
-
-                            },
-                            imageRes = painterResource(id = R.drawable.ic_home_3x),
-                            text = "Home",
-                            isSelected =  isSelected == HOME_SCREEN
-                        )
-                        iconNamedVertically(
-                            onClick = {
-                                if (isSelected != TRANSFER) {
-                                    navController.navigate(TRANSFER)
-                                    isSelected = navController.currentDestination?.route ?: "transfer"
-                                }
-                            },
-                            imageRes = painterResource(id = R.drawable.ic_transfer_3x),
-                            text = "Transfer",
-                            isSelected = isSelected == "Transfer" || isSelected == TRANSFER
-                        )
-                        iconNamedVertically(
-                            onClick = {
-                                 if (isSelected != TRANSACTIONS){
-                                     navController.navigate(Route.TRANSACTIONS)
-                                     isSelected = navController.currentDestination?.route ?: "transactions"
-                                 }
-
-                            },
-                            imageRes = painterResource(id = R.drawable.ic_history_3x),
-                            text = "Transactions",
-                            isSelected = isSelected == "Transactions" || isSelected == TRANSACTIONS
-                        )
-                        iconNamedVertically(
-                            onClick = {
-                                 if (isSelected != CARDS){
-                                     navController.navigate(Route.CARDS)
-                                     isSelected = navController.currentDestination?.route ?: "cards"
-                                 }
-                            },
-                            imageRes = painterResource(id = R.drawable.ic_card_3x),
-                            text = "My cards",
-                            isSelected = isSelected == "My cards" || isSelected == CARDS
-                        )
-                        iconNamedVertically(
-                            onClick = {
-                                if (isSelected != MORE) {
-                                    navController.navigate(Route.MORE)
-                                    isSelected = navController.currentDestination?.route ?: "more"
-                                }
-                            },
-                            imageRes = painterResource(id = R.drawable.ic_more),
-                            text = "More",
-                            isSelected = isSelected == "More" || isSelected == MORE
-                        )
-
-
-                    }
-
-                }
-            }
-
-            )
-
-            { innerPadding ->
-                var backgroundColor by remember { mutableStateOf(background) }
-                navController.addOnDestinationChangedListener { _, destination, _ ->
-                    backgroundColor = if (destination.route == Route.SIGNIN /*ADD PAGES LIKE ADD NEW CARD ETC*/) {
+            var backgroundColor by remember { mutableStateOf(background) }
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                isSelected = destination.route ?: HOME_SCREEN
+                backgroundColor =
+                    if (destination.route == Route.SIGNIN /*ADD PAGES LIKE ADD NEW CARD ETC*/) {
                         background
                     } else {
                         background2
                     }
 
+            }
+            if (isSelected != ADD_CARD
+                && isSelected != ADD_CARD_DETAILS
+                && isSelected != APP_CONNECTION
+                && isSelected != OTP
+                && isSelected != OTP_CONNECTED
+                && isSelected != PROFILE_INFO
+                && isSelected != SETTINGS
+                && isSelected != EDIT_PROFILE
+                && isSelected != CHANGE_PASSWORD
+                && isSelected != INTERNET_ERROR
+                && isSelected != SERVER_ERROR) {
+                Scaffold(bottomBar = {
+
+
+                    val context = LocalContext.current
+                    Log.d("TAG", "onCreate: $isSelected")
+                    navController.addOnDestinationChangedListener { _, destination, _ ->
+
+                        isSelected = destination.route ?: HOME_SCREEN
+                    }
+
+
+                    Card(
+                        modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(
+                            containerColor = Color.White, disabledContainerColor = Color.White
+                        ), elevation = CardDefaults.cardElevation(
+                            defaultElevation = 10.dp
+                        ), shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                    ) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
+
+                        ) {
+
+
+                            iconNamedVertically(
+                                onClick = {
+                                    if (isSelected != HOME_SCREEN) {
+                                        navController.navigate(Route.HOME_SCREEN)
+                                        isSelected =
+                                            navController.currentDestination?.route ?: "home_screen"
+                                    }
+
+                                },
+                                imageRes = painterResource(id = R.drawable.ic_home_3x),
+                                text = "Home",
+                                isSelected = isSelected == HOME_SCREEN
+                            )
+                            iconNamedVertically(
+                                onClick = {
+                                    if (isSelected != TRANSFER) {
+                                        navController.navigate(TRANSFER)
+                                        isSelected =
+                                            navController.currentDestination?.route ?: "transfer"
+                                    }
+                                },
+                                imageRes = painterResource(id = R.drawable.ic_transfer_3x),
+                                text = "Transfer",
+                                isSelected = isSelected == "Transfer" || isSelected == TRANSFER
+                            )
+                            iconNamedVertically(
+                                onClick = {
+                                    if (isSelected != TRANSACTIONS) {
+                                        navController.navigate(Route.TRANSACTIONS)
+                                        isSelected = navController.currentDestination?.route
+                                            ?: "transactions"
+                                    }
+
+                                },
+                                imageRes = painterResource(id = R.drawable.ic_history_3x),
+                                text = "Transactions",
+                                isSelected = isSelected == "Transactions" || isSelected == TRANSACTIONS
+                            )
+                            iconNamedVertically(
+                                onClick = {
+                                    if (isSelected != CARDS) {
+                                        navController.navigate(Route.CARDS)
+                                        isSelected =
+                                            navController.currentDestination?.route ?: "cards"
+                                    }
+                                },
+                                imageRes = painterResource(id = R.drawable.ic_card_3x),
+                                text = "My cards",
+                                isSelected = isSelected == "My cards" || isSelected == CARDS
+                            )
+                            iconNamedVertically(
+                                onClick = {
+                                    if (isSelected != MORE) {
+                                        navController.navigate(Route.MORE)
+                                        isSelected =
+                                            navController.currentDestination?.route ?: "more"
+                                    }
+                                },
+                                imageRes = painterResource(id = R.drawable.ic_more),
+                                text = "More",
+                                isSelected = isSelected == "More" || isSelected == MORE
+                            )
+
+
+                        }
+
+                    }
                 }
-                Box(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
-                    MainNavHost(
-                        navController = navController,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+
+
+                )
+
+
+                { innerPadding ->
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(backgroundColor)
+                    ) {
+                        MainNavHost(
+                            navController = navController, modifier = Modifier.padding(innerPadding)
+                        )
+                    }
+                }
+            } else {
+                Scaffold { _ ->
+
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(backgroundColor, alpha = 1.0f)
+                    ) {
+                        MainNavHost(
+                            navController = navController, modifier = Modifier
+                        )
+
+                    }
                 }
             }
-        }
 
+        }
     }
 }
 
