@@ -254,7 +254,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier, user
                 .fillMaxWidth(),
         ) {
 
-            user.transactions.forEach { transaction ->
+            user.transactions.subList(0,3).forEach() { transaction ->
                 TransactionItem(
                     transaction.accountName,
                     transaction.details,
@@ -262,7 +262,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier, user
                     painterResource(id = R.drawable.visa),
                     onClick = {}
                 )
-                if(transaction != user.transactions.last())
+                if(transaction != user.transactions[2])
                 HorizontalDivider()
 
 
