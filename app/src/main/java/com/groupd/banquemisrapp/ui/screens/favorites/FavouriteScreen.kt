@@ -1,8 +1,5 @@
 package com.groupd.banquemisrapp.ui.screens.favorites
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,12 +8,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -40,18 +34,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
-import com.groupd.banquemisrapp.routes.Route.SIGNUP2
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.FavouriteItem
 import com.groupd.banquemisrapp.ui.partials.namedField
-import com.groupd.banquemisrapp.ui.screens.signup.CountryList
-import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.White
-import com.groupd.banquemisrapp.ui.theme.background
 
 @Composable
-fun FavouriteScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun FavouriteScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
 
     Column(
         modifier = modifier
@@ -193,7 +184,7 @@ fun FavouritsList(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    FavouriteScreen(navController = NavController(LocalContext.current))
+
 
 
 }

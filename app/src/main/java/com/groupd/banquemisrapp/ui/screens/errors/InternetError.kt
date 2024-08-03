@@ -1,9 +1,6 @@
 package com.groupd.banquemisrapp.ui.screens.errors
 
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,15 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
-import com.groupd.banquemisrapp.activities.MainActivity
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.ui.theme.Maroon
-import com.groupd.banquemisrapp.ui.theme.background
-import com.groupd.banquemisrapp.ui.theme.background2
 
 @Composable
 fun InternetConnectionErrorScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
+    user: User,
 ) {
     Column(
         modifier = modifier
@@ -83,5 +79,5 @@ fun InternetConnectionErrorScreen(
 @Preview(showBackground = true)
 @Composable
 private fun InternetConnectionErrorScreenPreview() {
-    InternetConnectionErrorScreen(navController = NavController(LocalContext.current))
+
 }

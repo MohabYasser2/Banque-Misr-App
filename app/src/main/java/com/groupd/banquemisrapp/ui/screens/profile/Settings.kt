@@ -1,6 +1,5 @@
 package com.groupd.banquemisrapp.ui.screens.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,14 +14,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route.CHANGE_PASSWORD
 import com.groupd.banquemisrapp.routes.Route.EDIT_PROFILE
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.ProfileOptionItem
-import com.groupd.banquemisrapp.ui.theme.background2
 
 @Composable
-fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,6 +53,6 @@ fun SettingsScreen(navController: NavController, modifier: Modifier = Modifier) 
 @Preview(showBackground = true)
 @Composable
 private fun SettingsScreenPreview() {
-    SettingsScreen(navController = NavController(LocalContext.current))
+
     
 }

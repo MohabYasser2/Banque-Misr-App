@@ -36,14 +36,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
-import com.groupd.banquemisrapp.ui.theme.background
 
 @Composable
-fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -185,5 +185,5 @@ fun CardItem(
 @Preview
 @Composable
 private fun MyCardsScreenPreview() {
-    MyCardsScreen(NavController(LocalContext.current))
+
 }

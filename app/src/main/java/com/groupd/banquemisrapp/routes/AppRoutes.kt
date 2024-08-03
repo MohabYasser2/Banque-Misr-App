@@ -23,6 +23,7 @@ import com.groupd.banquemisrapp.ui.screens.signup.SignUpFirst
 import com.groupd.banquemisrapp.ui.screens.signup.SignUpSecond
 import com.groupd.banquemisrapp.activities.OnBoardingScreen
 import com.groupd.banquemisrapp.activities.SplashScreen
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route.ADD_CARD
 import com.groupd.banquemisrapp.routes.Route.ADD_CARD_DETAILS
 import com.groupd.banquemisrapp.routes.Route.APP_CONNECTION
@@ -121,32 +122,32 @@ fun AppNavHost() {
 
 
 @Composable
-fun MainNavHost(navController :NavHostController , modifier: Modifier) {
+fun MainNavHost(navController :NavHostController , user: User , modifier: Modifier) {
     //val navController = rememberNavController()
     NavHost(navController = navController, startDestination = HOME_SCREEN) {
 
         composable(route = PROFILE) { ProfileScreen(navController = navController ) }
-            composable(route = PROFILE_INFO) { ProfileInformationScreen(navController = navController, modifier = modifier ) }
-        composable(route = MORE) { MoreScreen(navController = navController, modifier = modifier ) }
-        composable(route = SETTINGS) { SettingsScreen(navController = navController, modifier = modifier ) }
-        composable(route = EDIT_PROFILE) { EditProfileScreen(navController = navController, modifier = modifier ) }
-        composable(route = CHANGE_PASSWORD) { PasswordChangeScreen(navController = navController, modifier = modifier ) }
-        composable(route = HOME_SCREEN) { HomeScreen(navController = navController, modifier = modifier ) }
-        composable(route = TRANSFER) { TransferScreenOne(navController = navController, modifier = modifier ) }
-        composable(route = TRANSFER_TWO) { TransferScreenTwo(navController = navController,  ) }
-        composable(route = TRANSFER_THREE) { TransferScreenThree(navController = navController, ) }
-        composable(route = TRANSACTIONS) { TransactionsScreen(navController = navController, modifier = modifier ) }
-        composable(route = TRANSACTION_DETAILS) { TransactionDetailsScreen(navController = navController, modifier = modifier ) }
-        composable(route = CARDS) { MyCardsScreen(navController = navController, modifier = modifier ) }
-        composable(route = INTERNET_ERROR) { InternetConnectionErrorScreen(navController = navController, modifier = modifier ) }
-        composable(route = SERVER_ERROR) { ServerErrorScreen(navController = navController, modifier = modifier ) }
-        composable(route = FAVOURITES) { FavouriteScreen(navController= navController, modifier = modifier )}
-        composable(route = NOTIFICATIONS) { NotificationScreen(navController= navController, modifier = modifier )}
-        composable(route = ADD_CARD) { AddCardScreen(navController= navController, modifier = modifier ) }
-        composable(route = ADD_CARD_DETAILS) { CardDetailsScreen(navController= navController, modifier = modifier ) }
-        composable(route = APP_CONNECTION) { ConnectingScreen(navController= navController, modifier = modifier ) }
-        composable(route = OTP) { OTPEnteredScreen(navController= navController, modifier = modifier ) }
-        composable(route = OTP_CONNECTED) { OTPConnectedScreen(navController= navController, modifier = modifier ) }
+            composable(route = PROFILE_INFO) { ProfileInformationScreen(navController = navController,user = user , modifier = modifier ) }
+        composable(route = MORE) { MoreScreen(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = SETTINGS) { SettingsScreen(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = EDIT_PROFILE) { EditProfileScreen(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = CHANGE_PASSWORD) { PasswordChangeScreen(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = HOME_SCREEN) { HomeScreen(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = TRANSFER) { TransferScreenOne(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = TRANSFER_TWO) { TransferScreenTwo(navController = navController,user = user ,   ) }
+        composable(route = TRANSFER_THREE) { TransferScreenThree(navController = navController,user = user ,  ) }
+        composable(route = TRANSACTIONS) { TransactionsScreen(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = TRANSACTION_DETAILS) { TransactionDetailsScreen(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = CARDS) { MyCardsScreen(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = INTERNET_ERROR) { InternetConnectionErrorScreen(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = SERVER_ERROR) { ServerErrorScreen(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = FAVOURITES) { FavouriteScreen(navController= navController,user = user ,  modifier = modifier )}
+        composable(route = NOTIFICATIONS) { NotificationScreen(navController= navController,user = user ,  modifier = modifier )}
+        composable(route = ADD_CARD) { AddCardScreen(navController= navController,user = user ,  modifier = modifier ) }
+        composable(route = ADD_CARD_DETAILS) { CardDetailsScreen(navController= navController,user = user ,  modifier = modifier ) }
+        composable(route = APP_CONNECTION) { ConnectingScreen(navController= navController,user = user ,  modifier = modifier ) }
+        composable(route = OTP) { OTPEnteredScreen(navController= navController,user = user ,  modifier = modifier ) }
+        composable(route = OTP_CONNECTED) { OTPConnectedScreen(navController= navController, user = user , modifier = modifier ) }
 
 
 

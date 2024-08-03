@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,16 +31,15 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
-import com.groupd.banquemisrapp.activities.MainActivity
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.ui.theme.Maroon
-import com.groupd.banquemisrapp.ui.theme.background
-import com.groupd.banquemisrapp.ui.theme.background2
 
 
 @Composable
 fun ServerErrorScreen(
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    user: User
 ) {
     val context = LocalContext.current
 
@@ -126,5 +123,5 @@ fun ServerErrorScreen(
 @Preview(showBackground = true)
 @Composable
 private fun ServerErrorScreenPreview() {
-    ServerErrorScreen(navController = NavController(LocalContext.current))
+
 }

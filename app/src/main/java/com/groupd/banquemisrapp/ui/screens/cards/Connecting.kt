@@ -3,9 +3,7 @@ package com.groupd.banquemisrapp.ui.screens.cards
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,10 +21,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.ui.theme.Maroon
 
 @Composable
-fun ConnectingScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun ConnectingScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -61,5 +60,5 @@ fun ConnectingScreen(navController: NavController, modifier: Modifier = Modifier
 @Preview
 @Composable
 private fun ConnectingScreenPreview() {
-    ConnectingScreen(NavController(LocalContext.current))
+
 }

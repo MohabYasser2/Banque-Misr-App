@@ -18,30 +18,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
-import com.groupd.banquemisrapp.routes.Route.APP_CONNECTION
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route.OTP
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.namedField
-import com.groupd.banquemisrapp.ui.screens.signup.CountryList
 import com.groupd.banquemisrapp.ui.theme.Maroon
 
 
 @Composable
-fun CardDetailsScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun CardDetailsScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
 
     var cardholderName by remember { mutableStateOf("") }
     var cardNo by remember { mutableStateOf("") }
@@ -136,5 +132,5 @@ fun Char.isSpecialCharacter(): Boolean {
 @Preview(showBackground = true)
 @Composable
 private fun CardDetailsScreenPreview() {
-    CardDetailsScreen(NavController(LocalContext.current))
+
 }

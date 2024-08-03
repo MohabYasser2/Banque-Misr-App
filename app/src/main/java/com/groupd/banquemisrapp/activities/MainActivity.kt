@@ -59,6 +59,10 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.Account
+import com.groupd.banquemisrapp.data.Favourite
+import com.groupd.banquemisrapp.data.Transaction
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.AppNavHost
 import com.groupd.banquemisrapp.routes.MainNavHost
 import com.groupd.banquemisrapp.routes.Route
@@ -95,6 +99,26 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            val user = User(
+                fullName = "Mohab Yasser",
+                balance = "$10.3",
+                accounts = listOf(
+                    Account("Ahmed Atef","Account xxxx6969" , true),
+                    Account("Mohamed Magdy", "Account xxxx6969" , false)
+                ),
+                favourites = listOf(
+                    Favourite("Favourite 1", "1234567890"),
+                    Favourite("Favourite 2", "9876543210")
+                ),
+                transactions = listOf(
+                    Transaction(true, "$2.3", "Mohanad Yasser", "Visa  - 1234\nToday 11:00 - Received"),
+                    Transaction(false, "$1.1", "Mohamed Magdy", "Visa  - 1234\nToday 11:00 - Received"),
+                    Transaction(true, "$16.2", "Asmaa Desouky", "Visa  - 1234\nToday 11:00 - Received"),
+
+                )
+            )
+
             var isSelected by remember { mutableStateOf(HOME_SCREEN) }
             val navController = rememberNavController()
             var backgroundColor by remember { mutableStateOf(background) }
@@ -226,7 +250,7 @@ class MainActivity : ComponentActivity() {
                             .background(backgroundColor)
                     ) {
                         MainNavHost(
-                            navController = navController, modifier = Modifier.padding(innerPadding)
+                            navController = navController,user = user, modifier = Modifier.padding(innerPadding)
                         )
                     }
                 }
@@ -240,7 +264,7 @@ class MainActivity : ComponentActivity() {
                             .background(backgroundColor, alpha = 1.0f)
                     ) {
                         MainNavHost(
-                            navController = navController, modifier = Modifier
+                            navController = navController, user = user , modifier = Modifier
                         )
 
                     }

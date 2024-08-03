@@ -3,7 +3,6 @@ package com.groupd.banquemisrapp.ui.screens.main
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,16 +34,16 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.MoreOptionItem
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.White
-import com.groupd.banquemisrapp.ui.theme.background
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoreScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun MoreScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
     val sheetState = rememberModalBottomSheetState()
     var isSheetOpen by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current

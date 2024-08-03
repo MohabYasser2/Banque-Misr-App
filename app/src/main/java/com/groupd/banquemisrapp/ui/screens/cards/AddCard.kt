@@ -22,13 +22,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route.ADD_CARD_DETAILS
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.screens.signup.CountryList
 import com.groupd.banquemisrapp.ui.theme.Maroon
 
 @Composable
-fun AddCardScreen(navController: NavController ,modifier: Modifier = Modifier) {
+fun AddCardScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
 
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
     var selectedCountry by remember { mutableStateOf("") }
@@ -65,5 +66,5 @@ fun AddCardScreen(navController: NavController ,modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun AddCardScreenPreview() {
-    AddCardScreen(NavController(LocalContext.current))
+
 }

@@ -4,32 +4,24 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -42,24 +34,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route
-import com.groupd.banquemisrapp.routes.Route.CARDS
-import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
-import com.groupd.banquemisrapp.routes.Route.MORE
 import com.groupd.banquemisrapp.routes.Route.PROFILE
-import com.groupd.banquemisrapp.routes.Route.TRANSACTIONS
-import com.groupd.banquemisrapp.routes.Route.TRANSFER
 import com.groupd.banquemisrapp.ui.partials.iconNamedVertically
 import com.groupd.banquemisrapp.ui.theme.Gold
-import com.groupd.banquemisrapp.ui.theme.Green
 import com.groupd.banquemisrapp.ui.theme.Maroon
-import com.groupd.banquemisrapp.ui.theme.Red
 import com.groupd.banquemisrapp.ui.theme.White
-import com.groupd.banquemisrapp.ui.theme.background
-import com.groupd.banquemisrapp.ui.theme.background2
 
 @Composable
-fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun HomeScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -82,8 +66,11 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                     .background(Maroon.copy(alpha = 0.1f)),
                 onClick = { navController.navigate(PROFILE) },
             ) {
+                val names = user.fullName.split(" ")
+                val intials = names.joinToString("") { it.first().toString() }
+
                 Text(
-                    text = "AD",
+                    text = intials,
                     fontSize = 24.sp,
                     color = Maroon.copy(alpha = 0.6f),
                     fontWeight = FontWeight(500)
@@ -105,7 +92,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                     fontWeight = FontWeight(500)
                 )
                 Text(
-                    text = "Asmaa Dosuky",
+                    text = user.fullName,
                     fontSize = 20.sp,
                     color = Color.Black,
                     fontWeight = FontWeight(500)
@@ -142,7 +129,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                     fontWeight = FontWeight(350)
                 )
                 Text(
-                    text = "$2,855,856.20",
+                    text = user.balance,
                     fontSize = 32.sp,
                     color = Color.White,
                     modifier = Modifier.padding(16.dp),
@@ -260,40 +247,26 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
 
 
 
-        Card (
+        Card(
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
-        ){
+        ) {
+
+            user.transactions.forEach { transaction ->
+                TransactionItem(
+                    transaction.accountName,
+                    transaction.details,
+                    transaction.amount,
+                    painterResource(id = R.drawable.visa),
+                    onClick = {}
+                )
+                if(transaction != user.transactions.last())
+                HorizontalDivider()
 
 
-            TransactionItem(
-                "Ahmed Mohamed",
-                "Visa  - 1234\nToday 11:00 - Received",
-                "$1000",
-                painterResource(id = R.drawable.visa),
-                onClick = {}
-            )
-            HorizontalDivider()
-            TransactionItem(
-                "Ahmed Mohamed",
-                "Master Card - 1234\nToday 11:00 - Received",
-                "$1000",
-                painterResource(id = R.drawable.visa),
-                onClick = {}
-            )
-            HorizontalDivider()
-
-            TransactionItem(
-                "Ahmed Mohamed",
-                "Visa - 1234\nToday 11:00 - Received",
-                "$1000",
-                painterResource(id = R.drawable.visa),
-                onClick = {}
-            )
-
-
+            }
         }
     }
 
@@ -376,6 +349,5 @@ fun TransactionItem(
 @Composable
 private fun Preview() {
 
-    HomeScreen(navController = NavController(LocalContext.current))
 
 }
