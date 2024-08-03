@@ -1,7 +1,6 @@
 package com.groupd.banquemisrapp.ui.screens.cards
 
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,11 +36,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.Account
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
+import androidx.compose.foundation.lazy.items
+
 
 @Composable
 fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
@@ -56,53 +59,56 @@ fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier, u
         }
 
 
-        CardList(){
+        CardList(user.accounts) {
             navController.navigate(Route.ADD_CARD)
         }
 
 
-
-
     }
-
 
 
 }
 
 
 @Composable
-fun CardList(modifier: Modifier = Modifier , onClick : () -> Unit) {
-    Column (modifier = modifier.verticalScroll(rememberScrollState())){
-        CardItem("Asmaa Dosuky", "Account xxxx7890" , true)
-        CardItem("Asmaa Dosuky", "Account xxxx7890" , false)
-        CardItem("Asmaa Dosuky", "Account xxxx7890" , false)
-        CardItem("Asmaa Dosuky", "Account xxxx7890" , false)
-        CardItem("Asmaa Dosuky", "Account xxxx7890" , false)
+fun CardList(cards: List<Account>, modifier: Modifier = Modifier, onClick: () -> Unit) {
 
+    LazyColumn(modifier = modifier) {
+        items(cards) { card ->
+            CardItem(
+                name = card.cardHolder,
+                account = card.accountNumber,
+                isDefault = card.isDefault
+            )
+        }
+        item{
+            Button(
+                onClick = { onClick() },
+                shape = RoundedCornerShape(8.dp),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(14.dp),
+                colors = ButtonDefaults.buttonColors(Maroon),
+            ) {
+                Text(
+                    text = "Add New Account",
+                    Modifier.padding(12.dp),
+                    color = Color.White,
+                    fontSize = 18.sp
+                )
 
-        Button(
-            onClick = { onClick() },
-            shape = RoundedCornerShape(8.dp),
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(14.dp),
-            colors = ButtonDefaults.buttonColors(Maroon),
-        ) {
-            Text(text = "Add New Account", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
-
+            }
         }
     }
+
 }
-
-
-
 
 
 @Composable
 fun CardItem(
     name: String,
     account: String,
-    isDefault : Boolean,
+    isDefault: Boolean,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -147,11 +153,11 @@ fun CardItem(
                 Text(text = account, color = Black.copy(alpha = 0.5f))
 
             }
-            if(isDefault){
-                Column (
+            if (isDefault) {
+                Column(
                     //modifier.fillMaxHeight(),
                     verticalArrangement = Arrangement.Top
-                ){
+                ) {
                     Card(
                         modifier = Modifier.wrapContentSize(),
                         shape = RoundedCornerShape(8.dp),
@@ -173,13 +179,6 @@ fun CardItem(
 
 
 }
-
-
-
-
-
-
-
 
 
 @Preview

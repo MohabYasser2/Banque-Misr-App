@@ -34,11 +34,11 @@ fun ProfileInformationScreen(
             navController.popBackStack()
         }
         Spacer(modifier = modifier.height(16.dp))
-        ProfileDetail("Full Name", "Asmaa Dosuky")
-        ProfileDetail("Email", "Asmaa@gmail.com")
-        ProfileDetail("Date Of Birth", "12/01/2000")
-        ProfileDetail("Country", "Egypt")
-        ProfileDetail("Bank Account", "1234xxxx")
+        ProfileDetail("Full Name", user.fullName)
+        ProfileDetail("Email", user.email)
+        ProfileDetail("Date Of Birth", user.dateOfBirth)
+        ProfileDetail("Country", user.country)
+        ProfileDetail("Bank Account", user.bankAccountNumber)
     }
 }
 

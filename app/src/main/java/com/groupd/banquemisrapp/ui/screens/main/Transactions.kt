@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,12 +44,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.Transaction
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route.TRANSACTION_DETAILS
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.theme.Green
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.Red
+import androidx.compose.foundation.lazy.items
+
 
 
 @Composable
@@ -56,7 +60,7 @@ fun TransactionsScreen(navController: NavController, modifier: Modifier = Modifi
     Column(
         modifier = modifier
             .fillMaxSize()
-            //.padding(16.dp)
+        //.padding(16.dp)
 
 
     ) {
@@ -74,7 +78,7 @@ fun TransactionsScreen(navController: NavController, modifier: Modifier = Modifi
                 .fillMaxWidth()
         )
 
-        TransactionList(){
+        TransactionList(user.transactions) {
             navController.navigate(TRANSACTION_DETAILS)
         }
 
@@ -83,51 +87,23 @@ fun TransactionsScreen(navController: NavController, modifier: Modifier = Modifi
 
 
 @Composable
-fun TransactionList(modifier: Modifier = Modifier,onClick: () -> Unit){
+fun TransactionList(
+    transactions: List<Transaction>,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
 
-    Column (modifier = modifier.verticalScroll(rememberScrollState())){
-        val list = listOf(TransactionItem(
-            "Ahmed Mohamed",
-            "Visa - Master Card - 1234\nToday 11:00 - Received",
-            "$1000",
-            "Successful",
-            painterResource(id = R.drawable.visa),
-            true,
-            onClick = { onClick() }
-        ) , TransactionItem(
-            "Ahmed Mohamed",
-            "Visa - Master Card - 1234\nToday 11:00 - Received",
-            "$1000",
-            "Failed",
-            painterResource(id = R.drawable.visa),
-            false,
-            onClick = { onClick()}
-        ) , TransactionItem(
-            "Ahmed Mohamed",
-            "Visa - Master Card - 1234\nToday 11:00 - Received",
-            "$1000",
-            "Successful",
-            painterResource(id = R.drawable.visa),
-            true,
-            onClick = { onClick()}
-        ),TransactionItem(
-            "Ahmed Mohamed",
-            "Visa - Master Card - 1234\nToday 11:00 - Received",
-            "$1000",
-            "Successful",
-            painterResource(id = R.drawable.visa),
-            true,
-            onClick = { onClick()}
-        ),TransactionItem(
-            "Ahmed Mohamed",
-            "Visa - Master Card - 1234\nToday 11:00 - Received",
-            "$1000",
-            "Successful",
-            painterResource(id = R.drawable.visa),
-            true,
-            onClick = { onClick() }
-        )
-        )
+    LazyColumn(modifier = modifier) {
+        items(transactions) { transaction ->
+            TransactionItem(
+                 transaction.accountName,
+                 transaction.details,
+                 transaction.amount,
+                 painterResource(id = R.drawable.visa),
+                 transaction.successful, // Assuming you want to highlight all items; adjust as needed
+                 onClick = {onClick()}  // Pass the transaction to the onClick callback
+            )
+        }
     }
 
 
@@ -139,10 +115,10 @@ fun TransactionItem(
     name: String,
     details: String,
     amount: String,
-    status: String,
+    //status: String,
     iconRes: Painter,
     isSuccessfulTransaction: Boolean,
-    onClick : () -> Unit = {}
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier
@@ -205,7 +181,7 @@ fun TransactionItem(
                         colors = CardDefaults.cardColors(containerColor = Color.Green.copy(alpha = 0.15f))
                     ) {
                         Text(
-                            text = status,
+                            text = "Successful",
                             color = Green,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(8.dp)
@@ -218,7 +194,7 @@ fun TransactionItem(
                         colors = CardDefaults.cardColors(containerColor = Color.Red.copy(alpha = 0.15f))
                     ) {
                         Text(
-                            text = status,
+                            text = "Failed",
                             color = Red,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(8.dp)
@@ -241,7 +217,6 @@ fun TransactionItem(
 }
 
 
-
 @Composable
 fun TransactionDetailsScreen(
     navController: NavController,
@@ -258,8 +233,7 @@ fun TransactionDetailsScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-           ,
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -302,24 +276,6 @@ fun TransactionDetailsScreen(
         )*/
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 @Composable
@@ -440,10 +396,10 @@ fun TransactionDetailCard(label: String, name: String, account: String, icon: Pa
 @Composable
 fun TransactionDetailItem() {
 
-    Card (
+    Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(Color(0xFFDAC7CA))
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -505,16 +461,6 @@ fun TransactionDetailItem() {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
 
 
 @Preview(showBackground = true)

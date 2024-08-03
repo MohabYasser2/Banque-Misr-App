@@ -103,9 +103,13 @@ class MainActivity : ComponentActivity() {
             val user = User(
                 fullName = "Mohab Yasser",
                 balance = "$10.3",
+                email = "mohab@gmail.com",
+                dateOfBirth = "1/07/2002",
+                country = "Egypt",
+                bankAccountNumber = "1234xxx",
                 accounts = listOf(
                     Account("Ahmed Atef","Account xxxx6969" , true),
-                    Account("Mohamed Magdy", "Account xxxx6969" , false)
+                    Account("Mohamed Magdy", "Account xxxx6969" , false),
                 ),
                 favourites = listOf(
                     Favourite("Favourite 1", "1234567890"),
@@ -115,7 +119,7 @@ class MainActivity : ComponentActivity() {
                     Transaction(true, "$2.3", "Mohanad Yasser", "Visa  - 1234\nToday 11:00 - Received"),
                     Transaction(false, "$1.1", "Mohamed Magdy", "Visa  - 1234\nToday 11:00 - Received"),
                     Transaction(true, "$16.2", "Asmaa Desouky", "Visa  - 1234\nToday 11:00 - Received"),
-
+                    Transaction(true, "$16.2", "Asmaa Desouky", "Visa  - 1234\nToday 11:00 - Received"),
                 )
             )
 

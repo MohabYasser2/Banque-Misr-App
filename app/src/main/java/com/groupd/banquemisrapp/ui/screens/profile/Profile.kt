@@ -29,6 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.Account
+import com.groupd.banquemisrapp.data.Favourite
+import com.groupd.banquemisrapp.data.Transaction
+import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.FAVOURITES
 import com.groupd.banquemisrapp.routes.Route.PROFILE_INFO
@@ -40,7 +44,7 @@ import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background2
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen( user: User ,navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,7 +52,7 @@ fun ProfileScreen(navController: NavController) {
             .padding(16.dp)
     ) {
         CustomHeader(title = "Profile", onBackClick = {navController.popBackStack()})
-        ProfileHeader()
+        ProfileHeader(user.fullName)
         Spacer(modifier = Modifier.height(16.dp))
 
         ProfileOptionItem(
@@ -88,7 +92,7 @@ fun ProfileScreen(navController: NavController) {
 }
 
 @Composable
-fun ProfileHeader(modifier: Modifier = Modifier) {
+fun ProfileHeader(name :String ,modifier: Modifier = Modifier) {
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         IconButton(
@@ -98,14 +102,16 @@ fun ProfileHeader(modifier: Modifier = Modifier) {
                 .background(Black.copy(alpha = 0.1f)),
             onClick = { /*TODO*/ },
         ) {
-            Text(text = "AD", fontSize = 24.sp,color = Black.copy(alpha = 0.6f), fontWeight = FontWeight(500))
+            val names = name.split(" ")
+            val intials = names.joinToString("") { it.first().toString() }
+            Text(text = intials, fontSize = 24.sp,color = Black.copy(alpha = 0.6f), fontWeight = FontWeight(500))
 
 
         }
         Spacer(modifier = Modifier.width(16.dp))
         Column {
             Text(
-                text = "Asmaa Dosuky",
+                text = name,
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight(500),
                 fontSize = 24.sp
@@ -118,5 +124,5 @@ fun ProfileHeader(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    ProfileScreen(navController = NavController(LocalContext.current))
+   // ProfileScreen(User(user),navController = NavController(LocalContext.current))
 }
