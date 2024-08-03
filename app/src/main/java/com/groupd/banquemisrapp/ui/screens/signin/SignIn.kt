@@ -1,5 +1,6 @@
 package com.groupd.banquemisrapp.ui.screens.signin
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
@@ -12,6 +13,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxColors
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -24,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -45,16 +50,22 @@ import com.groupd.banquemisrapp.ui.theme.background
 fun SignInScreen(navController: NavController, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .fillMaxSize()
-            ,
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
-        var fullName by remember { mutableStateOf("") }
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
-        var secondPassword by remember { mutableStateOf("") }
+
         val context = navController.context
+
+        val pref = context.getSharedPreferences("user_data", Context.MODE_PRIVATE)
+        val savedEmail = pref.getString("email", "")!!
+        val savedPassword = pref.getString("password", "")!!
+
+        var fullName by remember { mutableStateOf("") }
+        var email by remember { mutableStateOf(savedEmail) }
+        var password by remember { mutableStateOf(savedPassword) }
+        var secondPassword by remember { mutableStateOf("") }
+        var cbState by remember { mutableStateOf(true) }
 
 
         Text(
@@ -83,11 +94,30 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier) {
             value = password,
             isPassord = true,
             onValueChange = { password = it })
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp)
+        ) {
+            Text(text = "Remember me next time?")
+            Checkbox(
+                checked = cbState,
+                onCheckedChange = { cbState = it },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = Maroon,      // Color when the checkbox is checked
+                    uncheckedColor = Color.Gray, // Color when the checkbox is unchecked
+                    checkmarkColor = Color.White // Color of the checkmark inside the checkbox
+                )
+            )
+
+        }
         Button(
             onClick = {
-                        val intent = Intent(context, MainActivity::class.java)
-                        context.startActivity(intent)
-                      },
+                saveData(email, password, cbState, context)
+                val intent = Intent(context, MainActivity::class.java)
+                context.startActivity(intent)
+            },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()
@@ -100,28 +130,42 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier) {
         Row {
 
 
-            Text(text = buildAnnotatedString {
-                withStyle(SpanStyle(color = Color.Black.copy(alpha = 0.5f))) {
-                    append("Don't have an account?")
-                }
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(SpanStyle(color = Color.Black.copy(alpha = 0.5f))) {
+                        append("Don't have an account?")
+                    }
 
-            },
+                },
                 modifier = Modifier.align(Alignment.CenterVertically),
-                fontSize = 16.sp)
+                fontSize = 16.sp
+            )
             TextButton(onClick = { navController.navigate(SIGNUP) }) {
                 Text(text = buildAnnotatedString {
                     withStyle(SpanStyle(color = Maroon, textDecoration = Underline)) {
                         append("Sign Up")
                     }
-                },fontSize = 16.sp)
+                }, fontSize = 16.sp)
 
             }
         }
 
 
-
     }
 
+}
+
+
+fun saveData(email: String, password: String, cbState: Boolean, context: Context) {
+    val editor = context.getSharedPreferences("user_data", Context.MODE_PRIVATE).edit()
+    if (cbState) {
+        editor.putString("email", email)
+        editor.putString("password", password)
+    } else {
+        editor.putString("email", "")
+        editor.putString("password", "")
+    }
+    editor.apply()
 }
 
 @Preview(showBackground = true)
