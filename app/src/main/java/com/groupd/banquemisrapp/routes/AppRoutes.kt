@@ -133,8 +133,8 @@ fun MainNavHost(navController :NavHostController , modifier: Modifier) {
         composable(route = CHANGE_PASSWORD) { PasswordChangeScreen(navController = navController, modifier = modifier ) }
         composable(route = HOME_SCREEN) { HomeScreen(navController = navController, modifier = modifier ) }
         composable(route = TRANSFER) { TransferScreenOne(navController = navController, modifier = modifier ) }
-        composable(route = TRANSFER_TWO) { TransferScreenTwo(navController = navController, modifier = modifier ) }
-        composable(route = TRANSFER_THREE) { TransferScreenThree(navController = navController, modifier = modifier ) }
+        composable(route = TRANSFER_TWO) { TransferScreenTwo(navController = navController,  ) }
+        composable(route = TRANSFER_THREE) { TransferScreenThree(navController = navController, ) }
         composable(route = TRANSACTIONS) { TransactionsScreen(navController = navController, modifier = modifier ) }
         composable(route = TRANSACTION_DETAILS) { TransactionDetailsScreen(navController = navController, modifier = modifier ) }
         composable(route = CARDS) { MyCardsScreen(navController = navController, modifier = modifier ) }

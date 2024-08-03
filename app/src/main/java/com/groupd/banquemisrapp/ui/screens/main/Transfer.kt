@@ -351,7 +351,7 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(16.dp).padding(bottom = 64.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -488,7 +488,7 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(16.dp).padding(bottom = 64.dp)
                 .verticalScroll(rememberScrollState()) // For scrolling if content overflows
         ) {
             ProgressBar(mode = 3)
