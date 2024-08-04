@@ -1,6 +1,9 @@
 package com.groupd.banquemisrapp.activities
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,6 +21,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +64,10 @@ import com.groupd.banquemisrapp.ui.theme.background
 import com.groupd.banquemisrapp.ui.theme.background2
 
 class MainActivity : ComponentActivity() {
+    private var userActivityTimer: CountDownTimer? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContent {
 
@@ -77,7 +85,7 @@ class MainActivity : ComponentActivity() {
                             Account("Current Account", "Account xxxx1111"),
                             Account("Credit Account", "Account xxxx2222"),
 
-                        ),
+                            ),
                         favourites = mutableStateListOf(
                             Favourite("Favourite 1", "1234567890"),
                             Favourite("Favourite 2", "9876543210")
@@ -116,6 +124,11 @@ class MainActivity : ComponentActivity() {
             var isSelected by remember { mutableStateOf(HOME_SCREEN) }
             val navController = rememberNavController()
             var backgroundColor by remember { mutableStateOf(background) }
+
+            LaunchedEffect(Unit) {
+                setupInactivityTimeout()
+            }
+
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 isSelected = destination.route ?: HOME_SCREEN
                 backgroundColor =
@@ -245,7 +258,9 @@ class MainActivity : ComponentActivity() {
                             .background(backgroundColor)
                     ) {
                         MainNavHost(
-                            navController = navController, user = user, modifier = Modifier.padding(innerPadding)
+                            navController = navController,
+                            user = user,
+                            modifier = Modifier.padding(innerPadding)
                         )
                     }
                 }
@@ -268,7 +283,63 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
+            DisposableEffect(Unit) {
+                onDispose {
+                    cancelInactivityTimer()
+                }
+            }
+
         }
+    }
+
+    private fun setupInactivityTimeout() {
+        resetInactivityTimer()
+        window.decorView.setOnTouchListener { _, _ ->
+            resetInactivityTimer()
+            false
+        }
+    }
+
+    private fun resetInactivityTimer() {
+        cancelInactivityTimer()
+        userActivityTimer = object : CountDownTimer(1 * 60 * 1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                // No-op
+            }
+
+            override fun onFinish() {
+                showInactivityDialog()
+            }
+        }.start()
+    }
+
+
+
+    private fun cancelInactivityTimer() {
+        userActivityTimer?.cancel()
+        userActivityTimer = null
+    }
+
+    private fun showInactivityDialog() {
+        runOnUiThread {
+            AlertDialog.Builder(this)
+                .setTitle("Session Expired")
+                .setMessage("You've been inactive for 30 minutes. Please log in again.")
+                .setPositiveButton("Log In") { _, _ ->
+                    // Redirect to login activity
+                    val intent = Intent(this, StartActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    finish()
+                }
+                .setCancelable(false)
+                .show()
+        }
+    }
+
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        resetInactivityTimer()
     }
 }
 
