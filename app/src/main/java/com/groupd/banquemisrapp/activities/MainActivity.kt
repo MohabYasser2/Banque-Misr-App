@@ -1,5 +1,6 @@
 package com.groupd.banquemisrapp.activities
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -39,6 +40,7 @@ import androidx.navigation.compose.rememberNavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.data.Account
 import com.groupd.banquemisrapp.data.Favourite
+import com.groupd.banquemisrapp.data.MockData.user
 import com.groupd.banquemisrapp.data.Transaction
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.MainNavHost
@@ -71,66 +73,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            var user by remember {
-                mutableStateOf(
-                    User(
-                        fullName = "Mohab Yasser",
-                        balance = "$10.3",
-                        email = "mohab@gmail.com",
-                        dateOfBirth = "1/07/2002",
-                        country = "Egypt",
-                        defaultAccountNumber = "Account xxxx6969",
-                        accounts = mutableStateListOf(
-                            Account("Long Saving Account", "Account xxxx6969"),
-                            Account("Current Account", "Account xxxx1111"),
-                            Account("Credit Account", "Account xxxx2222"),
 
-                            ),
-                        favourites = mutableStateListOf(
-                            Favourite("Favourite 1", "1234567890"),
-                            Favourite("Favourite 2", "9876543210")
-                        ),
-                        transactions = mutableStateListOf(
-                            Transaction(
-                                true,
-                                "$2.3",
-                                "Mohanad Yasser",
-                                "Visa  - 1234\nToday 11:00 - Received"
-                            ),
-                            Transaction(
-                                false,
-                                "$1.1",
-                                "Mohamed Magdy",
-                                "Visa  - 1234\nToday 11:00 - Received"
-                            ),
-                            Transaction(
-                                true,
-                                "$16.2",
-                                "Asmaa Desouky",
-                                "Visa  - 1234\nToday 11:00 - Received"
-                            ),
-                            Transaction(
-                                true,
-                                "$16.2",
-                                "Asmaa Desouky",
-                                "Visa  - 1234\nToday 11:00 - Received"
-                            ),
-                            Transaction(
-                                true,
-                                "$16.2",
-                                "Asmaa Desouky",
-                                "Visa  - 1234\nToday 11:00 - Received"
-                            ),
-                            Transaction(
-                                true,
-                                "$16.2",
-                                "Asmaa Desouky",
-                                "Visa  - 1234\nToday 11:00 - Received"
-                            ),
-                        )
-                    )
-                )
-            }
             //Log.d("TAG", "onCreate: $user")
 
             var isSelected by remember { mutableStateOf(HOME_SCREEN) }
@@ -144,7 +87,7 @@ class MainActivity : ComponentActivity() {
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 isSelected = destination.route ?: HOME_SCREEN
                 backgroundColor =
-                    if (destination.route == Route.SIGNIN /*ADD PAGES LIKE ADD NEW CARD ETC*/) {
+                    if (destination.route == Route.SIGNUP2 /*ADD PAGES LIKE ADD NEW CARD ETC*/) {
                         background
                     } else {
                         background2
@@ -163,7 +106,9 @@ class MainActivity : ComponentActivity() {
                 && isSelected != INTERNET_ERROR
                 && isSelected != SERVER_ERROR
             ) {
-                Scaffold(bottomBar = {
+                Scaffold(
+
+                    bottomBar = {
 
 
                     val context = LocalContext.current
@@ -276,7 +221,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             } else {
-                Scaffold { _ ->
+                Scaffold ( ){ _ ->
 
 
                     Box(
@@ -303,6 +248,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupInactivityTimeout() {
         resetInactivityTimer()
         window.decorView.setOnTouchListener { _, _ ->
@@ -313,7 +259,7 @@ class MainActivity : ComponentActivity() {
 
     private fun resetInactivityTimer() {
         cancelInactivityTimer()
-        userActivityTimer = object : CountDownTimer(1 * 60 * 1000, 1000) {
+        userActivityTimer = object : CountDownTimer(1 * 60 * 1000 * 30, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 // No-op
             }

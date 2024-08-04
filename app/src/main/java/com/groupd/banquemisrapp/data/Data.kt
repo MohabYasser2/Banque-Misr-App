@@ -32,7 +32,7 @@ data class User(
     var receivingAccount: Account = Account("", ""),
     var savingAccount: Account = Account("", ""),
     val accounts: MutableList<Account>,
-    var defaultAccountNumber: String ,
+    var defaultAccountNumber: String,
     var favourites: MutableList<Favourite>,
     val transactions: MutableList<Transaction>
 )
