@@ -100,13 +100,6 @@ object Route {
 
 @Composable
 fun AppNavHost() {
-    /*NavHost(navController = navController, startDestination = SPLASH) {
-        composable(route = SPLASH) { SplashScreen(navController = navController) }
-        composable(route = HOME) { OnBoardingScreen(navController = navController) }
-        composable(route = SIGNUP) { SignUpFirst(navController = navController) }
-        composable(route = SIGNUP2) { SignUpSecond(navController = navController) }
-        composable(route = SIGNIN) { SignInScreen(navController = navController) }
-    }*/
 
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = SPLASH) {
@@ -128,7 +121,8 @@ fun MainNavHost(
     modifier: Modifier
 ) {
     //val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = HOME_SCREEN) {
+    NavHost(navController = navController, startDestination = HOME_SCREEN)
+    {
 
         composable(route = PROFILE) { ProfileScreen(navController = navController ,user = user ) }
             composable(route = PROFILE_INFO) { ProfileInformationScreen(navController = navController,user = user , modifier = modifier ) }

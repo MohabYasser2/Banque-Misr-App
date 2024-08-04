@@ -107,6 +107,18 @@ class MainActivity : ComponentActivity() {
                                 "Asmaa Desouky",
                                 "Visa  - 1234\nToday 11:00 - Received"
                             ),
+                            Transaction(
+                                true,
+                                "$16.2",
+                                "Asmaa Desouky",
+                                "Visa  - 1234\nToday 11:00 - Received"
+                            ),
+                            Transaction(
+                                true,
+                                "$16.2",
+                                "Asmaa Desouky",
+                                "Visa  - 1234\nToday 11:00 - Received"
+                            ),
                         )
                     )
                 )
@@ -144,7 +156,6 @@ class MainActivity : ComponentActivity() {
                     val context = LocalContext.current
                     Log.d("TAG", "onCreate: $isSelected")
                     navController.addOnDestinationChangedListener { _, destination, _ ->
-
                         isSelected = destination.route ?: HOME_SCREEN
                     }
 

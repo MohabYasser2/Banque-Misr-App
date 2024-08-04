@@ -3,15 +3,21 @@ package com.groupd.banquemisrapp.ui.screens.main
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -41,6 +47,8 @@ import com.groupd.banquemisrapp.ui.partials.iconNamedVertically
 import com.groupd.banquemisrapp.ui.theme.Gold
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.White
+
+private const val s = "My Accounts"
 
 @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
@@ -244,35 +252,47 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier, user
             )
         }
 
+        val scrollableState = rememberScrollState()
 
 
 
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
+    Card(
+
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+
+
         ) {
 
-            user.transactions.subList(0,3).forEach() { transaction ->
-                TransactionItem(
-                    transaction.accountName,
-                    transaction.details,
-                    transaction.amount,
-                    painterResource(id = R.drawable.visa),
-                    onClick = {}
-                )
-                if(transaction != user.transactions[2])
-                HorizontalDivider()
+LazyColumn (
+
+){
 
 
-            }
-        }
+
+    items(user.transactions.subList(0, 3)) { transaction ->
+        TransactionItem(
+            transaction.accountName,
+            transaction.details,
+            transaction.amount,
+            painterResource(id = R.drawable.visa),
+            onClick = {}
+        )
+        if (transaction != user.transactions[2])
+            HorizontalDivider()
+
+
+    }
+}
+    }
+}
     }
 
 
     //TODO: add recent transactions
-}
+
 
 
 @Composable
