@@ -280,7 +280,7 @@ fun TransactionDetailsScreen(
             color = Maroon
         )
         Spacer(modifier = Modifier.height(16.dp))
-        TransactionDetails(from , fromAccount , to , toAccount ,amount ,reference , modifier = modifier)
+        TransactionDetails(from , fromAccount , to , toAccount ,amount ,status ,reference , modifier = modifier)
         /*TransactionInfoSection(
             from = from,
             to = to,
@@ -299,6 +299,7 @@ fun TransactionDetails(
     to: String,
     toAccount: String,
     amount:String,
+    status:Boolean,
     ref : String,
     modifier: Modifier
 ) {
@@ -334,15 +335,29 @@ fun TransactionDetails(
                 .offset(y = (-140).dp)
         ) {
             //HorizontalDivider()
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "Check",
-                tint = Color.White,
-                modifier = Modifier
-                    .background(Color(0xFFb08645), shape = CircleShape)
-                    .size(42.dp)
-                    .padding(4.dp)
-            )
+            if(status){
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = "Check",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .background(Color(0xFFb08645), shape = CircleShape)
+                        .size(42.dp)
+                        .padding(4.dp)
+                )
+            }
+            else{
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "uncheck",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .background(Color(0xFFb08645), shape = CircleShape)
+                        .size(42.dp)
+                        .padding(4.dp)
+                )
+            }
+
         }
 
         //Spacer(modifier = Modifier.height(16.dp))
