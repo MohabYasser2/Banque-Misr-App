@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -38,7 +37,7 @@ fun ProfileInformationScreen(
         ProfileDetail("Email", user.email)
         ProfileDetail("Date Of Birth", user.dateOfBirth)
         ProfileDetail("Country", user.country)
-        ProfileDetail("Bank Account", user.bankAccountNumber)
+        ProfileDetail("Bank Account", user.defaultAccountNumber)
     }
 }
 

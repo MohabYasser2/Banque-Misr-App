@@ -48,7 +48,10 @@ fun AddCardScreen(navController: NavController, modifier: Modifier = Modifier, u
         })
 
         Button(
-            onClick = { navController.navigate(ADD_CARD_DETAILS)},
+            onClick = {
+                user.savingAccount.currency = selectedCountry
+                navController.navigate(ADD_CARD_DETAILS)
+                      },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()

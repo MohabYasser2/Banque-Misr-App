@@ -1,20 +1,24 @@
 package com.groupd.banquemisrapp.ui.screens.cards
 
 
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -27,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,10 +46,21 @@ import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.groupd.banquemisrapp.data.Favourite
+import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
+import com.groupd.banquemisrapp.ui.theme.White
 
 
 @Composable
 fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
+
+    var defaultAccount by remember { mutableStateOf(user.defaultAccountNumber) }
+    var isClickable by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -54,13 +68,55 @@ fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier, u
 
     )
     {
-        CustomHeader(title = "My Cards") {
+        CustomHeader(title = "My Accounts") {
             navController.popBackStack()
         }
 
+        CardList(user.accounts, user = user, isClickable = isClickable, onSelected = {
+            defaultAccount = it
+            user.defaultAccountNumber = it
+            isClickable = false
 
-        CardList(user.accounts) {
-            navController.navigate(Route.ADD_CARD)
+        })
+
+
+        Button(
+            onClick = { navController.navigate(Route.ADD_CARD) },
+            shape = RoundedCornerShape(8.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(14.dp),
+            colors = ButtonDefaults.buttonColors(Maroon),
+        ) {
+            Text(
+                text = "Add New Account",
+                Modifier.padding(12.dp),
+                color = Color.White,
+                fontSize = 18.sp
+            )
+
+
+        }
+        Button(
+            onClick = {
+                isClickable = true
+                Log.d("TAG", "MyCardsScreen: $isClickable")
+            },
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+
+            border = BorderStroke(2.dp, Maroon),
+            colors = ButtonDefaults.buttonColors(White.copy(alpha = 0.1f)),
+        ) {
+            Text(
+                text = "Select Default Account",
+                Modifier.padding(12.dp),
+                color = Maroon,
+                fontSize = 18.sp
+            )
+
         }
 
 
@@ -71,34 +127,30 @@ fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier, u
 
 
 @Composable
-fun CardList(cards: List<Account>, modifier: Modifier = Modifier, onClick: () -> Unit) {
-
-    LazyColumn(modifier = modifier) {
+fun CardList(
+    cards: List<Account>,
+    isClickable: Boolean = false,
+    user: User,
+    onSelected: (String) -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+Log.d("TAG", "Card List :isClickable: $isClickable")
+    LazyColumn(modifier = Modifier.heightIn(max = 500.dp)) {
         items(cards) { card ->
             CardItem(
                 name = card.cardHolder,
                 account = card.accountNumber,
-                isDefault = card.isDefault
+                balance = card.balance,
+                isDefault = card.isDefault,
+                user = user,
+                isClickable = isClickable,
+                onSelected = {
+                    onSelected(it)
+
+                }
             )
         }
-        item{
-            Button(
-                onClick = { onClick() },
-                shape = RoundedCornerShape(8.dp),
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(14.dp),
-                colors = ButtonDefaults.buttonColors(Maroon),
-            ) {
-                Text(
-                    text = "Add New Account",
-                    Modifier.padding(12.dp),
-                    color = Color.White,
-                    fontSize = 18.sp
-                )
 
-            }
-        }
     }
 
 }
@@ -109,12 +161,23 @@ fun CardItem(
     name: String,
     account: String,
     isDefault: Boolean,
+    balance: String,
+    user: User,
+    onSelected: (String) -> Unit = {},
+    isClickable: Boolean = false,
     modifier: Modifier = Modifier
 ) {
+    Log.d("TAG", "CardItem :isClickable: $isClickable")
     Card(
         modifier = modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable(enabled = isClickable, onClick = {
+                onSelected(account)
+            }),
+        colors = if (isClickable) CardDefaults.cardColors(containerColor = Black.copy(alpha = 0.2f)) else CardDefaults.cardColors(
+            containerColor = Maroon.copy(alpha = 0.2f)
+        ),
 
         ) {
         Row(
@@ -151,9 +214,11 @@ fun CardItem(
                     modifier = modifier.padding(bottom = 12.dp)
                 )
                 Text(text = account, color = Black.copy(alpha = 0.5f))
+                Text(text = "Balance: $balance", color = Color.Green)
+
 
             }
-            if (isDefault) {
+            if (account == user.defaultAccountNumber) {
                 Column(
                     //modifier.fillMaxHeight(),
                     verticalArrangement = Arrangement.Top

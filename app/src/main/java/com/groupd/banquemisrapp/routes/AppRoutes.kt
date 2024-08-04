@@ -122,7 +122,11 @@ fun AppNavHost() {
 
 
 @Composable
-fun MainNavHost(navController :NavHostController , user: User , modifier: Modifier) {
+fun MainNavHost(
+    navController: NavHostController,
+    user: User,
+    modifier: Modifier
+) {
     //val navController = rememberNavController()
     NavHost(navController = navController, startDestination = HOME_SCREEN) {
 
@@ -138,10 +142,10 @@ fun MainNavHost(navController :NavHostController , user: User , modifier: Modifi
         composable(route = TRANSFER_THREE) { TransferScreenThree(navController = navController,user = user ,  ) }
         composable(route = TRANSACTIONS) { TransactionsScreen(navController = navController,user = user ,  modifier = modifier ) }
         composable(route = TRANSACTION_DETAILS) { TransactionDetailsScreen(navController = navController,user = user ,  modifier = modifier ) }
-        composable(route = CARDS) { MyCardsScreen(navController = navController,user = user ,  modifier = modifier ) }
+        composable(route = CARDS) { MyCardsScreen(navController = navController,user = user  ) }
         composable(route = INTERNET_ERROR) { InternetConnectionErrorScreen(navController = navController,user = user ,  modifier = modifier ) }
         composable(route = SERVER_ERROR) { ServerErrorScreen(navController = navController,user = user ,  modifier = modifier ) }
-        composable(route = FAVOURITES) { FavouriteScreen(navController= navController,user = user ,  modifier = modifier )}
+        composable(route = FAVOURITES) { FavouriteScreen(navController= navController,user = user )}
         composable(route = NOTIFICATIONS) { NotificationScreen(navController= navController,user = user ,  modifier = modifier )}
         composable(route = ADD_CARD) { AddCardScreen(navController= navController,user = user ,  modifier = modifier ) }
         composable(route = ADD_CARD_DETAILS) { CardDetailsScreen(navController= navController,user = user ,  modifier = modifier ) }

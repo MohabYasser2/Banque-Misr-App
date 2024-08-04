@@ -345,12 +345,14 @@ fun FavouriteItem(
     isEditable: Boolean = false,
     onEdit: () -> Unit = {},
     onDelete: () -> Unit = {},
+    onItemClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onItemClick() },
 
         ) {
         Row(

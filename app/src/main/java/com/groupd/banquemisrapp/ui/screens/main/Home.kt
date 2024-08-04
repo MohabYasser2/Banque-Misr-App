@@ -196,7 +196,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier, user
 
                         },
                         imageRes = painterResource(id = R.drawable.ic_card_3x),
-                        text = "My cards",
+                        text = "My Accounts",
                         imageSize = 44.dp,
                         fontSize = 14.sp,
                         tint = Gold,

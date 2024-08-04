@@ -1,5 +1,6 @@
 package com.groupd.banquemisrapp.ui.screens.main
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,7 +38,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.Favourite
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
 import com.groupd.banquemisrapp.routes.Route.TRANSFER_THREE
@@ -91,9 +92,9 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
             navController.popBackStack()
         }
 
-        Column (
+        Column(
             modifier = Modifier.padding(horizontal = 16.dp)
-        ){
+        ) {
             ProgressBar(mode = 1)
         }
 
@@ -241,6 +242,8 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
 
         Button(
             onClick = {
+                user.receivingAccount.cardHolder = tempName
+                user.receivingAccount.accountNumber = tempAccount
                 navController.navigate(TRANSFER_TWO)
 
             },
@@ -268,18 +271,7 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
 
         ) {
             val favourites = remember {
-                mutableStateListOf(
-
-                    Pair("Asmaa Dosuky", "Account xxxx7890"),
-                    Pair("Ahmed Mohamed", "Account xxxx71234"),
-                    Pair("Mohab Yasser", "Account xxxx6969"),
-                    Pair("Mohamed Magdy", "Account xxxx4200"),
-                    Pair("Asmaa Dosuky", "Account xxxx7890"),
-                    Pair("Ahmed Mohamed", "Account xxxx71234"),
-                    Pair("Mohab Yasser", "Account xxxx6969"),
-                    Pair("Mohamed Magdy", "Account xxxx4200"),
-
-                    )
+                user.favourites
             }
 
             Row(
@@ -308,12 +300,18 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
             ) {
                 items(favourites.size) { index ->
                     val (name, account) = favourites[index]
-                    var tempName by remember { mutableStateOf("") }
-                    var tempAccount by remember { mutableStateOf("") }
-                    var selectedItemIndex by remember { mutableStateOf(0) }
                     FavouriteItem(
                         name = name,
                         account = account,
+                        onItemClick = {
+                            tempName = name
+                            tempAccount = account
+                            isSheetOneOpen = !isSheetOneOpen
+
+
+                        }
+
+
                     )
                 }
             }
@@ -337,10 +335,11 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp).padding(bottom = 64.dp)
+                .padding(16.dp)
+                .padding(bottom = 64.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        ) {
             ProgressBar(mode = 2)
             Text(
                 text = "1000 USD",
@@ -377,8 +376,8 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
             // From section
             TransactionDetailCard(
                 label = "From",
-                name = "Asmaa Dosuky",
-                account = "Account xxxx7890",
+                name = user.fullName,
+                account = user.defaultAccountNumber,
                 icon = painterResource(id = R.drawable.ic_bank)
             )
 
@@ -388,8 +387,8 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
             // To section
             TransactionDetailCard(
                 label = "To",
-                name = "Jonathon Smith",
-                account = "Account xxxx7890",
+                name = user.receivingAccount.cardHolder,
+                account = user.receivingAccount.accountNumber,
                 icon = painterResource(id = R.drawable.ic_bank)
             )
             Box(
@@ -442,7 +441,7 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
                     .fillMaxWidth()
                     .padding(top = 8.dp),
 
-border = BorderStroke(2.dp, Maroon),
+                border = BorderStroke(2.dp, Maroon),
                 colors = ButtonDefaults.buttonColors(White.copy(alpha = 0.1f)),
             ) {
                 Text(
@@ -460,6 +459,7 @@ border = BorderStroke(2.dp, Maroon),
 
 @Composable
 fun TransferScreenThree(navController: NavController, modifier: Modifier = Modifier, user: User) {
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -474,17 +474,21 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp).padding(bottom = 64.dp)
+                .padding(16.dp)
+                .padding(bottom = 64.dp)
                 .verticalScroll(rememberScrollState()) // For scrolling if content overflows
         ) {
             ProgressBar(mode = 3)
 
-            Column (
+            Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Image(painter = painterResource(id = R.drawable.check_mark), contentDescription ="" )
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.check_mark),
+                    contentDescription = ""
+                )
                 Text(
                     text = "Your transfer was successful",
                     fontSize = 20.sp,
@@ -496,8 +500,8 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
             // From section
             TransactionDetailCard(
                 label = "From",
-                name = "Asmaa Dosuky",
-                account = "Account xxxx7890",
+                name = user.fullName,
+                account = user.defaultAccountNumber,
                 icon = painterResource(id = R.drawable.ic_bank)
             )
 
@@ -507,8 +511,8 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
             // To section
             TransactionDetailCard(
                 label = "To",
-                name = "Jonathon Smith",
-                account = "Account xxxx7890",
+                name = user.receivingAccount.cardHolder,
+                account = user.receivingAccount.accountNumber,
                 icon = painterResource(id = R.drawable.ic_bank)
             )
             Box(
@@ -541,7 +545,12 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
                 horizontalArrangement = Arrangement.SpaceBetween
 
             ) {
-                Text(text = "Total amount", fontWeight = FontWeight(500), fontSize = 18.sp, color = Black.copy(0.5f))
+                Text(
+                    text = "Total amount",
+                    fontWeight = FontWeight(500),
+                    fontSize = 18.sp,
+                    color = Black.copy(0.5f)
+                )
                 Text(
                     text = "48,422 EGP",
                     fontWeight = FontWeight(450),
@@ -550,9 +559,11 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
                 )
 
             }
-            HorizontalDivider(modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 32.dp))
+            HorizontalDivider(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 32.dp)
+            )
             Button(
                 onClick = {
                     navController.navigate(HOME_SCREEN)
@@ -576,8 +587,15 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
 
             Button(
                 onClick = {
-                    navController.popBackStack()
+                    if (Favourite(user.receivingAccount.cardHolder, user.receivingAccount.accountNumber) !in user.favourites) {
 
+                        user.favourites.add(Favourite(user.receivingAccount.cardHolder, user.receivingAccount.accountNumber))
+                        Toast.makeText(context, "Added to favorites!", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        Toast.makeText(context, "Already in favorites!", Toast.LENGTH_SHORT).show()
+                    }
+                    navController.navigate(HOME_SCREEN)
 
                 },
                 shape = RoundedCornerShape(8.dp),
@@ -589,7 +607,7 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
                 colors = ButtonDefaults.buttonColors(White.copy(alpha = 0.1f)),
             ) {
                 Text(
-                    text = "Previous",
+                    text = "Add to Favourite",
                     Modifier.padding(12.dp),
                     color = Maroon,
                     fontSize = 18.sp
@@ -601,11 +619,11 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
 
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
     Column(Modifier.background(background)) {
-
 
 
     }
@@ -627,9 +645,9 @@ fun ProgressBar(mode: Int, modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            //.padding(horizontal = 8.dp),
+        //.padding(horizontal = 8.dp),
 
-        ) {
+    ) {
 
 
         Row(

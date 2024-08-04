@@ -1,9 +1,13 @@
 package com.groupd.banquemisrapp.data
 
 data class Account(
-    val cardHolder: String,
-    val accountNumber: String,
-    val isDefault: Boolean
+    var cardHolder: String,
+    var accountNumber: String,
+    var balance: String = "$0.0",
+    var currency: String = "",
+    var expiryDate: String = "",
+    var cvv: String = "",
+    val isDefault: Boolean = false
     // Add other account details as needed
 )
 
@@ -25,8 +29,10 @@ data class User(
     val email: String,
     val dateOfBirth: String,
     val country: String,
-    val bankAccountNumber: String,
-    val accounts: List<Account>,
-    val favourites: List<Favourite>,
-    val transactions: List<Transaction>
+    var receivingAccount: Account = Account("", ""),
+    var savingAccount: Account = Account("", ""),
+    val accounts: MutableList<Account>,
+    var defaultAccountNumber: String ,
+    var favourites: MutableList<Favourite>,
+    val transactions: MutableList<Transaction>
 )

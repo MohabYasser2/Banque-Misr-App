@@ -110,7 +110,13 @@ fun CardDetailsScreen(navController: NavController, modifier: Modifier = Modifie
         }
 
         Button(
-            onClick = { navController.navigate(OTP) },
+            onClick = {
+                user.savingAccount.cardHolder = cardholderName
+                user.savingAccount.accountNumber = cardNo
+                user.savingAccount.expiryDate = expiryDate
+                user.savingAccount.cvv = CVV
+                navController.navigate(OTP)
+                      },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()

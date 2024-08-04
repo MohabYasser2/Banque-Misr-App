@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.groupd.banquemisrapp.data.Account
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route.OTP_CONNECTED
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
@@ -138,6 +139,8 @@ fun OTPEnteredScreen(navController: NavController, modifier: Modifier = Modifier
 
             Button(
                 onClick = {
+                    user.accounts.add(user.savingAccount)
+                    user.savingAccount = Account("", "")
                     // Handle sign-in action
                     navController.navigate(OTP_CONNECTED)
                 },
