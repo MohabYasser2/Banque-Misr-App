@@ -3,9 +3,11 @@ package com.groupd.banquemisrapp.routes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.groupd.banquemisrapp.routes.Route.CHANGE_PASSWORD
 import com.groupd.banquemisrapp.routes.Route.EDIT_PROFILE
 import com.groupd.banquemisrapp.routes.Route.HOME
@@ -135,7 +137,7 @@ fun MainNavHost(
         composable(route = TRANSFER_TWO) { TransferScreenTwo(navController = navController,user = user ,   ) }
         composable(route = TRANSFER_THREE) { TransferScreenThree(navController = navController,user = user ,  ) }
         composable(route = TRANSACTIONS) { TransactionsScreen(navController = navController,user = user ,  modifier = modifier ) }
-        composable(route = TRANSACTION_DETAILS) { TransactionDetailsScreen(navController = navController,user = user ,  modifier = modifier ) }
+        //composable(route = TRANSACTION_DETAILS) { TransactionDetailsScreen(transaction : Int ,navController = navController,user = user ,  modifier = modifier ) }
         composable(route = CARDS) { MyCardsScreen(navController = navController,user = user  ) }
         composable(route = INTERNET_ERROR) { InternetConnectionErrorScreen(navController = navController,user = user ,  modifier = modifier ) }
         composable(route = SERVER_ERROR) { ServerErrorScreen(navController = navController,user = user ,  modifier = modifier ) }
@@ -147,6 +149,15 @@ fun MainNavHost(
         composable(route = OTP) { OTPEnteredScreen(navController= navController,user = user ,  modifier = modifier ) }
         composable(route = OTP_CONNECTED) { OTPConnectedScreen(navController= navController, user = user , modifier = modifier ) }
 
+        composable(
+            route = "$TRANSACTION_DETAILS/{id}",
+            arguments = listOf(
+                navArgument("id") { type = NavType.IntType},
+
+            )
+        ) {
+            val id = it.arguments?.getInt("id")!!
+            TransactionDetailsScreen( transaction = id ,navController = navController,user = user ,  modifier = modifier )        }
 
 
 

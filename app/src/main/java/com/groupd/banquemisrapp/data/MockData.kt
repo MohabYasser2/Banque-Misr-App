@@ -27,39 +27,51 @@ object MockData {
             ),
             transactions = mutableStateListOf(
                 Transaction(
+                    1,
                     true,
                     "$2.3",
                     "Mohanad Yasser",
+                    "1223xxxxxx",
                     "Visa  - 1234\nToday 11:00 - Received"
                 ),
                 Transaction(
+                    2,
                     false,
                     "$1.1",
                     "Mohamed Magdy",
+                    "1223xxxxxx",
                     "Visa  - 1234\nToday 11:00 - Received"
                 ),
                 Transaction(
+                    3,
                     true,
                     "$16.2",
                     "Asmaa Desouky",
+                    "1223xxxxxx",
                     "Visa  - 1234\nToday 11:00 - Received"
                 ),
                 Transaction(
+                    4,
                     true,
                     "$16.2",
                     "Asmaa Desouky",
+                    "1223xxxxxx",
                     "Visa  - 1234\nToday 11:00 - Received"
                 ),
                 Transaction(
+                    5,
                     true,
                     "$16.2",
                     "Asmaa Desouky",
+                    "1223xxxxxx",
                     "Visa  - 1234\nToday 11:00 - Received"
                 ),
                 Transaction(
+                    6,
                     true,
                     "$16.2",
                     "Asmaa Desouky",
+                    "1223xxxxxx",
                     "Visa  - 1234\nToday 11:00 - Received"
                 ),
             )

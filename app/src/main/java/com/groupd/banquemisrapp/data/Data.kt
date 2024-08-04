@@ -17,9 +17,11 @@ data class Favourite(
 )
 
 data class Transaction(
+    val id : Int,
     val successful: Boolean,
     val amount: String,
     val accountName: String,
+    val accountNumber: String,
     val details: String
 )
 

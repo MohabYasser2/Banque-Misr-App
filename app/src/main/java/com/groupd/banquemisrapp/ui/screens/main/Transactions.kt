@@ -52,7 +52,7 @@ import com.groupd.banquemisrapp.ui.theme.Green
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.Red
 import androidx.compose.foundation.lazy.items
-
+import androidx.compose.material.icons.filled.Close
 
 
 @Composable
@@ -78,9 +78,7 @@ fun TransactionsScreen(navController: NavController, modifier: Modifier = Modifi
                 .fillMaxWidth()
         )
 
-        TransactionList(user.transactions) {
-            navController.navigate(TRANSACTION_DETAILS)
-        }
+        TransactionList(transactions = user.transactions, navController = navController)
 
     }
 }
@@ -89,19 +87,19 @@ fun TransactionsScreen(navController: NavController, modifier: Modifier = Modifi
 @Composable
 fun TransactionList(
     transactions: List<Transaction>,
+    navController: NavController,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
 ) {
 
     LazyColumn(modifier = modifier) {
         items(transactions) { transaction ->
             TransactionItem(
-                 transaction.accountName,
-                 transaction.details,
-                 transaction.amount,
-                 painterResource(id = R.drawable.visa),
-                 transaction.successful, // Assuming you want to highlight all items; adjust as needed
-                 onClick = {onClick()}  // Pass the transaction to the onClick callback
+                transaction.accountName,
+                transaction.details,
+                transaction.amount,
+                painterResource(id = R.drawable.visa),
+                transaction.successful, // Assuming you want to highlight all items; adjust as needed
+                onClick = { navController.navigate("$TRANSACTION_DETAILS/${transaction.id}") }  // Pass the transaction to the onClick callback
             )
         }
     }
@@ -219,15 +217,19 @@ fun TransactionItem(
 
 @Composable
 fun TransactionDetailsScreen(
+    transaction: Int,
     navController: NavController,
     modifier: Modifier = Modifier,
     user: User
 ) {
-    val amount = "1000 USD"
-    val from = "Asmaa Dosuky"
-    val to = "Jonathon Smith"
-    val transferAmount = "48.4220 EGP"
-    val reference = "123456789876"
+
+    val amount = user.transactions[transaction - 1].amount
+    val from = user.fullName
+    val fromAccount = user.defaultAccountNumber
+    val to = user.transactions[transaction - 1].accountName
+    val toAccount = user.transactions[transaction - 1].accountNumber
+    val reference = "$transaction"
+    val status = user.transactions[transaction - 1].successful
     val date = "20 Jul 2024 7:50 PM"
 
 
@@ -237,16 +239,28 @@ fun TransactionDetailsScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        CustomHeader(title = "Successful Transaction") {
+        val header = if(status) "Successful Transaction" else "Failed Transaction"
+
+        CustomHeader(title = header) {
             navController.popBackStack()
         }
         // Status Icon
-        Icon(
-            painter = painterResource(id = R.drawable.ic_success), // Replace with your icon resource
-            contentDescription = "Success Icon",
-            tint = Color.Unspecified,
-            modifier = Modifier.size(120.dp)
-        )
+        if (status) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_success), // Replace with your icon resource
+                contentDescription = "Success Icon",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(120.dp)
+            )
+        } else {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_x), // Replace with your icon resource
+                contentDescription = "failed Icon",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(120.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = amount,
@@ -266,7 +280,7 @@ fun TransactionDetailsScreen(
             color = Maroon
         )
         Spacer(modifier = Modifier.height(16.dp))
-        TransactionDetails(modifier = modifier)
+        TransactionDetails(from , fromAccount , to , toAccount ,amount ,reference , modifier = modifier)
         /*TransactionInfoSection(
             from = from,
             to = to,
@@ -279,7 +293,15 @@ fun TransactionDetailsScreen(
 
 
 @Composable
-fun TransactionDetails(modifier: Modifier) {
+fun TransactionDetails(
+    from: String,
+    fromAccount: String,
+    to: String,
+    toAccount: String,
+    amount:String,
+    ref : String,
+    modifier: Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -289,8 +311,8 @@ fun TransactionDetails(modifier: Modifier) {
         // From section
         TransactionDetailCard(
             label = "From",
-            name = "Asmaa Dosuky",
-            account = "Account xxxx7890",
+            name = from,
+            account = fromAccount,
             icon = painterResource(id = R.drawable.ic_bank)
         )
 
@@ -300,8 +322,8 @@ fun TransactionDetails(modifier: Modifier) {
         // To section
         TransactionDetailCard(
             label = "To",
-            name = "Jonathon Smith",
-            account = "Account xxxx7890",
+            name = to,
+            account = toAccount,
             icon = painterResource(id = R.drawable.ic_bank)
         )
         Box(
@@ -313,7 +335,7 @@ fun TransactionDetails(modifier: Modifier) {
         ) {
             //HorizontalDivider()
             Icon(
-                imageVector = Icons.Default.Check,
+                imageVector = Icons.Default.Close,
                 contentDescription = "Check",
                 tint = Color.White,
                 modifier = Modifier
@@ -325,7 +347,7 @@ fun TransactionDetails(modifier: Modifier) {
 
         //Spacer(modifier = Modifier.height(16.dp))
 
-        TransactionDetailItem()
+        TransactionDetailItem(amount ,ref )
 
     }
 }
@@ -394,7 +416,7 @@ fun TransactionDetailCard(label: String, name: String, account: String, icon: Pa
 }
 
 @Composable
-fun TransactionDetailItem() {
+fun TransactionDetailItem(amount:String , id:String) {
 
     Card(
         shape = RoundedCornerShape(4.dp),
@@ -415,7 +437,7 @@ fun TransactionDetailItem() {
                     modifier = Modifier.weight(1f)
                 )
                 Text(
-                    text = "48.1202 EGP",
+                    text = amount,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     textAlign = TextAlign.End,
                     modifier = Modifier.weight(1f)
@@ -433,7 +455,7 @@ fun TransactionDetailItem() {
                     modifier = Modifier.weight(1f)
                 )
                 Text(
-                    text = "123456789876",
+                    text = id,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                     textAlign = TextAlign.End,
                     modifier = Modifier.weight(1f)
