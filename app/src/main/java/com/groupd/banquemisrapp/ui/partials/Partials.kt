@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -82,7 +83,8 @@ fun namedField(
     isPassord: Boolean = false,
     onValueChange: (String) -> Unit = {},
     onClick: () -> Unit = {},
-    isReadOnly: Boolean = false
+    isReadOnly: Boolean = false,
+    error: String? = null // New parameter for error message
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
     val passwordIcon = if (passwordVisible) painterResource(id = R.drawable.show)
@@ -102,59 +104,69 @@ fun namedField(
 
 
 
-    OutlinedTextField(
-        label = {
-            Text(
-                text = message,
-                fontSize = 16.sp,
-                color = Color.Black.copy(alpha = 0.5f)
-
-            )
-        },
-        value = value,
-        singleLine = true,
-        onValueChange = onValueChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp),
-        colors = TextFieldDefaults.colors(unfocusedContainerColor = White, focusedContainerColor = White),
-        shape = RoundedCornerShape(8.dp),
-        readOnly = isReadOnly,
-        trailingIcon = {
-
-
-            if (trailingIconOn && !isPassord)
-                Image(
-                    painter = imageRes,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .size(24.dp)
-                        .clickable {
-                            onClick()
-                        }
-                        .alpha(0.6f)
+        OutlinedTextField(
+            label = {
+                Text(
+                    text = message,
+                    fontSize = 16.sp,
+                    color = Color.Black.copy(alpha = 0.5f)
 
                 )
-            if (isPassord)
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            },
+            value = value,
+            singleLine = true,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onClick() }
+                .padding(horizontal = 16.dp),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = White,
+                focusedContainerColor = White
+            ),
+            shape = RoundedCornerShape(8.dp),
+            readOnly = isReadOnly,
+            trailingIcon = {
+
+
+                if (trailingIconOn && !isPassord)
                     Image(
-                        painter = passwordIcon,
+                        painter = imageRes,
                         contentDescription = "",
                         modifier = Modifier
                             .padding(end = 16.dp)
                             .size(24.dp)
+                            .clickable {
+                                onClick()
+                            }
                             .alpha(0.6f)
+
                     )
-                }
-        },
-        visualTransformation = if (passwordVisible || !isPassord) VisualTransformation.None else PasswordVisualTransformation(),
+                if (isPassord)
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Image(
+                            painter = passwordIcon,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(end = 16.dp)
+                                .size(24.dp)
+                                .alpha(0.6f)
+                        )
+                    }
+            },
+            visualTransformation = if (passwordVisible || !isPassord) VisualTransformation.None else PasswordVisualTransformation(),
 
         )
-}
+        if (error != null && error.isNotEmpty()) {
+            Text(
+                text = error,
+                color = Color.Red,
+                style = TextStyle(fontSize = 12.sp),
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
     }
-
+}
 
 
 @Composable
@@ -315,7 +327,7 @@ fun iconNamedVertically(
                 )
                 .background(Color.White.copy(alpha = 0.1f)),
 
-        )
+            )
         {
 
             Icon(

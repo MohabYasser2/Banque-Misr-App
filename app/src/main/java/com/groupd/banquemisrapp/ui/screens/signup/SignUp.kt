@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.text.format.Formatter
 import android.util.Log
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,6 +46,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -106,6 +108,53 @@ fun SignUpFirst(
         var password by remember { mutableStateOf("") }
         var secondPassword by remember { mutableStateOf("") }
 
+        var emailError by remember { mutableStateOf("") }
+        var passwordError by remember { mutableStateOf("") }
+        var secondPasswordError by remember { mutableStateOf("") }
+
+        val isButtonEnabled by remember {
+            derivedStateOf {
+                fullName.isNotEmpty() &&
+                        email.isNotEmpty() &&
+                        password.isNotEmpty() &&
+                        secondPassword.isNotEmpty() &&
+                        emailError.isEmpty() &&
+                        passwordError.isEmpty() &&
+                        secondPasswordError.isEmpty() &&
+                        password == secondPassword
+            }
+        }
+
+        fun validateEmail(email: String) {
+            emailError = if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) "" else "Invalid email format"
+        }
+        // Password strength validation
+        fun validatePassword(password: String) {
+            passwordError = when {
+                password.length < 6 -> "Password must be at least 6 characters"
+                !password.any { it.isUpperCase() } -> "Password must contain at least one capital letter"
+                !password.any { it.isLowerCase() } -> "Password must contain at least one small letter"
+                !password.any { it in "!@#$%^&*()-_+=<>?/,.|\\~`" } -> "Password must contain at least one special character"
+                else -> ""
+            }
+        }
+
+        // Confirm password validation
+        fun validateSecondPassword(password: String, secondPassword: String) {
+            secondPasswordError = if (password == secondPassword) "" else "Passwords do not match"
+        }
+
+        // Update values and validate
+        fun updateValuesAndValidate(fullName1: String, email1: String, password1: String, secondPassword1: String) {
+            fullName = fullName1
+            email = email1
+            password = password1
+            secondPassword = secondPassword1
+
+            validateEmail(email)
+            validatePassword(password)
+            validateSecondPassword(password, secondPassword)
+        }
 
         Text(
             text = "Sign Up",
@@ -123,29 +172,32 @@ fun SignUpFirst(
             text = "Full name",
             message = "Enter your full name",
             value = fullName,
-            onValueChange = { fullName = it },
+            onValueChange = { updateValuesAndValidate(it, email, password, secondPassword)},
             imageRes = painterResource(id = R.drawable.ic_profile),
-            trailingIconOn = true
+            trailingIconOn = true,
         )
         namedField(
             text = "Email",
             message = "Enter your email address",
             value = email,
-            onValueChange = { email = it },
+            onValueChange = {  updateValuesAndValidate(fullName, it, password, secondPassword) },
             imageRes = painterResource(id = R.drawable.ic_email),
-            trailingIconOn = true
+            trailingIconOn = true,
+            error = emailError
         )
         namedField(text = "Password",
             message = "Enter your password",
             value = password,
             isPassord = true,
-            onValueChange = { password = it })
+            onValueChange = {  updateValuesAndValidate(fullName, email, it, secondPassword) },
+            error = passwordError)
 
         namedField(text = "Re-enter Password",
             message = "Re- enter your password",
             value = secondPassword,
             isPassord = true,
-            onValueChange = { secondPassword = it })
+            onValueChange = {  updateValuesAndValidate(fullName, email, password, it)},
+            error = secondPasswordError)
 
 
         Button(
@@ -157,6 +209,7 @@ fun SignUpFirst(
                 .fillMaxWidth()
                 .padding(24.dp),
             colors = ButtonDefaults.buttonColors(Maroon),
+            enabled = isButtonEnabled
         ) {
             Text(text = "Sign Up", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
 
@@ -216,6 +269,13 @@ fun SignUpSecond(
 
         ) {
 
+        val isButtonEnabled by remember {
+            derivedStateOf {
+                fullName.isNotEmpty() &&
+                        selectedDate.isNotEmpty() &&
+                        selectedCountry.isNotEmpty()
+            }
+        }
 
         Text(
             text = "Speedo Transfer",
@@ -311,7 +371,7 @@ fun SignUpSecond(
                 username = fullName,
                 email = email,
                 password = password,
-                phoneNumber = "+101112131416",
+                phoneNumber = "+101112131419",
                 country = selectedCountry,
                 gender = "MALE",
                 dateOfBirth = selectedDate
@@ -341,6 +401,7 @@ fun SignUpSecond(
                 .fillMaxWidth()
                 .padding(24.dp),
             colors = ButtonDefaults.buttonColors(Maroon),
+            enabled = isButtonEnabled
         ) {
             Text(text = "Continue", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
 
