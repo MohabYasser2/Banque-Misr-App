@@ -25,7 +25,7 @@ interface UserAPICallable {
     suspend fun register(@Body registerRequest: RegisterRequest): UserDTO
 
     @POST("/api/login")
-    suspend fun login(@Body loginRequest: LoginRequest): LoginResponseDTO
+    suspend fun login(@Body loginRequest: LoginRequest ): LoginResponseDTO
 
     @POST("/api/logout")
     suspend fun logout(): String

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.MockData.user
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.ui.theme.Maroon
 
@@ -65,13 +66,15 @@ fun ServerErrorScreen(
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
             maxLines = 1,
-            color = Color.Black
+            color = Color.Black,
+            modifier = modifier.padding(16.dp)
         )
         Spacer(modifier = modifier.height(8.dp))
         Text(
             text = "It seems like we're having some difficulties, please don't leave your aspirations, we are sending for help",
             textAlign = TextAlign.Center,
-            color = Color.Black.copy(alpha = 0.5f)
+            color = Color.Black.copy(alpha = 0.5f),
+            modifier = modifier.padding(horizontal = 16.dp)
         )
         Spacer(modifier = modifier.height(16.dp))
         // Call Us Button
@@ -85,7 +88,7 @@ fun ServerErrorScreen(
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(horizontal = 16.dp),
             colors = ButtonDefaults.buttonColors(Maroon),
         ) {
             Text(text = "Call Us", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
@@ -109,7 +112,7 @@ fun ServerErrorScreen(
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(16.dp),
             border = BorderStroke(2.dp, Maroon),
             colors = ButtonDefaults.buttonColors(Color.Transparent),
         ) {
@@ -123,5 +126,5 @@ fun ServerErrorScreen(
 @Preview(showBackground = true)
 @Composable
 private fun ServerErrorScreenPreview() {
-
+ServerErrorScreen(navController = NavController(LocalContext.current), user = user)
 }

@@ -44,6 +44,7 @@ import com.groupd.banquemisrapp.activities.MainActivity
 import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.LoginRequest
 import com.groupd.banquemisrapp.data.LoginResponseDTO
+import com.groupd.banquemisrapp.routes.Route.SERVER_ERROR
 import kotlinx.coroutines.launch
 
 
@@ -132,6 +133,9 @@ fun SignInScreen(
                         Log.d("TAG", "Logging in: $loginRequest")
                         loginResponse = UserAPIService.userAPI.login(loginRequest)
                         Log.d("TAG", "Logging in: $loginResponse")
+
+                        viewModel.saveLoginResponse(loginResponse)
+
                         saveData(email, password, cbState, context)
                         val intent = Intent(context, MainActivity::class.java)
                         context.startActivity(intent)
@@ -139,6 +143,7 @@ fun SignInScreen(
 
                     } catch (e: Exception) {
                         Log.d("TAG", "Logging in Error: ${e.message}")
+                        navController.navigate(SERVER_ERROR)
                     }
                 }
 

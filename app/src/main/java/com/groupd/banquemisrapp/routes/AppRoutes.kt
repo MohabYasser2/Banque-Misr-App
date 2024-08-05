@@ -25,6 +25,7 @@ import com.groupd.banquemisrapp.ui.screens.signup.SignUpFirst
 import com.groupd.banquemisrapp.ui.screens.signup.SignUpSecond
 import com.groupd.banquemisrapp.activities.OnBoardingScreen
 import com.groupd.banquemisrapp.activities.SplashScreen
+import com.groupd.banquemisrapp.data.MockData.user
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route.ADD_CARD
 import com.groupd.banquemisrapp.routes.Route.ADD_CARD_DETAILS
@@ -110,6 +111,12 @@ fun AppNavHost() {
         composable(route = SIGNUP) { SignUpFirst(navController = navController) }
         //composable(route = SIGNUP2) { SignUpSecond(navController = navController) }
         composable(route = SIGNIN) { SignInScreen(navController = navController) }
+        composable(route = SERVER_ERROR) {
+            ServerErrorScreen(
+                navController = navController,
+                user = user,
+            )
+        }
 
         composable(
             route = "$SIGNUP2/{fullName}/{email}/{password}",
@@ -117,6 +124,7 @@ fun AppNavHost() {
                 navArgument("fullName") { type = NavType.StringType },
                 navArgument("email") { type = NavType.StringType },
                 navArgument("password") { type = NavType.StringType },
+
             )
         ) {
             val fullName = it.arguments?.getString("fullName")!!
