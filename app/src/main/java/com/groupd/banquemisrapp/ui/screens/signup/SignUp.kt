@@ -246,11 +246,13 @@ fun SignUpSecond(
     val sheetStateOne = rememberModalBottomSheetState()
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
     var selectedCountry by remember { mutableStateOf("") }
+    var number by remember { mutableStateOf("") }
     val openDialog = remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
     val datePickerState = rememberDatePickerState()
     val formatter = SimpleDateFormat("yyyy-MM-dd")
     val context = LocalContext.current
+
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -329,6 +331,18 @@ fun SignUpSecond(
             isReadOnly = true
         )
         namedField(
+            text = "Number",
+            message = "ex : +201234567891",
+            value = number,
+
+            onValueChange = {
+                number =it
+            },
+            imageRes = painterResource(id = R.drawable.ic_down),
+            trailingIconOn = false,
+            isReadOnly = false
+        )
+        namedField(
             text = "Date Of Birth",
             message = "DD/MM/YYYY",
             value = selectedDate,
@@ -394,7 +408,7 @@ fun SignUpSecond(
                     username = fullName,
                     email = email,
                     password = password,
-                    phoneNumber = "+101112131333",
+                    phoneNumber = number,
                     country = selectedCountry,
                     gender = "MALE",
                     dateOfBirth = selectedDate,
@@ -518,6 +532,11 @@ fun CountryList(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    SignUpFirst(navController = NavController(LocalContext.current))
+    SignUpSecond(
+        fullName = "mohamed",
+        email = "william.henry.harrison@example-pet-store.com",
+        password = "123456",
+        navController = NavController(LocalContext.current)
+    )
 }
 
