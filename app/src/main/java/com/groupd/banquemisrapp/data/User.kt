@@ -12,7 +12,7 @@ data class UserDTO(
     val country: Country,
     val gender: Gender,
     val dateOfBirth: String,
-    val cards: List<AccountDTO>
+    val accounts: List<AccountDTO>
 )
 
 data class AccountDTO(
@@ -21,7 +21,8 @@ data class AccountDTO(
     val expirationDate: String,
     val cvv: String,
     val isDefault: Boolean,
-    val cardCurrency: CardCurrency
+    val cardCurrency: CardCurrency,
+    val balance: Double
 )
 
 data class TransactionDTO(

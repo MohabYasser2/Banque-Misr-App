@@ -3,6 +3,7 @@ package com.groupd.banquemisrapp.ui.screens.signup
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.groupd.banquemisrapp.api.LoginAPIService
 import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.UserDTO
 import com.groupd.banquemisrapp.data.Country
@@ -24,7 +25,7 @@ class SignUpViewModel : ViewModel() {
         country = Country.USA,
         gender = Gender.MALE,
         dateOfBirth = "",
-        cards = emptyList()
+        accounts = emptyList()
     )
 
     private val _account = MutableStateFlow<UserDTO>(emptyAccountDTO)
@@ -39,7 +40,7 @@ class SignUpViewModel : ViewModel() {
             try {
              _account.update {
                  Log.d("TAG", "setAccount: $accountRequest")
-                 UserAPIService.userAPI.register(accountRequest)
+                 LoginAPIService.loginAPI.register(accountRequest)
              }
                 _hasError.update { false }
             }

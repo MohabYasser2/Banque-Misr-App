@@ -61,6 +61,7 @@ import com.groupd.banquemisrapp.ui.theme.White
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.groupd.banquemisrapp.api.LoginAPIService
 import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.RegisterRequest
 import com.groupd.banquemisrapp.data.UserDTO
@@ -417,7 +418,7 @@ fun SignUpSecond(
                 viewModel.viewModelScope.launch {
                     try {
                         Log.d("TAG", "Logging in: $registerRequest")
-                        signupResponse = UserAPIService.userAPI.register(registerRequest)
+                        signupResponse = LoginAPIService.loginAPI.register(registerRequest)
                         Log.d("TAG", "Logging in: $signupResponse")
                         navController.navigate(SIGNIN)
 
@@ -532,11 +533,6 @@ fun CountryList(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    SignUpSecond(
-        fullName = "mohamed",
-        email = "william.henry.harrison@example-pet-store.com",
-        password = "123456",
-        navController = NavController(LocalContext.current)
-    )
+    SignUpFirst(navController = NavController(LocalContext.current))
 }
 
