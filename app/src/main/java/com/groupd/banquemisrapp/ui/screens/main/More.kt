@@ -56,7 +56,7 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier, user
     ) {
         CustomHeader(title = "More") {
             navController.popBackStack()
-            Log.d("TAG", "MoreScreen: ${navController.currentDestination?.route}")
+
         }
         MoreOptionItem(
             imageRes = painterResource(id = R.drawable.ic_website),

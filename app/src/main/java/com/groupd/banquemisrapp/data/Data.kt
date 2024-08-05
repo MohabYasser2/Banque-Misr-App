@@ -1,5 +1,10 @@
 package com.groupd.banquemisrapp.data
 
+import org.jetbrains.annotations.NotNull
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.UUID
+
 data class Account(
     var cardHolder: String,
     var accountNumber: String,
@@ -38,3 +43,5 @@ data class User(
     var favourites: MutableList<Favourite>,
     val transactions: MutableList<Transaction>
 )
+
+

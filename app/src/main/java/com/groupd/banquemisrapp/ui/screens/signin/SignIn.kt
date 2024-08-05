@@ -3,6 +3,8 @@ package com.groupd.banquemisrapp.ui.screens.signin
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +21,7 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,11 +46,22 @@ import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.activities.MainActivity
 import com.groupd.banquemisrapp.routes.Route.SIGNUP
 import com.groupd.banquemisrapp.ui.partials.namedField
+import com.groupd.banquemisrapp.ui.screens.signup.SignUpViewModel
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.background
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.groupd.banquemisrapp.data.CardCurrency
+import com.groupd.banquemisrapp.data.CardDTO
+import com.groupd.banquemisrapp.data.Country
+import com.groupd.banquemisrapp.data.Gender
+import com.groupd.banquemisrapp.data.LoginRequest
+import com.groupd.banquemisrapp.data.RegisterRequest
+
 
 @Composable
-fun SignInScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun SignInScreen(navController: NavController, modifier: Modifier = Modifier,
+                 viewModel: SignInViewModel = viewModel()
+) {
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -93,7 +107,8 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier) {
             message = "Enter your password",
             value = password,
             isPassord = true,
-            onValueChange = { password = it })
+            onValueChange = { password = it
+            })
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
@@ -112,11 +127,29 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier) {
             )
 
         }
+
+        viewModel.login(LoginRequest(email, password))
+        val hasError by viewModel.hasError.collectAsState()
+        val loginResponse by viewModel.loginResponse.collectAsState()
         Button(
             onClick = {
+
+
                 saveData(email, password, cbState, context)
-                val intent = Intent(context, MainActivity::class.java)
-                context.startActivity(intent)
+
+                if (
+                    hasError
+                ) {
+                    Log.d("TAG", "Error: $hasError")
+                    Toast.makeText(context, "Check your info", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Log.d("TAG", "Logging in : ${loginResponse}")
+                    val intent = Intent(context, MainActivity::class.java)
+                    context.startActivity(intent)
+                }
+
+
             },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier

@@ -62,6 +62,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.activities.MainActivity
@@ -73,15 +74,17 @@ import com.groupd.banquemisrapp.ui.theme.White
 import com.groupd.banquemisrapp.ui.theme.background
 import java.text.SimpleDateFormat
 import java.util.Calendar
-
-
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun SignUpFirst(navController: NavController, modifier: Modifier = Modifier) {
+fun SignUpFirst(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    viewModel: SignUpViewModel = viewModel()
+) {
     Column(
         modifier = modifier
-            .fillMaxSize()
-            ,
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
@@ -125,7 +128,7 @@ fun SignUpFirst(navController: NavController, modifier: Modifier = Modifier) {
             isPassord = true,
             onValueChange = { password = it })
 
-                namedField(text = "Re-enter Password",
+        namedField(text = "Re-enter Password",
             message = "Re- enter your password",
             value = secondPassword,
             isPassord = true,
@@ -146,23 +149,25 @@ fun SignUpFirst(navController: NavController, modifier: Modifier = Modifier) {
         Row {
 
 
-            Text(text = buildAnnotatedString {
-                withStyle(SpanStyle(color = Color.Black.copy(alpha = 0.5f))) {
-                    append("Already have an account? ")
-                }
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(SpanStyle(color = Color.Black.copy(alpha = 0.5f))) {
+                        append("Already have an account? ")
+                    }
 
-            },
-                modifier = Modifier.align(Alignment.CenterVertically),fontSize = 16.sp)
+                },
+                modifier = Modifier.align(Alignment.CenterVertically), fontSize = 16.sp
+            )
+
             TextButton(onClick = { navController.navigate(SIGNIN) }) {
                 Text(text = buildAnnotatedString {
                     withStyle(SpanStyle(color = Maroon, textDecoration = Underline)) {
                         append("Sign In")
                     }
-                },fontSize = 16.sp)
+                }, fontSize = 16.sp)
 
             }
         }
-
 
 
     }
@@ -173,7 +178,7 @@ fun SignUpFirst(navController: NavController, modifier: Modifier = Modifier) {
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpSecond(navController: NavController,modifier: Modifier = Modifier) {
+fun SignUpSecond(navController: NavController, modifier: Modifier = Modifier) {
     val sheetStateOne = rememberModalBottomSheetState()
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
     var selectedCountry by remember { mutableStateOf("") }
@@ -184,8 +189,7 @@ fun SignUpSecond(navController: NavController,modifier: Modifier = Modifier) {
     val context = LocalContext.current
     Column(
         modifier = modifier
-            .fillMaxSize()
-           ,
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
@@ -211,7 +215,8 @@ fun SignUpSecond(navController: NavController,modifier: Modifier = Modifier) {
             modifier = modifier.padding(20.dp),
             fontWeight = FontWeight(350)
         )
-        namedField(text = "Country",
+        namedField(
+            text = "Country",
             message = "Select your Country",
             value = selectedCountry,
             onClick = {
@@ -244,7 +249,7 @@ fun SignUpSecond(navController: NavController,modifier: Modifier = Modifier) {
                 sheetState = sheetStateOne,
                 containerColor = White
 
-                ) {
+            ) {
                 CountryList(currentCountry = selectedCountry, onCountrySelected = {
                     isSheetOneOpen = !isSheetOneOpen
                     selectedCountry = it
@@ -277,8 +282,9 @@ fun SignUpSecond(navController: NavController,modifier: Modifier = Modifier) {
 
 
         Button(
-            onClick = { val intent = Intent(context, MainActivity::class.java)
-                context.startActivity(intent) },
+            onClick = {
+                navController.navigate(SIGNIN)
+            },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()

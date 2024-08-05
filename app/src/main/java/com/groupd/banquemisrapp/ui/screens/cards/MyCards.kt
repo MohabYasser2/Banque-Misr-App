@@ -101,7 +101,7 @@ fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier, u
         Button(
             onClick = {
                 isClickable = true
-                Log.d("TAG", "MyCardsScreen: $isClickable")
+
             },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
@@ -135,7 +135,7 @@ fun CardList(
     onSelected: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-Log.d("TAG", "Card List :isClickable: $isClickable")
+
     LazyColumn(modifier = Modifier.heightIn(max = 500.dp)) {
         items(cards) { card ->
             CardItem(
@@ -168,7 +168,7 @@ fun CardItem(
     isClickable: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    Log.d("TAG", "CardItem :isClickable: $isClickable")
+
     Card(
         modifier = modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)

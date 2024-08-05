@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
 
 
                     val context = LocalContext.current
-                    Log.d("TAG", "onCreate: $isSelected")
+
                     navController.addOnDestinationChangedListener { _, destination, _ ->
                         isSelected = destination.route ?: HOME_SCREEN
                     }
