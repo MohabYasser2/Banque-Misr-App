@@ -90,6 +90,9 @@ import com.groupd.banquemisrapp.routes.Route.TRANSACTION_DETAILS
 import com.groupd.banquemisrapp.ui.screens.signin.SignInViewModel
 import com.groupd.banquemisrapp.ui.screens.signin.saveData
 import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 @Composable
 fun SignUpFirst(
@@ -126,8 +129,10 @@ fun SignUpFirst(
         }
 
         fun validateEmail(email: String) {
-            emailError = if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) "" else "Invalid email format"
+            emailError =
+                if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) "" else "Invalid email format"
         }
+
         // Password strength validation
         fun validatePassword(password: String) {
             passwordError = when {
@@ -145,7 +150,12 @@ fun SignUpFirst(
         }
 
         // Update values and validate
-        fun updateValuesAndValidate(fullName1: String, email1: String, password1: String, secondPassword1: String) {
+        fun updateValuesAndValidate(
+            fullName1: String,
+            email1: String,
+            password1: String,
+            secondPassword1: String
+        ) {
             fullName = fullName1
             email = email1
             password = password1
@@ -172,7 +182,7 @@ fun SignUpFirst(
             text = "Full name",
             message = "Enter your full name",
             value = fullName,
-            onValueChange = { updateValuesAndValidate(it, email, password, secondPassword)},
+            onValueChange = { updateValuesAndValidate(it, email, password, secondPassword) },
             imageRes = painterResource(id = R.drawable.ic_profile),
             trailingIconOn = true,
         )
@@ -180,24 +190,28 @@ fun SignUpFirst(
             text = "Email",
             message = "Enter your email address",
             value = email,
-            onValueChange = {  updateValuesAndValidate(fullName, it, password, secondPassword) },
+            onValueChange = { updateValuesAndValidate(fullName, it, password, secondPassword) },
             imageRes = painterResource(id = R.drawable.ic_email),
             trailingIconOn = true,
             error = emailError
         )
-        namedField(text = "Password",
+        namedField(
+            text = "Password",
             message = "Enter your password",
             value = password,
             isPassord = true,
-            onValueChange = {  updateValuesAndValidate(fullName, email, it, secondPassword) },
-            error = passwordError)
+            onValueChange = { updateValuesAndValidate(fullName, email, it, secondPassword) },
+            error = passwordError
+        )
 
-        namedField(text = "Re-enter Password",
+        namedField(
+            text = "Re-enter Password",
             message = "Re- enter your password",
             value = secondPassword,
             isPassord = true,
-            onValueChange = {  updateValuesAndValidate(fullName, email, password, it)},
-            error = secondPasswordError)
+            onValueChange = { updateValuesAndValidate(fullName, email, password, it) },
+            error = secondPasswordError
+        )
 
 
         Button(
@@ -268,13 +282,41 @@ fun SignUpSecond(
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
+        var dateOfBirthError by remember { mutableStateOf("") }
+
 
         val isButtonEnabled by remember {
             derivedStateOf {
-                fullName.isNotEmpty() &&
-                        selectedDate.isNotEmpty() &&
-                        selectedCountry.isNotEmpty()
+                selectedDate.isNotEmpty() && selectedCountry.isNotEmpty() && dateOfBirthError.isEmpty()
             }
+        }
+
+        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+        fun validateDateOfBirth(dateOfBirth: String) {
+            try {
+                val parsedDate = LocalDate.parse(dateOfBirth, dateFormatter)
+                val currentDate = LocalDate.now()
+                val minimumAgeDate = currentDate.minusYears(18)
+
+                if (parsedDate.isAfter(currentDate)) {
+                    dateOfBirthError = "Date of birth cannot be in the future."
+                } else if (parsedDate.isAfter(minimumAgeDate)) {
+                    dateOfBirthError = "You must be at least 18 years old."
+                } else {
+                    dateOfBirthError = ""
+                }
+            } catch (e: DateTimeParseException) {
+                dateOfBirthError = "Invalid date format. Please use yyyy-MM-dd."
+            }
+        }
+
+
+        fun updateValuesAndValidate(
+            dateOfBirth: String
+        ) {
+            selectedDate = dateOfBirth
+            validateDateOfBirth(dateOfBirth)
         }
 
         Text(
@@ -322,8 +364,9 @@ fun SignUpSecond(
             imageRes = painterResource(id = R.drawable.ic_calendar),
             trailingIconOn = true,
             isReadOnly = true,
+            error = dateOfBirthError
 
-            )
+        )
 
         if (isSheetOneOpen) {
             ModalBottomSheet(
@@ -349,6 +392,8 @@ fun SignUpSecond(
                             val calendar = Calendar.getInstance()
                             calendar.timeInMillis = datePickerState.selectedDateMillis!!
                             selectedDate = formatter.format(calendar.time)
+                            updateValuesAndValidate(selectedDate)
+
 
                         },
                     color = Maroon,
@@ -360,18 +405,14 @@ fun SignUpSecond(
         }
 
 
-
-
-
-
-       // val hasError by viewModel.hasError.collectAsState()
+        // val hasError by viewModel.hasError.collectAsState()
         //val loginResponse by viewModel. .collectAsState()
         viewModel.setAccount(
             RegisterRequest(
                 username = fullName,
                 email = email,
                 password = password,
-                phoneNumber = "+101112131419",
+                phoneNumber = "+101112131461",
                 country = selectedCountry,
                 gender = "MALE",
                 dateOfBirth = selectedDate
@@ -389,8 +430,7 @@ fun SignUpSecond(
                 ) {
                     Log.d("TAG", "Error: $hasError")
                     Toast.makeText(context, "Check your info", Toast.LENGTH_SHORT).show()
-                }
-                else{
+                } else {
                     Log.d("TAG", "Logging in : ${signupResponse}")
                     navController.navigate(SIGNIN)
                 }
