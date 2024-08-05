@@ -3,6 +3,8 @@ package com.groupd.banquemisrapp.ui.screens.signup
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.text.format.Formatter
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,6 +43,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -75,6 +79,15 @@ import com.groupd.banquemisrapp.ui.theme.background
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.groupd.banquemisrapp.data.CardDTO
+import com.groupd.banquemisrapp.data.Country
+import com.groupd.banquemisrapp.data.Gender
+import com.groupd.banquemisrapp.data.LoginRequest
+import com.groupd.banquemisrapp.data.RegisterRequest
+import com.groupd.banquemisrapp.routes.Route.TRANSACTION_DETAILS
+import com.groupd.banquemisrapp.ui.screens.signin.SignInViewModel
+import com.groupd.banquemisrapp.ui.screens.signin.saveData
+import java.time.LocalDate
 
 @Composable
 fun SignUpFirst(
@@ -136,7 +149,9 @@ fun SignUpFirst(
 
 
         Button(
-            onClick = { navController.navigate(SIGNUP2) },
+            onClick = {
+                navController.navigate("$SIGNUP2/${fullName}/${email}/${password}")
+            },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()
@@ -178,14 +193,21 @@ fun SignUpFirst(
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpSecond(navController: NavController, modifier: Modifier = Modifier) {
+fun SignUpSecond(
+    fullName: String,
+    email: String,
+    password: String,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    viewModel: SignUpViewModel = viewModel()
+) {
     val sheetStateOne = rememberModalBottomSheetState()
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
     var selectedCountry by remember { mutableStateOf("") }
     val openDialog = remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
     val datePickerState = rememberDatePickerState()
-    val formatter = SimpleDateFormat("dd/MM/yyyy")
+    val formatter = SimpleDateFormat("yyyy-MM-dd")
     val context = LocalContext.current
     Column(
         modifier = modifier
@@ -281,9 +303,38 @@ fun SignUpSecond(navController: NavController, modifier: Modifier = Modifier) {
 
 
 
+
+       // val hasError by viewModel.hasError.collectAsState()
+        //val loginResponse by viewModel. .collectAsState()
+        viewModel.setAccount(
+            RegisterRequest(
+                username = fullName,
+                email = email,
+                password = password,
+                phoneNumber = "+101112131416",
+                country = selectedCountry,
+                gender = "MALE",
+                dateOfBirth = selectedDate
+            )
+        )
+        val hasError by viewModel.hasError.collectAsState()
+        val signupResponse by viewModel.account.collectAsState()
+
+
         Button(
             onClick = {
-                navController.navigate(SIGNIN)
+
+                if (
+                    hasError
+                ) {
+                    Log.d("TAG", "Error: $hasError")
+                    Toast.makeText(context, "Check your info", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Log.d("TAG", "Logging in : ${signupResponse}")
+                    navController.navigate(SIGNIN)
+                }
+
             },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
@@ -294,6 +345,7 @@ fun SignUpSecond(navController: NavController, modifier: Modifier = Modifier) {
             Text(text = "Continue", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
 
         }
+
     }
 
 }
@@ -306,8 +358,8 @@ fun CountryList(
 ) {
     val selectedCountry = remember { mutableStateOf("") }
     val countries = listOf(
-        Pair("Egypt", "🇪🇬"),
-        Pair("United States", "\uD83C\uDDFA\uD83C\uDDF8"),
+        Pair("EGYPT", "🇪🇬"),
+        Pair("USA", "\uD83C\uDDFA\uD83C\uDDF8"),
         Pair("Canada", "\uD83C\uDDE8\uD83C\uDDE6"),
         Pair("India", "\uD83C\uDDEE\uD83C\uDDF3"),
 
@@ -318,14 +370,14 @@ fun CountryList(
         Pair("Brazil", "\uD83C\uDDE7\uD83C\uDDF7"),
         Pair("Australia", "\uD83C\uDDE6\uD83C\uDDFA"),
         Pair("Russia", "\uD83C\uDDF7\uD83C\uDDFA"),
-        Pair("United Kingdom", "\uD83C\uDDEC\uD83C\uDDE7"),
+        Pair("UK", "\uD83C\uDDEC\uD83C\uDDE7"),
         Pair("Spain", "\uD83C\uDDEA\uD83C\uDDF8"),
         Pair("Italy", "\uD83C\uDDEE\uD83C\uDDF9"),
         // i added them to test the scrolling
         Pair("Mexico", "🇲🇽"),
         Pair("Argentina", "🇦🇷"),
         Pair("South Korea", "🇰🇷"),
-        Pair("Saudi Arabia", "🇸🇦"),
+        Pair("KSA", "🇸🇦"),
         Pair("South Africa", "🇿🇦"),
 
         )

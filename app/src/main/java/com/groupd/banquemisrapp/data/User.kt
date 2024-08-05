@@ -12,7 +12,7 @@ data class AccountDTO(
     val phoneNumber: String,
     val country: Country,
     val gender: Gender,
-    val dateOfBirth: LocalDate,
+    val dateOfBirth: String,
     val cards: List<CardDTO>
 )
 

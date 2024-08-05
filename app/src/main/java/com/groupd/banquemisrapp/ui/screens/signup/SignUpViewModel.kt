@@ -24,7 +24,7 @@ class SignUpViewModel : ViewModel() {
         phoneNumber = "",
         country = Country.USA,
         gender = Gender.MALE,
-        dateOfBirth = LocalDate.now(),
+        dateOfBirth = "",
         cards = emptyList()
     )
 

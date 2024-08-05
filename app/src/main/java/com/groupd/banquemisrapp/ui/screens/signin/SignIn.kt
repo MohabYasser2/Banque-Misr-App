@@ -135,7 +135,7 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier,
             onClick = {
 
 
-                saveData(email, password, cbState, context)
+
 
                 if (
                     hasError
@@ -145,6 +145,7 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier,
                 }
                 else{
                     Log.d("TAG", "Logging in : ${loginResponse}")
+                    saveData(email, password, cbState, context)
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
                 }
