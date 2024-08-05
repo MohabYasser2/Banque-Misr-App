@@ -1,11 +1,10 @@
 package com.groupd.banquemisrapp.data
 
 import org.jetbrains.annotations.NotNull
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 
-data class AccountDTO(
+data class UserDTO(
     val id: Long,
     val username: String,
     val email: String,
@@ -13,10 +12,10 @@ data class AccountDTO(
     val country: Country,
     val gender: Gender,
     val dateOfBirth: String,
-    val cards: List<CardDTO>
+    val cards: List<AccountDTO>
 )
 
-data class CardDTO(
+data class AccountDTO(
     @NotNull val cardNumber: String,
     @NotNull val cardHolderName: String,
     val expirationDate: String,
@@ -28,8 +27,8 @@ data class CardDTO(
 data class TransactionDTO(
     val transactionId: UUID,
     val transactionDate: LocalDateTime,
-    val senderCard: CardDTO, // Assuming a different entity
-    val recipientCard: CardDTO,
+    val senderCard: AccountDTO, // Assuming a different entity
+    val recipientCard: AccountDTO,
     val amount: Double,
     val isSuccessful: Boolean,
     val senderAccount: Account, // Assuming a different entity
@@ -65,7 +64,7 @@ data class RegisterRequest(
     val gender: String,
     val dateOfBirth: String,
     val password: String,
-    val card: CardDTO? = null // Optional for mobile app
+     // Optional for mobile app
 )
 
 data class LoginRequest(
@@ -107,7 +106,7 @@ data class AddFavoriteRequest(
 )
 
 data class TransferRequest(
-    val cardDTO: CardDTO,
+    val cardDTO: AccountDTO,
     val sendingCurrency: String,
     val receivingCurrency: String,
     val sentAmount: Double,

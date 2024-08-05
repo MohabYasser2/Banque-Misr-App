@@ -2,26 +2,20 @@ package com.groupd.banquemisrapp.ui.screens.signin
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -40,27 +33,24 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
-import com.groupd.banquemisrapp.activities.MainActivity
 import com.groupd.banquemisrapp.routes.Route.SIGNUP
 import com.groupd.banquemisrapp.ui.partials.namedField
-import com.groupd.banquemisrapp.ui.screens.signup.SignUpViewModel
 import com.groupd.banquemisrapp.ui.theme.Maroon
-import com.groupd.banquemisrapp.ui.theme.background
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.groupd.banquemisrapp.data.CardCurrency
-import com.groupd.banquemisrapp.data.CardDTO
-import com.groupd.banquemisrapp.data.Country
-import com.groupd.banquemisrapp.data.Gender
+import com.groupd.banquemisrapp.activities.MainActivity
+import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.LoginRequest
-import com.groupd.banquemisrapp.data.RegisterRequest
+import com.groupd.banquemisrapp.data.LoginResponseDTO
+import kotlinx.coroutines.launch
 
 
 @Composable
-fun SignInScreen(navController: NavController, modifier: Modifier = Modifier,
-                 viewModel: SignInViewModel = viewModel()
+fun SignInScreen(
+    navController: NavController, modifier: Modifier = Modifier,
+    viewModel: SignInViewModel = viewModel()
 ) {
     Column(
         modifier = modifier
@@ -107,7 +97,8 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier,
             message = "Enter your password",
             value = password,
             isPassord = true,
-            onValueChange = { password = it
+            onValueChange = {
+                password = it
             })
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -128,28 +119,28 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier,
 
         }
 
-        viewModel.login(LoginRequest(email, password))
-        val hasError by viewModel.hasError.collectAsState()
-        val loginResponse by viewModel.loginResponse.collectAsState()
+        var buttonClicked by remember { mutableStateOf(false) }
+        var loginResponse by remember { mutableStateOf<LoginResponseDTO?>(null) }
         Button(
             onClick = {
 
 
+                buttonClicked = true
+                val loginRequest = LoginRequest(email, password)
+                viewModel.viewModelScope.launch {
+                    try {
+                        Log.d("TAG", "Logging in: $loginRequest")
+                        loginResponse = UserAPIService.userAPI.login(loginRequest)
+                        Log.d("TAG", "Logging in: $loginResponse")
+                        saveData(email, password, cbState, context)
+                        val intent = Intent(context, MainActivity::class.java)
+                        context.startActivity(intent)
 
 
-                if (
-                    hasError
-                ) {
-                    Log.d("TAG", "Error: $hasError")
-                    Toast.makeText(context, "Check your info", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Log.d("TAG", "Logging in Error: ${e.message}")
+                    }
                 }
-                else{
-                    Log.d("TAG", "Logging in : ${loginResponse}")
-                    saveData(email, password, cbState, context)
-                    val intent = Intent(context, MainActivity::class.java)
-                    context.startActivity(intent)
-                }
-
 
             },
             shape = RoundedCornerShape(8.dp),
@@ -161,6 +152,25 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier,
             Text(text = "Sign In", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
 
         }
+
+        /*
+        if (buttonClicked) {
+            viewModel.login(LoginRequest(email, password))
+            val hasError by viewModel.hasError.collectAsState()
+            val loginResponse by viewModel.loginResponse.collectAsState()
+            if (
+                loginResponse.token.isEmpty()
+            ) {
+                Log.d("TAG", "Error: $hasError")
+                Toast.makeText(context, "Check your info", Toast.LENGTH_SHORT).show()
+                buttonClicked = false
+            } else {
+                Log.d("TAG", "SIGN IN : Login Response : ${loginResponse}")
+                saveData(email, password, cbState, context)
+                val intent = Intent(context, MainActivity::class.java)
+                context.startActivity(intent)
+            }
+        }*/
         Row {
 
 
@@ -186,8 +196,9 @@ fun SignInScreen(navController: NavController, modifier: Modifier = Modifier,
 
 
     }
-
 }
+
+
 
 
 fun saveData(email: String, password: String, cbState: Boolean, context: Context) {

@@ -1,7 +1,7 @@
-import com.groupd.banquemisrapp.data.AccountDTO
+import com.groupd.banquemisrapp.data.UserDTO
 import com.groupd.banquemisrapp.data.AddCardRequest
 import com.groupd.banquemisrapp.data.AddFavoriteRequest
-import com.groupd.banquemisrapp.data.CardDTO
+import com.groupd.banquemisrapp.data.AccountDTO
 import com.groupd.banquemisrapp.data.ChangeDefaultCardRequest
 import com.groupd.banquemisrapp.data.LoginRequest
 import com.groupd.banquemisrapp.data.LoginResponseDTO
@@ -22,7 +22,7 @@ interface UserAPICallable {
     // User Management
 
     @POST("/api/register")
-    suspend fun register(@Body registerRequest: RegisterRequest): AccountDTO
+    suspend fun register(@Body registerRequest: RegisterRequest): UserDTO
 
     @POST("/api/login")
     suspend fun login(@Body loginRequest: LoginRequest): LoginResponseDTO
@@ -39,10 +39,10 @@ interface UserAPICallable {
     suspend fun getTransactions(): List<TransactionDTO>
 
     @GET("/api/account")
-    suspend fun getAccount(): AccountDTO
+    suspend fun getAccount(): UserDTO
 
     @PUT("/api/account")
-    suspend fun updateAccount(@Body updateAccountRequest: UpdateAccountRequest): AccountDTO
+    suspend fun updateAccount(@Body updateAccountRequest: UpdateAccountRequest): UserDTO
 
     @PUT("/api/password")
     suspend fun changePassword(@Body changePasswordRequest: AddCardRequest): Any // Replace 'Any' with actual response type
@@ -50,10 +50,10 @@ interface UserAPICallable {
     // Card Management
 
     @POST("/api/cards")
-    suspend fun addCard(@Body addCardRequest: AddCardRequest): List<CardDTO>
+    suspend fun addCard(@Body addCardRequest: AddCardRequest): List<AccountDTO>
 
     @GET("/api/cards")
-    suspend fun getCards(): List<CardDTO>
+    suspend fun getCards(): List<AccountDTO>
 
     @DELETE("/api/cards")
     suspend fun removeCard(@Body removeCardRequest: RemoveCardRequest): Any // Replace 'Any' with actual response type
@@ -64,13 +64,13 @@ interface UserAPICallable {
     // Favorite Management
 
     @POST("/api/favorites")
-    suspend fun addFavorite(@Body addFavoriteRequest: AddFavoriteRequest): List<CardDTO>
+    suspend fun addFavorite(@Body addFavoriteRequest: AddFavoriteRequest): List<AccountDTO>
 
     @GET("/api/favorites")
-    suspend fun getFavorites(): List<CardDTO>
+    suspend fun getFavorites(): List<AccountDTO>
 
     @DELETE("/api/favorites/{cardNumber}")
-    suspend fun removeFavorite(@Path("cardNumber") cardNumber: String): List<CardDTO>
+    suspend fun removeFavorite(@Path("cardNumber") cardNumber: String): List<AccountDTO>
 
     // Transfer
 

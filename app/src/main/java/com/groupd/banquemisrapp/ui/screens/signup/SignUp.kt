@@ -1,13 +1,8 @@
 package com.groupd.banquemisrapp.ui.screens.signup
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.text.format.Formatter
 import android.util.Log
 import android.util.Patterns
-import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,35 +11,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -55,42 +40,32 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration.Companion.Underline
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
-import com.groupd.banquemisrapp.activities.MainActivity
 import com.groupd.banquemisrapp.routes.Route.SIGNIN
 import com.groupd.banquemisrapp.routes.Route.SIGNUP2
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.White
-import com.groupd.banquemisrapp.ui.theme.background
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.groupd.banquemisrapp.data.CardDTO
-import com.groupd.banquemisrapp.data.Country
-import com.groupd.banquemisrapp.data.Gender
-import com.groupd.banquemisrapp.data.LoginRequest
+import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.RegisterRequest
-import com.groupd.banquemisrapp.routes.Route.TRANSACTION_DETAILS
-import com.groupd.banquemisrapp.ui.screens.signin.SignInViewModel
-import com.groupd.banquemisrapp.ui.screens.signin.saveData
+import com.groupd.banquemisrapp.data.UserDTO
+import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
@@ -407,32 +382,35 @@ fun SignUpSecond(
 
         // val hasError by viewModel.hasError.collectAsState()
         //val loginResponse by viewModel. .collectAsState()
-        viewModel.setAccount(
-            RegisterRequest(
-                username = fullName,
-                email = email,
-                password = password,
-                phoneNumber = "+101112131461",
-                country = selectedCountry,
-                gender = "MALE",
-                dateOfBirth = selectedDate
-            )
-        )
-        val hasError by viewModel.hasError.collectAsState()
-        val signupResponse by viewModel.account.collectAsState()
+
+
+        var signupResponse by remember { mutableStateOf<UserDTO?>(null) }
 
 
         Button(
             onClick = {
 
-                if (
-                    hasError
-                ) {
-                    Log.d("TAG", "Error: $hasError")
-                    Toast.makeText(context, "Check your info", Toast.LENGTH_SHORT).show()
-                } else {
-                    Log.d("TAG", "Logging in : ${signupResponse}")
-                    navController.navigate(SIGNIN)
+                val registerRequest = RegisterRequest(
+                    username = fullName,
+                    email = email,
+                    password = password,
+                    phoneNumber = "+101112131333",
+                    country = selectedCountry,
+                    gender = "MALE",
+                    dateOfBirth = selectedDate,
+                    )
+
+                viewModel.viewModelScope.launch {
+                    try {
+                        Log.d("TAG", "Logging in: $registerRequest")
+                        signupResponse = UserAPIService.userAPI.register(registerRequest)
+                        Log.d("TAG", "Logging in: $signupResponse")
+                        navController.navigate(SIGNIN)
+
+
+                    } catch (e: Exception) {
+                        Log.d("TAG", "Logging in Error: ${e.message}")
+                    }
                 }
 
             },
