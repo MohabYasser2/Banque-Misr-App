@@ -61,6 +61,7 @@ import com.groupd.banquemisrapp.ui.theme.White
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.groupd.banquemisrapp.api.LoginAPIService
 import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.RegisterRequest
 import com.groupd.banquemisrapp.data.UserDTO
@@ -394,16 +395,17 @@ fun SignUpSecond(
                     username = fullName,
                     email = email,
                     password = password,
-                    phoneNumber = "+101112131333",
+                    phoneNumber = "+10111213133312",
                     country = selectedCountry,
                     gender = "MALE",
                     dateOfBirth = selectedDate,
                     )
+                //viewModel.context = context
 
                 viewModel.viewModelScope.launch {
                     try {
                         Log.d("TAG", "Logging in: $registerRequest")
-                        signupResponse = UserAPIService.userAPI.register(registerRequest)
+                        signupResponse = LoginAPIService.loginAPI.register(registerRequest)
                         Log.d("TAG", "Logging in: $signupResponse")
                         navController.navigate(SIGNIN)
 

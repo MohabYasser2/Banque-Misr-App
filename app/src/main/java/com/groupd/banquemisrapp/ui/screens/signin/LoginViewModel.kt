@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SignInViewModel : ViewModel() {
+class SignInViewModel() : ViewModel() {
 
     private val emptyLoginDTO: LoginResponseDTO = LoginResponseDTO(
         token = "",

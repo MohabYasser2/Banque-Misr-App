@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.api.AppContextProvider
 import com.groupd.banquemisrapp.data.Account
 import com.groupd.banquemisrapp.data.Favourite
 import com.groupd.banquemisrapp.data.MockData.user
@@ -69,6 +70,7 @@ class MainActivity : ComponentActivity() {
     private var userActivityTimer: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppContextProvider.context = applicationContext
 
         super.onCreate(savedInstanceState)
         setContent {

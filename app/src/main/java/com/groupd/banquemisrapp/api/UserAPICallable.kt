@@ -13,6 +13,7 @@ import com.groupd.banquemisrapp.data.UpdateAccountRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -32,8 +33,8 @@ interface UserAPICallable {
 
     // Account Information
 
-    @GET("/api/balance")
-    suspend fun getBalance(): Double
+    @GET("/api/user")
+    suspend fun getBalance(): UserDTO
 
     @GET("/api/transactions")
     suspend fun getTransactions(): List<TransactionDTO>

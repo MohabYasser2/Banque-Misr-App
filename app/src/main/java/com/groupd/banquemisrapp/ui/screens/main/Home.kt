@@ -26,6 +26,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.data.User
@@ -51,7 +55,21 @@ import com.groupd.banquemisrapp.ui.theme.White
 private const val s = "My Accounts"
 
 @Composable
-fun HomeScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
+fun HomeScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    user: User,
+    viewModel: HomeViewModel = viewModel()
+) {
+    val context = LocalContext.current
+    val balance by viewModel.balance.collectAsState()
+
+    // Trigger the API call
+    LaunchedEffect(Unit) {
+        viewModel.getBalance()
+    }
+
+
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -137,7 +155,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier, user
                     fontWeight = FontWeight(350)
                 )
                 Text(
-                    text = user.balance,
+                    text = balance?.accounts?.firstOrNull()?.balance?.toString() ?: "0",
                     fontSize = 32.sp,
                     color = Color.White,
                     modifier = Modifier.padding(16.dp),
@@ -256,43 +274,41 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier, user
 
 
 
-    Card(
+        Card(
 
-        shape = RoundedCornerShape(10.dp),
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
 
 
         ) {
 
-LazyColumn (
+            LazyColumn(
 
-){
-
-
-
-    items(user.transactions.subList(0, 3)) { transaction ->
-        TransactionItem(
-            transaction.accountName,
-            transaction.details,
-            transaction.amount,
-            painterResource(id = R.drawable.visa),
-            onClick = {}
-        )
-        if (transaction != user.transactions[2])
-            HorizontalDivider()
+            ) {
 
 
+                items(user.transactions.subList(0, 3)) { transaction ->
+                    TransactionItem(
+                        transaction.accountName,
+                        transaction.details,
+                        transaction.amount,
+                        painterResource(id = R.drawable.visa),
+                        onClick = {}
+                    )
+                    if (transaction != user.transactions[2])
+                        HorizontalDivider()
+
+
+                }
+            }
+        }
     }
 }
-    }
-}
-    }
 
 
-    //TODO: add recent transactions
-
+//TODO: add recent transactions
 
 
 @Composable

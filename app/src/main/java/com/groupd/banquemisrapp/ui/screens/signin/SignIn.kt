@@ -41,6 +41,8 @@ import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.groupd.banquemisrapp.activities.MainActivity
+import com.groupd.banquemisrapp.api.LoginAPIService
+import com.groupd.banquemisrapp.api.TokenStorage
 import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.LoginRequest
 import com.groupd.banquemisrapp.data.LoginResponseDTO
@@ -131,7 +133,8 @@ fun SignInScreen(
                 viewModel.viewModelScope.launch {
                     try {
                         Log.d("TAG", "Logging in: $loginRequest")
-                        loginResponse = UserAPIService.userAPI.login(loginRequest)
+                        loginResponse = LoginAPIService.loginAPI.login(loginRequest)
+                        loginResponse?.token?.let { TokenStorage.saveToken(context, it) }
                         Log.d("TAG", "Logging in: $loginResponse")
 
                         viewModel.saveLoginResponse(loginResponse)
