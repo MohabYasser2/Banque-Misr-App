@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.api.TokenStorage
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
@@ -95,6 +96,7 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier, user
             onClick = {
 
 
+                TokenStorage.clearToken(context)
                 navController.navigate(Route.SIGNIN) {
                     popUpTo(Route.SIGNIN) {
                         inclusive = true

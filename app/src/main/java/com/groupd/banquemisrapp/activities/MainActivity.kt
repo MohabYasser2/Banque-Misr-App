@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.api.AppContextProvider
+import com.groupd.banquemisrapp.api.TokenStorage
 
 import com.groupd.banquemisrapp.data.Account
 import com.groupd.banquemisrapp.data.Favourite
@@ -262,7 +263,7 @@ class MainActivity : ComponentActivity() {
 
     private fun resetInactivityTimer() {
         cancelInactivityTimer()
-        userActivityTimer = object : CountDownTimer(1 * 60 * 1000 * 30, 1000) {
+        userActivityTimer = object : CountDownTimer(1 * 60 * 1000 , 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 // No-op
             }
@@ -287,6 +288,7 @@ class MainActivity : ComponentActivity() {
                 .setMessage("You've been inactive for 30 minutes. Please log in again.")
                 .setPositiveButton("Log In") { _, _ ->
                     // Redirect to login activity
+                    TokenStorage.clearToken(context = AppContextProvider.context)
                     val intent = Intent(this, StartActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
