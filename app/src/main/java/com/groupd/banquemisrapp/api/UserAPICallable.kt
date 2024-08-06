@@ -39,8 +39,8 @@ interface UserAPICallable {
     @GET("/api/transactions")
     suspend fun getTransactions(): List<TransactionDTO>
 
-    @GET("/api/account")
-    suspend fun getAccount(): UserDTO
+    @GET("/api/accounts")
+    suspend fun getAccounts(): List<AccountDTO>
 
     @PUT("/api/account")
     suspend fun updateAccount(@Body updateAccountRequest: UpdateAccountRequest): UserDTO
@@ -51,7 +51,7 @@ interface UserAPICallable {
     // Card Management
 
     @POST("/api/cards")
-    suspend fun addCard(@Body addCardRequest: AddCardRequest): List<AccountDTO>
+    suspend fun addAccount(@Body addCardRequest: AddCardRequest): List<AccountDTO>
 
     @GET("/api/cards")
     suspend fun getCards(): List<AccountDTO>

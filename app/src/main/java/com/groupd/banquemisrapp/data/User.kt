@@ -9,19 +9,19 @@ data class UserDTO(
     val username: String,
     val email: String,
     val phoneNumber: String,
-    val country: Country,
+    val country: String,
     val gender: Gender,
     val dateOfBirth: String,
     val accounts: List<AccountDTO>
 )
 
 data class AccountDTO(
-    @NotNull val cardNumber: String,
-    @NotNull val cardHolderName: String,
+    @NotNull val accountNumber: String,
+    @NotNull val accountHolderName: String,
     val expirationDate: String,
     val cvv: String,
     val isDefault: Boolean,
-    val cardCurrency: CardCurrency,
+    val accountCurrency: String,
     val balance: Double
 )
 
@@ -86,9 +86,9 @@ data class ChangePasswordRequest(
     val password: String
 )
 
-data class AddCardRequest(
-    val cardNumber: String,
-    val cardHolderName: String,
+data class AddAccountRequest(
+    val accountNumber: String,
+    val accountHolderName: String,
     val expirationDate: String,
     val cvv: String
 )

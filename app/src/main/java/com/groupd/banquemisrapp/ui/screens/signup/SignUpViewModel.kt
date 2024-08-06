@@ -22,7 +22,7 @@ class SignUpViewModel : ViewModel() {
         username = "",
         email = "",
         phoneNumber = "",
-        country = Country.USA,
+        country = "",
         gender = Gender.MALE,
         dateOfBirth = "",
         accounts = emptyList()

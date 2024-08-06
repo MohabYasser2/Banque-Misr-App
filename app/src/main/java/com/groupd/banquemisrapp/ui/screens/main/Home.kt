@@ -154,8 +154,10 @@ fun HomeScreen(
                     modifier = Modifier.padding(start = 16.dp, top = 16.dp),
                     fontWeight = FontWeight(350)
                 )
+                val formattedAmount = (balance?.accounts?.firstOrNull()?.accountCurrency
+                    ?: "USD") + " " + (balance?.accounts?.firstOrNull()?.balance?.toString() ?: "0")
                 Text(
-                    text = balance?.accounts?.firstOrNull()?.balance?.toString() ?: "0",
+                    text = formattedAmount,
                     fontSize = 32.sp,
                     color = Color.White,
                     modifier = Modifier.padding(16.dp),

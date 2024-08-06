@@ -46,6 +46,7 @@ import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,10 +54,18 @@ import androidx.compose.runtime.setValue
 import com.groupd.banquemisrapp.data.Favourite
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
 import com.groupd.banquemisrapp.ui.theme.White
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.groupd.banquemisrapp.data.AccountDTO
 
 
 @Composable
-fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
+fun MyCardsScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    user: User,
+    viewModel: MyAccountsViewModel = viewModel()
+) {
+    viewModel.getAccounts()
 
     var defaultAccount by remember { mutableStateOf(user.defaultAccountNumber) }
     var isClickable by remember { mutableStateOf(false) }
@@ -72,8 +81,8 @@ fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier, u
         CustomHeader(title = "My Accounts") {
             navController.popBackStack()
         }
-
-        CardList(user.accounts, user = user, isClickable = isClickable, onSelected = {
+        val accounts by viewModel.accounts.collectAsState()
+        CardList(accounts, user = user, isClickable = isClickable, onSelected = {
             defaultAccount = it
             user.defaultAccountNumber = it
             isClickable = false
@@ -129,7 +138,7 @@ fun MyCardsScreen(navController: NavController, modifier: Modifier = Modifier, u
 
 @Composable
 fun CardList(
-    cards: List<Account>,
+    cards: List<AccountDTO>,
     isClickable: Boolean = false,
     user: User,
     onSelected: (String) -> Unit = {},
@@ -139,11 +148,10 @@ fun CardList(
     LazyColumn(modifier = Modifier.heightIn(max = 500.dp)) {
         items(cards) { card ->
             CardItem(
-                name = card.cardHolder,
+                name = card.accountHolderName,
                 account = card.accountNumber,
-                balance = card.balance,
+                balance = card.balance.toString(),
                 isDefault = card.isDefault,
-                user = user,
                 isClickable = isClickable,
                 onSelected = {
                     onSelected(it)
@@ -163,7 +171,6 @@ fun CardItem(
     account: String,
     isDefault: Boolean,
     balance: String,
-    user: User,
     onSelected: (String) -> Unit = {},
     isClickable: Boolean = false,
     modifier: Modifier = Modifier
@@ -219,7 +226,7 @@ fun CardItem(
 
 
             }
-            if (account == user.defaultAccountNumber) {
+            if (isDefault) {
                 Column(
                     //modifier.fillMaxHeight(),
                     verticalArrangement = Arrangement.Top
