@@ -90,6 +90,7 @@ fun SignUpFirst(
         var emailError by remember { mutableStateOf("") }
         var passwordError by remember { mutableStateOf("") }
         var secondPasswordError by remember { mutableStateOf("") }
+        var fullNameError by remember { mutableStateOf("") }
 
         val isButtonEnabled by remember {
             derivedStateOf {
@@ -100,7 +101,8 @@ fun SignUpFirst(
                         emailError.isEmpty() &&
                         passwordError.isEmpty() &&
                         secondPasswordError.isEmpty() &&
-                        password == secondPassword
+                        password == secondPassword &&
+                        fullNameError.isEmpty()
             }
         }
 
@@ -125,6 +127,17 @@ fun SignUpFirst(
             secondPasswordError = if (password == secondPassword) "" else "Passwords do not match"
         }
 
+        fun validateFullName(fullName: String) {
+            fullNameError = when {
+                fullName.isEmpty() -> "Full name is required"
+                fullName.split(" ").size != 2 -> "Full name must contain a first and last name"
+                !fullName.split(" ").all { it.isNotEmpty() && it[0].isUpperCase() } -> "Each name must start with a capital letter"
+                else -> ""
+            }
+        }
+
+
+
         // Update values and validate
         fun updateValuesAndValidate(
             fullName1: String,
@@ -140,6 +153,7 @@ fun SignUpFirst(
             validateEmail(email)
             validatePassword(password)
             validateSecondPassword(password, secondPassword)
+            validateFullName(fullName)
         }
 
         Text(
@@ -161,6 +175,7 @@ fun SignUpFirst(
             onValueChange = { updateValuesAndValidate(it, email, password, secondPassword) },
             imageRes = painterResource(id = R.drawable.ic_profile),
             trailingIconOn = true,
+            error = fullNameError
         )
         namedField(
             text = "Email",
@@ -335,9 +350,10 @@ fun SignUpSecond(
             text = "Number",
             message = "ex : +201234567891",
             value = number,
+            error = if (number.length < 11) "Invalid number" else if (!number.startsWith("+")) "Number Should Start With Country Code" else "",
 
             onValueChange = {
-                number =it
+                number = it
             },
             imageRes = painterResource(id = R.drawable.ic_down),
             trailingIconOn = false,
@@ -413,7 +429,7 @@ fun SignUpSecond(
                     country = selectedCountry,
                     gender = "MALE",
                     dateOfBirth = selectedDate,
-                    )
+                )
 
                 viewModel.viewModelScope.launch {
                     try {
