@@ -83,6 +83,7 @@ data class UpdateAccountRequest(
 )
 
 data class ChangePasswordRequest(
+
     val password: String
 )
 
@@ -97,7 +98,7 @@ data class RemoveCardRequest(
     val cardNumber: String
 )
 
-data class ChangeDefaultCardRequest(
+data class ChangeDefaultAccountRequest(
     val cardNumber: String
 )
 

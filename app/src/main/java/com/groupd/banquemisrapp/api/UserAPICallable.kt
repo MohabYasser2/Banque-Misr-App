@@ -1,8 +1,9 @@
 import com.groupd.banquemisrapp.data.UserDTO
-import com.groupd.banquemisrapp.data.AddCardRequest
 import com.groupd.banquemisrapp.data.AddFavoriteRequest
 import com.groupd.banquemisrapp.data.AccountDTO
-import com.groupd.banquemisrapp.data.ChangeDefaultCardRequest
+import com.groupd.banquemisrapp.data.AddAccountRequest
+import com.groupd.banquemisrapp.data.ChangeDefaultAccountRequest
+import com.groupd.banquemisrapp.data.ChangePasswordRequest
 import com.groupd.banquemisrapp.data.LoginRequest
 import com.groupd.banquemisrapp.data.LoginResponseDTO
 import com.groupd.banquemisrapp.data.RegisterRequest
@@ -13,7 +14,6 @@ import com.groupd.banquemisrapp.data.UpdateAccountRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -46,21 +46,21 @@ interface UserAPICallable {
     suspend fun updateAccount(@Body updateAccountRequest: UpdateAccountRequest): UserDTO
 
     @PUT("/api/password")
-    suspend fun changePassword(@Body changePasswordRequest: AddCardRequest): Any // Replace 'Any' with actual response type
+    suspend fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Any // Replace 'Any' with actual response type
 
     // Card Management
 
-    @POST("/api/cards")
-    suspend fun addAccount(@Body addCardRequest: AddCardRequest): List<AccountDTO>
+    @POST("/api/accounts")
+    suspend fun addAccount(@Body addCardRequest: AddAccountRequest): List<AccountDTO>
 
-    @GET("/api/cards")
+    @GET("/api/accounts")
     suspend fun getCards(): List<AccountDTO>
 
-    @DELETE("/api/cards")
+    @DELETE("/api/accounts")
     suspend fun removeCard(@Body removeCardRequest: RemoveCardRequest): Any // Replace 'Any' with actual response type
 
     @PUT("/api/cards/default")
-    suspend fun changeDefaultCard(@Body changeDefaultCardRequest: ChangeDefaultCardRequest): Any // Replace 'Any' with actual response type
+    suspend fun changeDefaultAccount(@Body changeDefaultCardRequest: ChangeDefaultAccountRequest) : Any // Replace 'Any' with actual response type
 
     // Favorite Management
 
