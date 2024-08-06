@@ -1,6 +1,7 @@
 package com.groupd.banquemisrapp.ui.screens.profile
 
 import android.annotation.SuppressLint
+import android.util.Patterns
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +47,9 @@ import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.screens.signup.CountryList
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.util.Calendar
 
 @SuppressLint("SimpleDateFormat")
@@ -67,13 +72,82 @@ fun EditProfileScreen(
     }
     val sheetStateOne = rememberModalBottomSheetState()
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
-    var selectedCountry by remember { mutableStateOf(profile?.country?:"") }
+    var selectedCountry by remember { mutableStateOf(profile?.country ?: "") }
     val openDialog = remember { mutableStateOf(false) }
-    var selectedDate by remember { mutableStateOf(profile?.dateOfBirth?:"") }
+    var selectedDate by remember { mutableStateOf(profile?.dateOfBirth ?: "") }
     val datePickerState = rememberDatePickerState()
     val formatter = SimpleDateFormat("yyyy-MM-dd")
-    var fullName by remember { mutableStateOf(profile?.username?:"") }
-    var email by remember { mutableStateOf(profile?.email?:"") }
+    var fullName by remember { mutableStateOf(profile?.username ?: "") }
+    var email by remember { mutableStateOf(profile?.email ?: "") }
+    var dateOfBirthError by remember { mutableStateOf("") }
+
+    var emailError by remember { mutableStateOf("") }
+    var fullNameError by remember { mutableStateOf("") }
+
+    val isButtonEnabled by remember {
+        derivedStateOf {
+            fullName.isNotEmpty() &&
+                    email.isNotEmpty() &&
+                    emailError.isEmpty() &&
+                    fullNameError.isEmpty() &&
+                    selectedDate.isNotEmpty() &&
+                    selectedCountry.isNotEmpty() &&
+                    dateOfBirthError.isEmpty()
+
+        }
+    }
+
+    fun validateEmail(email: String) {
+        emailError =
+            if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) "" else "Invalid email format"
+    }
+
+
+    fun validateFullName(fullName: String) {
+        fullNameError = when {
+            fullName.isEmpty() -> "Full name is required"
+            fullName.split(" ").size != 2 -> "Full name must contain a first and last name"
+            !fullName.split(" ")
+                .all { it.isNotEmpty() && it[0].isUpperCase() } -> "Each name must start with a capital letter"
+
+            else -> ""
+        }
+    }
+    val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+    fun validateDateOfBirth(dateOfBirth: String) {
+        try {
+            val parsedDate = LocalDate.parse(dateOfBirth, dateFormatter)
+            val currentDate = LocalDate.now()
+            val minimumAgeDate = currentDate.minusYears(18)
+
+            if (parsedDate.isAfter(currentDate)) {
+                dateOfBirthError = "Date of birth cannot be in the future."
+            } else if (parsedDate.isAfter(minimumAgeDate)) {
+                dateOfBirthError = "You must be at least 18 years old."
+            } else {
+                dateOfBirthError = ""
+            }
+        } catch (e: DateTimeParseException) {
+            dateOfBirthError = "Invalid date format. Please use yyyy-MM-dd."
+        }
+    }
+
+
+    // Update values and validate
+    fun updateValuesAndValidate(
+        fullName1: String,
+        email1: String,
+        dateOfBirth: String
+    ) {
+        fullName = fullName1
+        email = email1
+        selectedDate = dateOfBirth
+
+        validateDateOfBirth(dateOfBirth)
+        validateEmail(email)
+        validateFullName(fullName)
+    }
 
 
 
@@ -102,17 +176,19 @@ fun EditProfileScreen(
             text = "Full name",
             message = "Enter your full name",
             value = fullName,
-            onValueChange = { fullName = it },
+            onValueChange = { updateValuesAndValidate(it, email, selectedDate) },
             imageRes = painterResource(id = R.drawable.ic_profile),
-            trailingIconOn = true
+            trailingIconOn = true,
+            error = fullNameError
         )
         namedField(
             text = "Email",
             message = "Enter your Email",
             value = email,
-            onValueChange = { email = it },
+            onValueChange = { updateValuesAndValidate(fullName, it, selectedDate) },
             imageRes = painterResource(id = R.drawable.ic_email),
-            trailingIconOn = true
+            trailingIconOn = true,
+            error = emailError
         )
         namedField(
             text = "Country",
@@ -139,6 +215,7 @@ fun EditProfileScreen(
             imageRes = painterResource(id = R.drawable.ic_calendar),
             trailingIconOn = true,
             isReadOnly = true,
+            error = dateOfBirthError
 
             )
 
@@ -165,7 +242,7 @@ fun EditProfileScreen(
                             val calendar = Calendar.getInstance()
                             calendar.timeInMillis = datePickerState.selectedDateMillis!!
                             selectedDate = formatter.format(calendar.time)
-
+                            updateValuesAndValidate(fullName,email,selectedDate)
                         },
                     color = Maroon,
 
@@ -182,7 +259,8 @@ fun EditProfileScreen(
                     username = fullName,
                     email = email,
                     country = selectedCountry,
-                    dateOfBirth = selectedDate)
+                    dateOfBirth = selectedDate
+                )
                 viewModel.editProfile(request, context = context)
             },
             shape = RoundedCornerShape(8.dp),
@@ -190,6 +268,7 @@ fun EditProfileScreen(
                 .fillMaxWidth()
                 .padding(16.dp),
             colors = ButtonDefaults.buttonColors(Maroon),
+            enabled = isButtonEnabled
         ) {
             Text(text = "Save", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
 
@@ -219,6 +298,49 @@ fun PasswordChangeScreen(
         var password by remember { mutableStateOf("") }
         var secondPassword by remember { mutableStateOf("") }
 
+        var passwordError by remember { mutableStateOf("") }
+        var secondPasswordError by remember { mutableStateOf("") }
+
+        val isButtonEnabled by remember {
+            derivedStateOf {
+                password.isNotEmpty() &&
+                secondPassword.isNotEmpty() &&
+                passwordError.isEmpty() &&
+                secondPasswordError.isEmpty() &&
+                password != secondPassword
+            }
+        }
+
+        fun validatePassword(password:String ,secondPassword: String) {
+            secondPasswordError = when {
+                secondPassword.length < 6 -> "Password must be at least 6 characters"
+                password == secondPassword -> "Passwords match"
+                !secondPassword.any { it.isUpperCase() } -> "Password must contain at least one capital letter"
+                !secondPassword.any { it.isLowerCase() } -> "Password must contain at least one small letter"
+                !secondPassword.any { it in "!@#$%^&*()-_+=<>?/,.|\\~`" } -> "Password must contain at least one special character"
+                else -> ""
+            }
+            passwordError = when {
+                password.length < 6 -> "Password must be at least 6 characters"
+                password == secondPassword -> "Passwords match"
+                !password.any { it.isUpperCase() } -> "Password must contain at least one capital letter"
+                !password.any { it.isLowerCase() } -> "Password must contain at least one small letter"
+                !password.any { it in "!@#$%^&*()-_+=<>?/,.|\\~`" } -> "Password must contain at least one special character"
+                else -> ""
+            }
+        }
+
+
+        fun updateValuesAndValidate(
+            password1: String,
+            secondPassword1: String
+        ) {
+            password = password1
+            secondPassword = secondPassword1
+
+
+            validatePassword(password,secondPassword)
+        }
 
 
         CustomHeader(title = "Change Password") {
@@ -228,12 +350,14 @@ fun PasswordChangeScreen(
             message = "Enter your password",
             value = password,
             isPassord = true,
-            onValueChange = { password = it })
+            onValueChange = { updateValuesAndValidate(it,secondPassword) },
+            error = passwordError)
         namedField(text = "New Password",
             message = "Enter new password",
             value = secondPassword,
             isPassord = true,
-            onValueChange = { secondPassword = it })
+            onValueChange = { updateValuesAndValidate(password,it) },
+            error = secondPasswordError)
 
         Button(
             onClick = { /*TODO*/ },
@@ -242,6 +366,7 @@ fun PasswordChangeScreen(
                 .fillMaxWidth()
                 .padding(24.dp),
             colors = ButtonDefaults.buttonColors(Maroon),
+            enabled = isButtonEnabled
         ) {
             Text(text = "Save", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
 
