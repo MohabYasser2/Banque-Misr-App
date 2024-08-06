@@ -52,6 +52,7 @@ class MyAccountsViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response =
+
                     UserAPIService.userAPI.changeDefaultAccount(accountNumber)
 
                 Log.d("TAG", "makeDefaultAccount: $response")

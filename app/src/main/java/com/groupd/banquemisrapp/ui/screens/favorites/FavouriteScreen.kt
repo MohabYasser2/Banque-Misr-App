@@ -19,6 +19,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,10 +34,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
-import com.groupd.banquemisrapp.data.Favourite
-import com.groupd.banquemisrapp.data.User
+import com.groupd.banquemisrapp.data.AccountDTO
+import com.groupd.banquemisrapp.data.AddFavoriteRequest
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.FavouriteItem
 import com.groupd.banquemisrapp.ui.partials.namedField
@@ -47,10 +49,10 @@ import com.groupd.banquemisrapp.ui.theme.White
 fun FavouriteScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    user: User,
+    favouritesViewModel: FavouritesViewModel = viewModel(),
 
     ) {
-
+val context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -64,24 +66,44 @@ fun FavouriteScreen(
         Text(
             text = "Your favourite list",
             fontSize = 24.sp,
-            modifier = modifier.padding(16.dp).padding(top = 16.dp),
+            modifier = modifier
+                .padding(16.dp)
+                .padding(top = 16.dp),
             fontWeight = FontWeight(600)
         )
-        FavouritsList(user)
+        favouritesViewModel.getFavourites()
+
+        FavouritsList(
+
+            onDelete = {
+                favouritesViewModel.deleteFavourites(it)
+
+            },
+            onAddToFavourites = {
+                favouritesViewModel.addFavourites(it)
+            },
+
+            )
+        val error by favouritesViewModel.error.collectAsState()
+        if (error == "HTTP 404 ") {
+        Log.d("TAG", "FavouriteScreen: $error")
+            Toast.makeText(LocalContext.current, "Account Not Found , Try Again", Toast.LENGTH_SHORT).show()
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavouritsList(
-    userMain: User,
-
-
+    favouritesViewModel: FavouritesViewModel = viewModel(),
+    onDelete: (accountNumber: String) -> Unit,
+    onAddToFavourites: (account: AddFavoriteRequest) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    favouritesViewModel.getFavourites()
+    val favourites by favouritesViewModel.favourites.collectAsState()
+
     val context = LocalContext.current
-    val user = remember { (userMain) }
-    val userFavourites = remember { (userMain.favourites) }
     val sheetState = rememberModalBottomSheetState()
     var isSheetOpen by rememberSaveable { mutableStateOf(false) }
     var selectedItemIndex by remember { mutableStateOf(0) }
@@ -91,31 +113,25 @@ fun FavouritsList(
     var tempAccount by remember { mutableStateOf("") }
 
 
-
-
     LazyColumn(
         modifier = Modifier.heightIn(max = 500.dp)
     ) {
-        items(userFavourites.size) { index ->
-            val (name, account) = userFavourites[index]
+        favouritesViewModel.getFavourites()
+        items(favourites.size) { index ->
             var tempName by remember { mutableStateOf("") }
             var tempAccount by remember { mutableStateOf("") }
 
 
 
             FavouriteItem(
-                name = name,
-                account = account,
+                name = favourites[index].accountHolderName,
+                account = favourites[index].accountNumber,
                 onEdit = {
                     isSheetOpen = !isSheetOpen
                     selectedItemIndex = index
                 },
                 onDelete = {
-
-                    userFavourites.removeAt(index)
-                    user.favourites = userFavourites
-
-
+                    onDelete(favourites[index].accountNumber)
                 },
                 isEditable = true
             )
@@ -126,6 +142,7 @@ fun FavouritsList(
                     containerColor = White
 
                 ) {
+                    favouritesViewModel.getFavourites()
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(16.dp)
@@ -167,12 +184,14 @@ fun FavouritsList(
                         Button(
                             onClick = {
                                 if (tempName.isEmpty() || tempAccount.isEmpty()) {
-                                    Toast.makeText(context, "Please Fill all Fields!", Toast.LENGTH_SHORT).show()
-                                }
-                                else {
+                                    Toast.makeText(
+                                        context,
+                                        "Please Fill all Fields!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
                                     isSheetOpen = !isSheetOpen
-                                    userFavourites[selectedItemIndex] =
-                                        Favourite(tempName, tempAccount)
+
 
                                 }
                             },
@@ -252,27 +271,29 @@ fun FavouritsList(
                 }
 
                 namedField(
-                    text = "Recipient Name",
+                    text = "Favourite Account Name",
                     message = "Enter Cardholder Name",
                     value = tempName,
                     onValueChange = { tempName = it }
                 )
                 namedField(
-                    text = "Recipient Account",
-                    message = "Enter Cardholder Account",
+                    text = "Favourite Account Number",
+                    message = "Enter Favourite Account Number",
                     value = tempAccount,
-                    onValueChange = { tempAccount = it }
+                    onValueChange = { tempAccount = it },
+                    error = if (tempAccount.length != 16) "Should be 16 digits" else null
 
                 )
 
                 Button(
+
                     onClick = {
                         if (tempName.isEmpty() || tempAccount.isEmpty()) {
-                            Toast.makeText(context, "Please Fill all Fields!", Toast.LENGTH_SHORT).show()
-                        }
-                        else {
+                            Toast.makeText(context, "Please Fill all Fields!", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            onAddToFavourites(AddFavoriteRequest(tempAccount, tempName))
                             isSheetOpen2 = !isSheetOpen2
-                            user.favourites.add(Favourite(tempName, tempAccount))
                         }
 
                     },

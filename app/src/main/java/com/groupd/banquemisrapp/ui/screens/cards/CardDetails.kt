@@ -27,54 +27,65 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.AddAccountRequest
 import com.groupd.banquemisrapp.data.User
+import com.groupd.banquemisrapp.routes.Route.CARDS
 import com.groupd.banquemisrapp.routes.Route.OTP
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.namedField
+import com.groupd.banquemisrapp.ui.screens.main.Currency
 import com.groupd.banquemisrapp.ui.theme.Maroon
 
 
 @Composable
-fun CardDetailsScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
+fun CardDetailsScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    currency: String,
+    MyAccountsViewModel: MyAccountsViewModel = viewModel()
+) {
 
     var cardholderName by remember { mutableStateOf("") }
     var cardNo by remember { mutableStateOf("") }
     var expiryDate by remember { mutableStateOf("") }
     var CVV by remember { mutableStateOf("") }
 
-    Column (
+    Column(
         modifier = modifier.fillMaxSize()
-    ){
-        CustomHeader(title = "Add Card") {
+    ) {
+        CustomHeader(title = "Add Account") {
             navController.popBackStack()
         }
 
 
         namedField(
-            text = "Cardholder name",
-            message = "Enter Cardholder name",
+            text = "Account name",
+            message = "Enter Account name",
             value = cardholderName,
             onValueChange = { cardholderName = it },
             imageRes = painterResource(id = R.drawable.ic_profile),
-            trailingIconOn = false
+            trailingIconOn = false,
+            error = if (cardholderName.length < 3) "Name should be at least 3 characters" else null
         )
         namedField(
-            text = "card No ",
-            message = "Enter Card Number",
+            text = "Account Number ",
+            message = "Enter Acccount Number",
             value = cardNo,
             onValueChange = { cardNo = it },
             imageRes = painterResource(id = R.drawable.ic_profile),
             trailingIconOn = false,
+            error = if (cardNo.length != 16) "Number should be 16 numbers" else null
         )
 
-        Row (
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
-        ){
+        ) {
 
             OutlinedTextField(
                 value = expiryDate,
@@ -105,25 +116,36 @@ fun CardDetailsScreen(navController: NavController, modifier: Modifier = Modifie
                 modifier = Modifier.weight(1f),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-               // visualTransformation = { VisualTransformation.None }
+                // visualTransformation = { VisualTransformation.None }
             )
         }
 
         Button(
             onClick = {
-                user.savingAccount.cardHolder = cardholderName
-                user.savingAccount.accountNumber = cardNo
-                user.savingAccount.expiryDate = expiryDate
-                user.savingAccount.cvv = CVV
-                navController.navigate(OTP)
-                      },
+
+                MyAccountsViewModel.addAccount(
+                    AddAccountRequest(
+                        accountHolderName = cardholderName,
+                        accountNumber = cardNo,
+                        expirationDate = expiryDate,
+                        cvv = CVV
+                    )
+                )
+
+                navController.navigate(CARDS)
+            },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()
                 .padding(24.dp),
             colors = ButtonDefaults.buttonColors(Maroon),
         ) {
-            Text(text = "Get Started ", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
+            Text(
+                text = "Get Started ",
+                Modifier.padding(12.dp),
+                color = Color.White,
+                fontSize = 18.sp
+            )
 
         }
     }

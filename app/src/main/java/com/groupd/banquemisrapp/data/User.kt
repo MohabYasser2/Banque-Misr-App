@@ -95,16 +95,16 @@ data class AddAccountRequest(
 )
 
 data class RemoveCardRequest(
-    val cardNumber: String
+    val accountNumber: String
 )
 
 data class ChangeDefaultAccountRequest(
-    val cardNumber: String
+    val accountNumber: String
 )
 
 data class AddFavoriteRequest(
-    val cardNumber: String,
-    val cardHolderName: String
+    val accountNumber: String,
+    val accountHolderName: String
 )
 
 data class TransferRequest(

@@ -37,6 +37,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.data.Favourite
@@ -65,6 +67,7 @@ import com.groupd.banquemisrapp.routes.Route.TRANSFER_TWO
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.FavouriteItem
 import com.groupd.banquemisrapp.ui.partials.namedField
+import com.groupd.banquemisrapp.ui.screens.favorites.FavouritesViewModel
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.White
@@ -72,7 +75,7 @@ import com.groupd.banquemisrapp.ui.theme.background
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifier, user: User) {
+fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifier, user: User, FavouriteViewModel: FavouritesViewModel = viewModel()) {
     val scrollableState = rememberScrollState()
     var sentValue by remember { mutableStateOf("") }
     var receivedValue by remember { mutableStateOf("") }
@@ -270,9 +273,7 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
             containerColor = White
 
         ) {
-            val favourites = remember {
-                user.favourites
-            }
+
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -295,6 +296,8 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
                     modifier = Modifier.padding(end = 8.dp)
                 )
             }
+            FavouriteViewModel.getFavourites()
+            val favourites by FavouriteViewModel.favourites.collectAsState()
             LazyColumn(
                 modifier = Modifier.heightIn(max = 400.dp)
             ) {

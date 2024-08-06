@@ -241,7 +241,7 @@ fun MainNavHost(
         composable(route = FAVOURITES) {
             FavouriteScreen(
                 navController = navController,
-                user = user
+
             )
         }
         composable(route = NOTIFICATIONS) {
@@ -254,14 +254,22 @@ fun MainNavHost(
         composable(route = ADD_CARD) {
             AddCardScreen(
                 navController = navController,
-                user = user,
+
                 modifier = modifier
             )
         }
-        composable(route = ADD_CARD_DETAILS) {
+        composable(
+            route = "$ADD_CARD_DETAILS/{currency}",
+            arguments = listOf(
+                navArgument("currency") { type = NavType.StringType },
+                )
+        ) {
+            val currency = it.arguments?.getString("currency")!!
+
+
             CardDetailsScreen(
                 navController = navController,
-                user = user,
+                currency = currency,
                 modifier = modifier
             )
         }

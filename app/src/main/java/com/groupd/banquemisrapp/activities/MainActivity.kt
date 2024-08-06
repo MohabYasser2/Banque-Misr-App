@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.api.AppContextProvider
+
 import com.groupd.banquemisrapp.data.Account
 import com.groupd.banquemisrapp.data.Favourite
 import com.groupd.banquemisrapp.data.MockData.user

@@ -56,6 +56,7 @@ import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
 import com.groupd.banquemisrapp.ui.theme.White
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.groupd.banquemisrapp.data.AccountDTO
+import com.groupd.banquemisrapp.data.ChangeDefaultAccountRequest
 
 
 @Composable
@@ -82,9 +83,10 @@ fun MyCardsScreen(
             navController.popBackStack()
         }
         val accounts by viewModel.accounts.collectAsState()
-        CardList(accounts, user = user, isClickable = isClickable, onSelected = {
-            defaultAccount = it
-            user.defaultAccountNumber = it
+        CardList(accounts, isClickable = isClickable, onSelected = {
+
+
+            viewModel.makeDefaultAccount(ChangeDefaultAccountRequest(it))
             isClickable = false
 
         })
@@ -140,7 +142,6 @@ fun MyCardsScreen(
 fun CardList(
     cards: List<AccountDTO>,
     isClickable: Boolean = false,
-    user: User,
     onSelected: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {

@@ -24,12 +24,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route.ADD_CARD_DETAILS
+import com.groupd.banquemisrapp.routes.Route.SIGNUP2
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.screens.signup.CountryList
 import com.groupd.banquemisrapp.ui.theme.Maroon
 
 @Composable
-fun AddCardScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
+fun AddCardScreen(navController: NavController, modifier: Modifier = Modifier) {
 
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
     var selectedCountry by remember { mutableStateOf("") }
@@ -49,8 +50,9 @@ fun AddCardScreen(navController: NavController, modifier: Modifier = Modifier, u
 
         Button(
             onClick = {
-                user.savingAccount.currency = selectedCountry
-                navController.navigate(ADD_CARD_DETAILS)
+
+                navController.navigate("$ADD_CARD_DETAILS/${selectedCountry}")
+
                       },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier

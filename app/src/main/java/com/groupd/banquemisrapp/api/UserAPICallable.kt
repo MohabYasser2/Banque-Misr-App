@@ -59,7 +59,7 @@ interface UserAPICallable {
     @DELETE("/api/accounts")
     suspend fun removeCard(@Body removeCardRequest: RemoveCardRequest): Any // Replace 'Any' with actual response type
 
-    @PUT("/api/cards/default")
+    @PUT("/api/accounts/default")
     suspend fun changeDefaultAccount(@Body changeDefaultCardRequest: ChangeDefaultAccountRequest) : Any // Replace 'Any' with actual response type
 
     // Favorite Management
@@ -70,8 +70,8 @@ interface UserAPICallable {
     @GET("/api/favorites")
     suspend fun getFavorites(): List<AccountDTO>
 
-    @DELETE("/api/favorites/{cardNumber}")
-    suspend fun removeFavorite(@Path("cardNumber") cardNumber: String): List<AccountDTO>
+    @DELETE("/api/favorites/{accountNumber}")
+    suspend fun deleteFavorite(@Path("accountNumber") accountNumber: String): List<AccountDTO>
 
     // Transfer
 
