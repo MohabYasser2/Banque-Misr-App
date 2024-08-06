@@ -11,12 +11,16 @@ import com.groupd.banquemisrapp.data.receipientDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TransferViewModel : ViewModel() {
 
     private val _amount = MutableStateFlow("")
     val amount = _amount.asStateFlow()
+
+    private val _error = MutableStateFlow(false)
+    val error = _error.asStateFlow()
 
     private val _receiver = MutableStateFlow(
         TransferRequest(
@@ -35,7 +39,10 @@ class TransferViewModel : ViewModel() {
             try {
                 _amount.value = amount
 
+
             } catch (e: Exception) {
+
+
 
             }
         }
@@ -60,10 +67,11 @@ class TransferViewModel : ViewModel() {
                 Log.d("TRANSFER", "addAccount: $transferRequest")
                 val response =
                     UserAPIService.userAPI.transfer(transferRequest)
-
+                _error.update { false }
                 Log.d("TRANSFER", "addAccount: $response")
             } catch (e: Exception) {
                 // Handle the error appropriately
+                _error.update { true }
                 Log.d("TRANSFER", " error addAccount: $e")
             }
         }

@@ -297,6 +297,9 @@ fun TransferScreenOne(
         else
             isButtonEnabled = false
 
+
+        val error2 by TransferViewModel.error.collectAsState()
+
         Button(
             onClick = {
                 if (receivedValue.toDouble() > 5000.0) {
@@ -321,6 +324,7 @@ fun TransferScreenOne(
                     user.receivingAccount.cardHolder = tempName
                     user.receivingAccount.accountNumber = tempAccount
                     user.sendingAmount = "EGP" + receivedValue
+
                     TransferViewModel.transfer(
                         TransferRequest(
                             receipientDTO(
@@ -350,6 +354,9 @@ fun TransferScreenOne(
             )
 
         }
+
+
+
 
     }
     if (isSheetOneOpen) {
@@ -851,7 +858,7 @@ fun CurrencyDropdown(
 ) {
     val currencies = listOf(
         Pair("EGP", "🇪🇬"), // Egyptian Pound
-        Pair("USD", "\uD83C\uDDFA\uD83C\uDDF8"), // US Dollar
+        /*Pair("USD", "\uD83C\uDDFA\uD83C\uDDF8"), // US Dollar
         Pair("CAD", "\uD83C\uDDE8\uD83C\uDDE6"), // Canadian Dollar
         Pair("INR", "\uD83C\uDDEE\uD83C\uDDF3"), // Indian Rupee
         Pair("EUR", "\uD83C\uDDE9\uD83C\uDDEA"), // Euro (Germany, France, and others)
@@ -867,7 +874,7 @@ fun CurrencyDropdown(
         Pair("ARS", "🇦🇷"), // Argentine Peso
         Pair("KRW", "🇰🇷"), // South Korean Won
         Pair("SAR", "🇸🇦"), // Saudi Riyal
-        Pair("ZAR", "🇿🇦"), // South African Rand
+        Pair("ZAR", "🇿🇦"), // South African Rand*/
     )
 
 
