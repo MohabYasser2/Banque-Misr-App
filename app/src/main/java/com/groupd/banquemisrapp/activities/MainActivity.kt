@@ -2,7 +2,10 @@ package com.groupd.banquemisrapp.activities
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -40,12 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.api.AppContextProvider
 import com.groupd.banquemisrapp.api.TokenStorage
-
-import com.groupd.banquemisrapp.data.Account
-import com.groupd.banquemisrapp.data.Favourite
 import com.groupd.banquemisrapp.data.MockData.user
-import com.groupd.banquemisrapp.data.Transaction
-import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.MainNavHost
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.ADD_CARD
@@ -67,6 +65,7 @@ import com.groupd.banquemisrapp.routes.Route.TRANSFER
 import com.groupd.banquemisrapp.ui.partials.iconNamedVertically
 import com.groupd.banquemisrapp.ui.theme.background
 import com.groupd.banquemisrapp.ui.theme.background2
+
 
 class MainActivity : ComponentActivity() {
     private var userActivityTimer: CountDownTimer? = null
@@ -304,6 +303,20 @@ class MainActivity : ComponentActivity() {
         resetInactivityTimer()
     }
 }
+
+
+fun isInternetAvailable(context: Context): Boolean {
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val network = connectivityManager.activeNetwork ?: return false
+    val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+    return when {
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+        else -> false
+    }
+}
+
 
 
 @Preview(showBackground = true)

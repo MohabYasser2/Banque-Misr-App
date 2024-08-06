@@ -51,10 +51,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import com.groupd.banquemisrapp.data.Favourite
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
 import com.groupd.banquemisrapp.ui.theme.White
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.AccountDTO
 import com.groupd.banquemisrapp.data.ChangeDefaultAccountRequest
 
@@ -66,6 +68,10 @@ fun MyCardsScreen(
     user: User,
     viewModel: MyAccountsViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     viewModel.getAccounts()
 
     var defaultAccount by remember { mutableStateOf(user.defaultAccountNumber) }

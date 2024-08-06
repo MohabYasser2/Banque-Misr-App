@@ -61,10 +61,12 @@ import com.groupd.banquemisrapp.ui.theme.White
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.api.LoginAPIService
 import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.RegisterRequest
 import com.groupd.banquemisrapp.data.UserDTO
+import com.groupd.banquemisrapp.routes.Route
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -253,6 +255,9 @@ fun SignUpSecond(
     val datePickerState = rememberDatePickerState()
     val formatter = SimpleDateFormat("yyyy-MM-dd")
     val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
 
     Column(
         modifier = modifier

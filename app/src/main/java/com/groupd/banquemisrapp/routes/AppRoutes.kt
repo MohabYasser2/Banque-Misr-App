@@ -117,6 +117,12 @@ fun AppNavHost() {
                 user = user,
             )
         }
+        composable(route = INTERNET_ERROR) {
+            InternetConnectionErrorScreen(
+                navController = navController,
+                user = user,
+            )
+        }
 
         composable(
             route = "$SIGNUP2/{fullName}/{email}/{password}",

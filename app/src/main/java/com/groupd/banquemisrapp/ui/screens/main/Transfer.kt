@@ -59,8 +59,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.Favourite
 import com.groupd.banquemisrapp.data.User
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
 import com.groupd.banquemisrapp.routes.Route.TRANSFER_THREE
 import com.groupd.banquemisrapp.routes.Route.TRANSFER_TWO
@@ -84,7 +86,10 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
     var tempName by remember { mutableStateOf("") }
     var tempAccount by remember { mutableStateOf("") }
 
-
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
 
     Column(
         modifier = modifier
@@ -324,7 +329,10 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
 
 @Composable
 fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifier, user: User) {
-
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     Column(
         modifier = modifier
             .fillMaxSize(),
@@ -463,7 +471,9 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
 @Composable
 fun TransferScreenThree(navController: NavController, modifier: Modifier = Modifier, user: User) {
     val context = LocalContext.current
-
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     Column(
         modifier = modifier
             .fillMaxSize(),

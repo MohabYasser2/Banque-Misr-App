@@ -41,11 +41,13 @@ import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.groupd.banquemisrapp.activities.MainActivity
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.api.LoginAPIService
 import com.groupd.banquemisrapp.api.TokenStorage
 import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.LoginRequest
 import com.groupd.banquemisrapp.data.LoginResponseDTO
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.SERVER_ERROR
 import kotlinx.coroutines.launch
 
@@ -55,6 +57,10 @@ fun SignInScreen(
     navController: NavController, modifier: Modifier = Modifier,
     viewModel: SignInViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     Column(
         modifier = modifier
             .fillMaxSize(),

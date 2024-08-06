@@ -37,8 +37,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.AccountDTO
 import com.groupd.banquemisrapp.data.AddFavoriteRequest
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.FavouriteItem
 import com.groupd.banquemisrapp.ui.partials.namedField
@@ -52,7 +54,11 @@ fun FavouriteScreen(
     favouritesViewModel: FavouritesViewModel = viewModel(),
 
     ) {
-val context = LocalContext.current
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize(),

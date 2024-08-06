@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.PROFILE
@@ -61,7 +62,11 @@ fun HomeScreen(
     user: User,
     viewModel: HomeViewModel = viewModel()
 ) {
+
     val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     val customer by viewModel.balance.collectAsState()
 
     // Trigger the API call

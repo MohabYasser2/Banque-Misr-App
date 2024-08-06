@@ -30,8 +30,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.AddAccountRequest
 import com.groupd.banquemisrapp.data.User
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.CARDS
 import com.groupd.banquemisrapp.routes.Route.OTP
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
@@ -47,7 +49,10 @@ fun CardDetailsScreen(
     currency: String,
     MyAccountsViewModel: MyAccountsViewModel = viewModel()
 ) {
-
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     var cardholderName by remember { mutableStateOf("") }
     var cardNo by remember { mutableStateOf("") }
     var expiryDate by remember { mutableStateOf("") }

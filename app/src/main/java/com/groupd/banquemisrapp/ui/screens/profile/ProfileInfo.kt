@@ -15,11 +15,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.User
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.screens.main.HomeViewModel
 
@@ -30,8 +33,12 @@ fun ProfileInformationScreen(
     user: User,
     viewModel: ProfileViewModel = viewModel()
 ) {
-
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     val profile by viewModel.balance.collectAsState()
+
 
     LaunchedEffect(Unit) {
         viewModel.getProfile()

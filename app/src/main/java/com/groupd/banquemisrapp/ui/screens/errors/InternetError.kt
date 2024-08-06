@@ -26,7 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.User
+import com.groupd.banquemisrapp.routes.Route.INTERNET_ERROR
 import com.groupd.banquemisrapp.ui.theme.Maroon
 
 @Composable
@@ -61,8 +63,16 @@ fun InternetConnectionErrorScreen(
         )
         Spacer(modifier = modifier.height(8.dp))
         // Update Button
+        val context = LocalContext.current
         Button(
-            onClick = { /*todo*/ },
+            onClick = {
+
+                if (isInternetAvailable(context = context)) {
+                    navController.popBackStack()
+                } else {
+                    navController.navigate(INTERNET_ERROR)
+                }
+            },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
                 .fillMaxWidth()

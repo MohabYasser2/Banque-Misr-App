@@ -37,14 +37,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.Account
 import com.groupd.banquemisrapp.data.User
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.OTP_CONNECTED
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.theme.Maroon
 
 @Composable
 fun OTPEnteredScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     // State to hold the OTP input values
     var otpValues by remember { mutableStateOf(listOf("", "", "", "", "", "")) }
     // Create focus requesters for each OTP field

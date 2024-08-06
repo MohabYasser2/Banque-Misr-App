@@ -53,10 +53,16 @@ import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.Red
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.Close
+import com.groupd.banquemisrapp.activities.isInternetAvailable
+import com.groupd.banquemisrapp.routes.Route
 
 
 @Composable
 fun TransactionsScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     Column(
         modifier = modifier
             .fillMaxSize()

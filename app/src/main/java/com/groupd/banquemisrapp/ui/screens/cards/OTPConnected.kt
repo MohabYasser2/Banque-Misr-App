@@ -29,7 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.User
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.ADD_CARD
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
@@ -37,6 +39,10 @@ import com.groupd.banquemisrapp.ui.theme.Maroon
 
 @Composable
 fun OTPConnectedScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     Column(
         modifier = Modifier.fillMaxSize()
             .padding(bottom = 40.dp)

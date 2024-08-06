@@ -35,9 +35,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.MockData.user
 import com.groupd.banquemisrapp.data.UpdateAccountRequest
 import com.groupd.banquemisrapp.data.User
+import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.screens.signup.CountryList
@@ -54,6 +56,10 @@ fun EditProfileScreen(
     user: User,
     viewModel: ProfileViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     val profile by viewModel.balance.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -68,7 +74,7 @@ fun EditProfileScreen(
     val formatter = SimpleDateFormat("yyyy-MM-dd")
     var fullName by remember { mutableStateOf(profile?.username?:"") }
     var email by remember { mutableStateOf(profile?.email?:"") }
-    val context = LocalContext.current
+
 
 
     LaunchedEffect(profile) {
@@ -199,6 +205,10 @@ fun PasswordChangeScreen(
     modifier: Modifier = Modifier,
     user: User
 ) {
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     Column(
         modifier = modifier
             .fillMaxSize(),
