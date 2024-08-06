@@ -57,8 +57,8 @@ import com.groupd.banquemisrapp.ui.screens.main.MoreScreen
 import com.groupd.banquemisrapp.ui.screens.main.cards.MyCardsScreen
 import com.groupd.banquemisrapp.ui.screens.main.cards.OTPConnectedScreen
 import com.groupd.banquemisrapp.ui.screens.main.cards.OTPEnteredScreen
-import com.groupd.banquemisrapp.ui.screens.main.TransactionDetailsScreen
-import com.groupd.banquemisrapp.ui.screens.main.TransactionsScreen
+import com.groupd.banquemisrapp.ui.screens.main.transactions.TransactionDetailsScreen
+import com.groupd.banquemisrapp.ui.screens.main.transactions.TransactionsScreen
 import com.groupd.banquemisrapp.ui.screens.main.transfer.TransferScreenOne
 import com.groupd.banquemisrapp.ui.screens.main.transfer.TransferScreenThree
 import com.groupd.banquemisrapp.ui.screens.main.transfer.TransferScreenTwo

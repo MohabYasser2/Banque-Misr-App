@@ -32,8 +32,8 @@ data class receipientDTO(
 
 
 data class TransactionDTO(
-    val transactionId: UUID,
-    val transactionDate: LocalDateTime,
+    val transactionId: String,
+    val transactionDate: String,
     val senderCard: AccountDTO, // Assuming a different entity
     val recipientCard: AccountDTO,
     val amount: Double,

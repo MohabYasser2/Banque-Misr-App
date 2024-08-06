@@ -1,6 +1,5 @@
 package com.groupd.banquemisrapp.ui.screens.main.transfer
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -63,7 +62,6 @@ import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.AccountDTO
 import com.groupd.banquemisrapp.data.AddFavoriteRequest
-import com.groupd.banquemisrapp.data.Favourite
 import com.groupd.banquemisrapp.data.TransferRequest
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.data.receipientDTO
@@ -75,7 +73,7 @@ import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.FavouriteItem
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.screens.favorites.FavouritesViewModel
-import com.groupd.banquemisrapp.ui.screens.main.TransactionDetailCard
+import com.groupd.banquemisrapp.ui.screens.main.transactions.TransactionDetailCard
 import com.groupd.banquemisrapp.ui.screens.main.home.HomeViewModel
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon

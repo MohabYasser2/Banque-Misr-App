@@ -1,5 +1,6 @@
-package com.groupd.banquemisrapp.ui.screens.main
+package com.groupd.banquemisrapp.ui.screens.main.transactions
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -53,16 +54,32 @@ import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.Red
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.routes.Route
 
 
 @Composable
-fun TransactionsScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
+fun TransactionsScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    user: User,
+    viewModel: TransactionsViewModel = viewModel()
+) {
     val context = LocalContext.current
     if (!isInternetAvailable(context)) {
         navController.navigate(Route.INTERNET_ERROR)
     }
+    viewModel.fetchTransactions()
+    val countries by viewModel.transactions.collectAsState()
+    val hasError by viewModel.hasError.collectAsState()
+
+
+    Log.d("TAG", "TransactionsScreen: $countries")
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -245,7 +262,7 @@ fun TransactionDetailsScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        val header = if(status) "Successful Transaction" else "Failed Transaction"
+        val header = if (status) "Successful Transaction" else "Failed Transaction"
 
         CustomHeader(title = header) {
             navController.popBackStack()
@@ -286,7 +303,16 @@ fun TransactionDetailsScreen(
             color = Maroon
         )
         Spacer(modifier = Modifier.height(16.dp))
-        TransactionDetails(from , fromAccount , to , toAccount ,amount ,status ,reference , modifier = modifier)
+        TransactionDetails(
+            from,
+            fromAccount,
+            to,
+            toAccount,
+            amount,
+            status,
+            reference,
+            modifier = modifier
+        )
         /*TransactionInfoSection(
             from = from,
             to = to,
@@ -304,9 +330,9 @@ fun TransactionDetails(
     fromAccount: String,
     to: String,
     toAccount: String,
-    amount:String,
-    status:Boolean,
-    ref : String,
+    amount: String,
+    status: Boolean,
+    ref: String,
     modifier: Modifier
 ) {
     Column(
@@ -341,7 +367,7 @@ fun TransactionDetails(
                 .offset(y = (-140).dp)
         ) {
             //HorizontalDivider()
-            if(status){
+            if (status) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = "Check",
@@ -351,8 +377,7 @@ fun TransactionDetails(
                         .size(42.dp)
                         .padding(4.dp)
                 )
-            }
-            else{
+            } else {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "uncheck",
@@ -368,7 +393,7 @@ fun TransactionDetails(
 
         //Spacer(modifier = Modifier.height(16.dp))
 
-        TransactionDetailItem(amount ,ref )
+        TransactionDetailItem(amount, ref)
 
     }
 }
@@ -437,7 +462,7 @@ fun TransactionDetailCard(label: String, name: String, account: String, icon: Pa
 }
 
 @Composable
-fun TransactionDetailItem(amount:String , id:String) {
+fun TransactionDetailItem(amount: String, id: String) {
 
     Card(
         shape = RoundedCornerShape(4.dp),
