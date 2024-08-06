@@ -261,6 +261,10 @@ fun SignUpSecond(
     modifier: Modifier = Modifier,
     viewModel: SignUpViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+    if (!isInternetAvailable(context)) {
+        navController.navigate(Route.INTERNET_ERROR)
+    }
     val sheetStateOne = rememberModalBottomSheetState()
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
     var selectedCountry by remember { mutableStateOf("") }
@@ -269,10 +273,7 @@ fun SignUpSecond(
     var selectedDate by remember { mutableStateOf("") }
     val datePickerState = rememberDatePickerState()
     val formatter = SimpleDateFormat("yyyy-MM-dd")
-    val context = LocalContext.current
-    if (!isInternetAvailable(context)) {
-        navController.navigate(Route.INTERNET_ERROR)
-    }
+
 
     Column(
         modifier = modifier
