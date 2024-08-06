@@ -233,7 +233,7 @@ fun MoreOptionItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { /* Handle click */ },
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
 

@@ -42,7 +42,7 @@ interface UserAPICallable {
     @GET("/api/accounts")
     suspend fun getAccounts(): List<AccountDTO>
 
-    @PUT("/api/account")
+    @PUT("/api/user")
     suspend fun updateAccount(@Body updateAccountRequest: UpdateAccountRequest): UserDTO
 
     @PUT("/api/password")

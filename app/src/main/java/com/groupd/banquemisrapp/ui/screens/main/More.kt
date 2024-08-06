@@ -60,7 +60,11 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier, user
         }
         MoreOptionItem(
             imageRes = painterResource(id = R.drawable.ic_website),
-            option = "Transfer From Website"
+            option = "Transfer From Website",
+            onClick = {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.banquemisr.com/"))
+                context.startActivity(intent)
+            }
         )
         HorizontalDivider()
         MoreOptionItem(
@@ -87,7 +91,17 @@ fun MoreScreen(navController: NavController, modifier: Modifier = Modifier, user
         MoreOptionItem(
             imageRes = painterResource(id = R.drawable.ic_logout),
             option = "Logout",
-            isArrow = false
+            isArrow = false,
+            onClick = {
+
+
+                navController.navigate(Route.SIGNIN) {
+                    popUpTo(Route.SIGNIN) {
+                        inclusive = true
+                    }
+                }
+
+            }
         )
 
         if (isSheetOpen) {
