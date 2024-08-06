@@ -95,15 +95,19 @@ fun CardDetailsScreen(
             OutlinedTextField(
                 value = expiryDate,
                 onValueChange = { newValue ->
-                    if (newValue.length <= 5 && newValue.all { it.isDigit() || it.isSpecialCharacter() }) {
+                    if (newValue.length <= 4 && newValue.all { it.isDigit() }) {
                         expiryDate = newValue
                     }
+                    else {
+
+                    }
+
                 },
                 label = { Text("MM/YY") },
                 placeholder = { Text("MM/YY") },
                 modifier = Modifier.weight(1f),
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Unspecified),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 //visualTransformation = { VisualTransformation.None }
             )
 
@@ -127,7 +131,7 @@ fun CardDetailsScreen(
 
         Button(
             onClick = {
-
+                expiryDate = expiryDate[0] + "${expiryDate[1]}" + "/" + "${expiryDate[2]}" + "${expiryDate[3]}"
                 MyAccountsViewModel.addAccount(
                     AddAccountRequest(
                         accountHolderName = cardholderName,
