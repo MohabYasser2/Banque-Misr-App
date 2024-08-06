@@ -29,7 +29,7 @@ class HomeViewModel() : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response =
-                    UserAPIService.userAPI.getBalance()
+                    UserAPIService.userAPI.getUser()
                 _balance.value = response
                 Log.d("TAG", "getBalance: $response")
             } catch (e: Exception) {
