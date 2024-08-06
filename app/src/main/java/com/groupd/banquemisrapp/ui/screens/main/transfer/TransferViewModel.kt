@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.AccountDTO
 import com.groupd.banquemisrapp.data.TransferRequest
+import com.groupd.banquemisrapp.data.receipientDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,19 +20,11 @@ class TransferViewModel : ViewModel() {
 
     private val _receiver = MutableStateFlow(
         TransferRequest(
-            AccountDTO(
-                "",
-                "",
-                "",
-                "",
-                false,
-                "",
-                0.0,
-            ),
-            "",
-            "",
-            0.0,
-            0.0
+            receipientDTO(
+                "",""
+            )
+            , 0.0, "", ""
+
         )
     )
     val receiver = _receiver.asStateFlow()
@@ -64,13 +57,14 @@ class TransferViewModel : ViewModel() {
     fun transfer(transferRequest: TransferRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                Log.d("TRANSFER", "addAccount: $transferRequest")
                 val response =
                     UserAPIService.userAPI.transfer(transferRequest)
 
-                Log.d("TAG", "addAccount: $response")
+                Log.d("TRANSFER", "addAccount: $response")
             } catch (e: Exception) {
                 // Handle the error appropriately
-                Log.d("TAG", " error addAccount: $e")
+                Log.d("TRANSFER", " error addAccount: $e")
             }
         }
     }

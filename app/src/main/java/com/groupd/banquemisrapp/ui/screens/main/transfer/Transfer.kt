@@ -66,6 +66,7 @@ import com.groupd.banquemisrapp.data.AddFavoriteRequest
 import com.groupd.banquemisrapp.data.Favourite
 import com.groupd.banquemisrapp.data.TransferRequest
 import com.groupd.banquemisrapp.data.User
+import com.groupd.banquemisrapp.data.receipientDTO
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
 import com.groupd.banquemisrapp.routes.Route.TRANSFER_THREE
@@ -97,8 +98,8 @@ fun TransferScreenOne(
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
     var tempName by remember { mutableStateOf("") }
     var tempAccount by remember { mutableStateOf("") }
-    var selectedSentCurrency by remember { mutableStateOf("") }
-    var selectedRecivedCurrency by remember { mutableStateOf("") }
+    var selectedSentCurrency by remember { mutableStateOf("EGP") }
+    var selectedRecivedCurrency by remember { mutableStateOf("EGP") }
 
     val context = LocalContext.current
     if (!isInternetAvailable(context)) {
@@ -292,38 +293,47 @@ fun TransferScreenOne(
         )
 
         if (tempAccount.length == 16 && tempName.isNotEmpty() && receivedValue.isNotEmpty())
-            isButtonEnabled=true
+            isButtonEnabled = true
         else
-            isButtonEnabled=false
+            isButtonEnabled = false
 
         Button(
             onClick = {
-                if (receivedValue.toDouble() > 5000.0)
-         {
-         Toast.makeText(context, "You can't send more than 5000 EGP", Toast.LENGTH_SHORT).show()
-                }
-                else {
+                if (receivedValue.toDouble() > 5000.0) {
+                    Toast.makeText(context, "You can't send more than 5000 EGP", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
                     TransferViewModel.saveAmount(
                         receivedValue
                     )
                     TransferViewModel.saveReceiver(
                         TransferRequest(
-                            AccountDTO(
+                            receipientDTO(
                                 tempAccount,
-                                tempName,
-                                "",
-                                "",
-                                false,
-                                selectedRecivedCurrency,
-                                0.0,
-                            ), "", "", 0.0, 0.0
+                                tempName
+                            ),
+                            receivedValue.toDouble(),
+                            selectedSentCurrency,
+                            selectedRecivedCurrency
                         ),
-
-                        )
+                    )
                     TransferViewModel.saveAmount(selectedRecivedCurrency + receivedValue)
                     user.receivingAccount.cardHolder = tempName
                     user.receivingAccount.accountNumber = tempAccount
                     user.sendingAmount = "EGP" + receivedValue
+                    TransferViewModel.transfer(
+                        TransferRequest(
+                            receipientDTO(
+                                tempAccount,
+                                tempName
+                            ),
+                            receivedValue.toDouble(),
+                            selectedSentCurrency,
+                            selectedRecivedCurrency
+                        )
+
+
+                    )
                     navController.navigate(TRANSFER_TWO)
                 }
             },

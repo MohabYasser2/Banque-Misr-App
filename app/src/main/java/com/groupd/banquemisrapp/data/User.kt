@@ -25,6 +25,12 @@ data class AccountDTO(
     val balance: Double
 )
 
+data class receipientDTO(
+    val accountNumber: String,
+    val accountHolderName: String,
+)
+
+
 data class TransactionDTO(
     val transactionId: UUID,
     val transactionDate: LocalDateTime,
@@ -108,11 +114,10 @@ data class AddFavoriteRequest(
 )
 
 data class TransferRequest(
-    val cardDTO: AccountDTO,
-    val sendingCurrency: String,
-    val receivingCurrency: String,
+    val accountDTO: receipientDTO,
     val sentAmount: Double,
-    val receivedAmount: Double
+    val sendingCurrency: String,
+    val receivingCurrency: String
 )
 
 
