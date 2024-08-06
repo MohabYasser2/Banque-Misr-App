@@ -19,6 +19,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,10 +55,13 @@ fun FavouriteScreen(
     favouritesViewModel: FavouritesViewModel = viewModel(),
 
     ) {
+    var buttonClicked by remember { mutableStateOf(false) }
     val context = LocalContext.current
     if (!isInternetAvailable(context)) {
         navController.navigate(Route.INTERNET_ERROR)
     }
+
+    favouritesViewModel.getFavourites()
 
     Column(
         modifier = modifier
@@ -77,16 +81,18 @@ fun FavouriteScreen(
                 .padding(top = 16.dp),
             fontWeight = FontWeight(600)
         )
-        favouritesViewModel.getFavourites()
+
 
         FavouritsList(
-
+navController = navController,
             onDelete = {
                 favouritesViewModel.deleteFavourites(it)
+                //navController.navigate(Route.FAVOURITES)
 
             },
             onAddToFavourites = {
                 favouritesViewModel.addFavourites(it)
+                //navController.navigate(Route.FAVOURITES)
             },
 
             )
@@ -104,25 +110,31 @@ fun FavouritsList(
     favouritesViewModel: FavouritesViewModel = viewModel(),
     onDelete: (accountNumber: String) -> Unit,
     onAddToFavourites: (account: AddFavoriteRequest) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
-    favouritesViewModel.getFavourites()
+
+    var isSheetOpen by rememberSaveable { mutableStateOf(false) }
+
     val favourites by favouritesViewModel.favourites.collectAsState()
 
     val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState()
-    var isSheetOpen by rememberSaveable { mutableStateOf(false) }
     var selectedItemIndex by remember { mutableStateOf(0) }
     val sheet2State = rememberModalBottomSheetState()
     var isSheetOpen2 by rememberSaveable { mutableStateOf(false) }
     var tempName by remember { mutableStateOf("") }
+    var buttonClicked by remember { mutableStateOf(false) }
+    LaunchedEffect(key1 = isSheetOpen2) {
+        favouritesViewModel.getFavourites()
+    }
+    LaunchedEffect(key1 = buttonClicked) {
+        favouritesViewModel.getFavourites()
+    }
     var tempAccount by remember { mutableStateOf("") }
-
-
     LazyColumn(
         modifier = Modifier.heightIn(max = 500.dp)
     ) {
-        favouritesViewModel.getFavourites()
         items(favourites.size) { index ->
             var tempName by remember { mutableStateOf("") }
             var tempAccount by remember { mutableStateOf("") }
@@ -137,6 +149,7 @@ fun FavouritsList(
                     selectedItemIndex = index
                 },
                 onDelete = {
+                    buttonClicked = !buttonClicked
                     onDelete(favourites[index].accountNumber)
                 },
                 isEditable = true
@@ -148,7 +161,11 @@ fun FavouritsList(
                     containerColor = White
 
                 ) {
-                    favouritesViewModel.getFavourites()
+                    LaunchedEffect(key1 = isSheetOpen) {
+                        favouritesViewModel.getFavourites()
+
+                    }
+
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(16.dp)
@@ -196,6 +213,7 @@ fun FavouritsList(
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
+
                                     isSheetOpen = !isSheetOpen
 
 
