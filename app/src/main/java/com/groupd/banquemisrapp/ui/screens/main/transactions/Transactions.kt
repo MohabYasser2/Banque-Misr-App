@@ -59,6 +59,7 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.groupd.banquemisrapp.activities.isInternetAvailable
+import com.groupd.banquemisrapp.data.TransactionDTO
 import com.groupd.banquemisrapp.routes.Route
 
 
@@ -74,11 +75,11 @@ fun TransactionsScreen(
         navController.navigate(Route.INTERNET_ERROR)
     }
     viewModel.fetchTransactions()
-    val countries by viewModel.transactions.collectAsState()
+    val transactions by viewModel.transactions.collectAsState()
     val hasError by viewModel.hasError.collectAsState()
 
 
-    Log.d("TAG", "TransactionsScreen: $countries")
+    Log.d("TAG", "TransactionsScreen: $transactions")
 
     Column(
         modifier = modifier
@@ -101,7 +102,7 @@ fun TransactionsScreen(
                 .fillMaxWidth()
         )
 
-        TransactionList(transactions = user.transactions, navController = navController)
+        TransactionList(transactions = transactions, navController = navController)
 
     }
 }
@@ -109,7 +110,7 @@ fun TransactionsScreen(
 
 @Composable
 fun TransactionList(
-    transactions: List<Transaction>,
+    transactions: List<TransactionDTO>,
     navController: NavController,
     modifier: Modifier = Modifier,
 ) {
@@ -117,12 +118,12 @@ fun TransactionList(
     LazyColumn(modifier = modifier) {
         items(transactions) { transaction ->
             TransactionItem(
-                transaction.accountName,
-                transaction.details,
-                transaction.amount,
+                transaction.recipientAccount.accountHolderName,
+                transaction.recipientAccount.accountNumber,
+                "EGP" + transaction.amount.toString(),
                 painterResource(id = R.drawable.visa),
                 transaction.successful, // Assuming you want to highlight all items; adjust as needed
-                onClick = { navController.navigate("$TRANSACTION_DETAILS/${transaction.id}") }  // Pass the transaction to the onClick callback
+                onClick = { navController.navigate("$TRANSACTION_DETAILS/${transaction.transactionId}") }  // Pass the transaction to the onClick callback
             )
         }
     }

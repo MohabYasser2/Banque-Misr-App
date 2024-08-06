@@ -32,14 +32,14 @@ data class receipientDTO(
 
 
 data class TransactionDTO(
-    val transactionId: String,
+    val transactionId: Int,
     val transactionDate: String,
-    val senderCard: AccountDTO, // Assuming a different entity
-    val recipientCard: AccountDTO,
+    val senderAccount: AccountDTO,
+    val recipientAccount: AccountDTO,
     val amount: Double,
-    val isSuccessful: Boolean,
-    val senderAccount: Account, // Assuming a different entity
-    val recipientAccount: Account
+    val senderUser: UserDTO,
+    val recipientUser: UserDTO,
+    val successful: Boolean
 )
 
 enum class Country {

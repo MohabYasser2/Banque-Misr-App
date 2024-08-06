@@ -46,6 +46,7 @@ import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.PROFILE
 import com.groupd.banquemisrapp.ui.partials.iconNamedVertically
+import com.groupd.banquemisrapp.ui.screens.main.transactions.TransactionsViewModel
 import com.groupd.banquemisrapp.ui.theme.Gold
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.White
@@ -57,9 +58,12 @@ fun HomeScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     user: User,
-    viewModel: HomeViewModel = viewModel()
+    viewModel: HomeViewModel = viewModel(),
+    transactionsViewModel: TransactionsViewModel = viewModel()
 ) {
 
+    transactionsViewModel.fetchTransactions()
+    val transactions by transactionsViewModel.transactions.collectAsState()
     val context = LocalContext.current
     if (!isInternetAvailable(context)) {
         navController.navigate(Route.INTERNET_ERROR)
@@ -297,15 +301,15 @@ fun HomeScreen(
             ) {
 
 
-                items(user.transactions.subList(0, 3)) { transaction ->
+                items(transactions.take(3)) { transaction ->
                     TransactionItem(
-                        transaction.accountName,
-                        transaction.details,
-                        transaction.amount,
+                        transaction.recipientAccount.accountHolderName,
+                        transaction.recipientAccount.accountNumber,
+                        "EGP" + transaction.amount.toString(),
                         painterResource(id = R.drawable.visa),
                         onClick = {}
                     )
-                    if (transaction != user.transactions[2])
+                    if (transaction != transactions[2])
                         HorizontalDivider()
 
 
