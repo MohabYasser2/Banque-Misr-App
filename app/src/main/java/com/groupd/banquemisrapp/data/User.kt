@@ -123,3 +123,14 @@ data class TransferRequest(
 
 
 
+
+data class CountryDTO(
+     val id: Int,
+     val currency: String,
+     val flag: String,
+     val country: String,
+     val currencySymbol: String,
+     val rateToDollar: Double
+)
+
+
