@@ -262,7 +262,7 @@ class MainActivity : ComponentActivity() {
 
     private fun resetInactivityTimer() {
         cancelInactivityTimer()
-        userActivityTimer = object : CountDownTimer(1 * 60 * 1000 , 1000) {
+        userActivityTimer = object : CountDownTimer(1 * 60 * 1000 * 30 , 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 // No-op
             }

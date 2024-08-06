@@ -124,7 +124,7 @@ fun ProfileHeader(name: String, modifier: Modifier = Modifier) {
             }
             Text(
                 text = initials,
-                fontSize = 24.sp,
+                fontSize = 20.sp,
                 color = Black.copy(alpha = 0.6f),
                 fontWeight = FontWeight(500)
             )

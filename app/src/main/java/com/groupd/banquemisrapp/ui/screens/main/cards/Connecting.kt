@@ -1,4 +1,4 @@
-package com.groupd.banquemisrapp.ui.screens.cards
+package com.groupd.banquemisrapp.ui.screens.main.cards
 
 
 import androidx.compose.foundation.layout.Arrangement

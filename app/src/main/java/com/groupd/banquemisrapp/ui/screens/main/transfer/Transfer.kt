@@ -1,5 +1,6 @@
-package com.groupd.banquemisrapp.ui.screens.main
+package com.groupd.banquemisrapp.ui.screens.main.transfer
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -60,7 +61,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.activities.isInternetAvailable
+import com.groupd.banquemisrapp.data.AccountDTO
+import com.groupd.banquemisrapp.data.AddFavoriteRequest
 import com.groupd.banquemisrapp.data.Favourite
+import com.groupd.banquemisrapp.data.TransferRequest
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.HOME_SCREEN
@@ -70,6 +74,8 @@ import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.FavouriteItem
 import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.screens.favorites.FavouritesViewModel
+import com.groupd.banquemisrapp.ui.screens.main.TransactionDetailCard
+import com.groupd.banquemisrapp.ui.screens.main.home.HomeViewModel
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.White
@@ -77,7 +83,13 @@ import com.groupd.banquemisrapp.ui.theme.background
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifier, user: User, FavouriteViewModel: FavouritesViewModel = viewModel()) {
+fun TransferScreenOne(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    user: User,
+    FavouriteViewModel: FavouritesViewModel = viewModel(),
+    TransferViewModel: TransferViewModel = viewModel()
+) {
     val scrollableState = rememberScrollState()
     var sentValue by remember { mutableStateOf("") }
     var receivedValue by remember { mutableStateOf("") }
@@ -85,6 +97,8 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
     var tempName by remember { mutableStateOf("") }
     var tempAccount by remember { mutableStateOf("") }
+    var selectedSentCurrency by remember { mutableStateOf("") }
+    var selectedRecivedCurrency by remember { mutableStateOf("") }
 
     val context = LocalContext.current
     if (!isInternetAvailable(context)) {
@@ -161,10 +175,17 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
                     modifier = Modifier.padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CurrencyDropdown()
+                    CurrencyDropdown(onResult = {
+                        selectedSentCurrency = it.first
+                    }
+
+                    )
                     OutlinedTextField(
                         value = sentValue,
-                        onValueChange = { sentValue = it },
+                        onValueChange = {
+                            sentValue = it
+                            receivedValue = it
+                        },
                         modifier = Modifier.padding(horizontal = 16.dp),
                         shape = RoundedCornerShape(8.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -182,12 +203,21 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
                     modifier = Modifier.padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CurrencyDropdown()
+                    CurrencyDropdown(onResult = {
+                        selectedRecivedCurrency = it.first
+                    }
+
+                    )
                     OutlinedTextField(
                         value = receivedValue,
-                        onValueChange = { receivedValue = it },
+                        onValueChange = {
+
+                            receivedValue = it
+
+                        },
                         modifier = Modifier.padding(16.dp),
                         shape = RoundedCornerShape(8.dp),
+                        readOnly = true,
                     )
                 }
             }
@@ -238,22 +268,64 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
             text = "Recipient Name",
             message = "Enter Cardholder Name",
             value = tempName,
-            onValueChange = { tempName = it }
+            onValueChange = { tempName = it },
+            error = if (tempName.isEmpty()) "Name is required" else ""
         )
+
+        var error by remember { mutableStateOf("") }
+        var isButtonEnabled by remember { mutableStateOf(false) }
         namedField(
             text = "Recipient Account",
             message = "Enter Cardholder Account",
             value = tempAccount,
-            onValueChange = { tempAccount = it }
+            onValueChange = {
+                tempAccount = it
+                if (tempAccount.length != 16) {
+                    error = "Should be 16 numbers"
+
+                } else {
+                    error = ""
+                }
+            },
+            error = error
 
         )
 
+        if (tempAccount.length == 16 && tempName.isNotEmpty() && receivedValue.isNotEmpty())
+            isButtonEnabled=true
+        else
+            isButtonEnabled=false
+
         Button(
             onClick = {
-                user.receivingAccount.cardHolder = tempName
-                user.receivingAccount.accountNumber = tempAccount
-                navController.navigate(TRANSFER_TWO)
+                if (receivedValue.toDouble() > 5000.0)
+         {
+         Toast.makeText(context, "You can't send more than 5000 EGP", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    TransferViewModel.saveAmount(
+                        receivedValue
+                    )
+                    TransferViewModel.saveReceiver(
+                        TransferRequest(
+                            AccountDTO(
+                                tempAccount,
+                                tempName,
+                                "",
+                                "",
+                                false,
+                                selectedRecivedCurrency,
+                                0.0,
+                            ), "", "", 0.0, 0.0
+                        ),
 
+                        )
+                    TransferViewModel.saveAmount(selectedRecivedCurrency + receivedValue)
+                    user.receivingAccount.cardHolder = tempName
+                    user.receivingAccount.accountNumber = tempAccount
+                    user.sendingAmount = "EGP" + receivedValue
+                    navController.navigate(TRANSFER_TWO)
+                }
             },
             shape = RoundedCornerShape(8.dp),
             modifier = modifier
@@ -261,15 +333,14 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
                 .padding(16.dp)
                 .padding(top = 16.dp),
             colors = ButtonDefaults.buttonColors(Maroon),
+            enabled = isButtonEnabled
         ) {
             Text(
-                text = "Continue",
-                Modifier.padding(12.dp),
-                color = Color.White,
-                fontSize = 18.sp
+                text = "Continue", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp
             )
 
         }
+
     }
     if (isSheetOneOpen) {
         ModalBottomSheet(
@@ -307,17 +378,14 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
                 modifier = Modifier.heightIn(max = 400.dp)
             ) {
                 items(favourites.size) { index ->
-                    val (name, account) = favourites[index]
-                    FavouriteItem(
-                        name = name,
-                        account = account,
-                        onItemClick = {
-                            tempName = name
-                            tempAccount = account
-                            isSheetOneOpen = !isSheetOneOpen
+                    val (account, name) = favourites[index]
+                    FavouriteItem(name = name, account = account, onItemClick = {
+                        tempName = name
+                        tempAccount = account
+                        isSheetOneOpen = !isSheetOneOpen
 
 
-                        }
+                    }
 
 
                     )
@@ -328,15 +396,21 @@ fun TransferScreenOne(navController: NavController, modifier: Modifier = Modifie
 }
 
 @Composable
-fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifier, user: User) {
+fun TransferScreenTwo(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    user: User,
+    TransferViewModel: TransferViewModel = viewModel(),
+    HomeViewModel: HomeViewModel = viewModel()
+) {
     val context = LocalContext.current
     if (!isInternetAvailable(context)) {
         navController.navigate(Route.INTERNET_ERROR)
     }
+    HomeViewModel.getBalance()
+
     Column(
-        modifier = modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CustomHeader(title = "Transfer") {
             navController.popBackStack()
@@ -352,8 +426,10 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ProgressBar(mode = 2)
+            val amount by TransferViewModel.amount.collectAsState()
+            val receiver by TransferViewModel.receiver.collectAsState()
             Text(
-                text = "1000 USD",
+                text = user.sendingAmount,
                 fontSize = 24.sp,
                 modifier = Modifier.padding(16.dp),
                 fontWeight = FontWeight.Bold
@@ -376,7 +452,7 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
             ) {
                 Text(text = "Total amount", fontWeight = FontWeight(500), fontSize = 18.sp)
                 Text(
-                    text = "48,422 EGP",
+                    text = user.sendingAmount,
                     fontWeight = FontWeight(450),
                     fontSize = 18.sp,
                     color = Black.copy(0.5f)
@@ -385,10 +461,11 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
             }
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             // From section
+            val user2 by HomeViewModel.balance.collectAsState()
             TransactionDetailCard(
                 label = "From",
-                name = user.fullName,
-                account = user.defaultAccountNumber,
+                name = user2?.username ?: "",
+                account = user2?.accounts?.get(0)?.accountNumber ?: "",
                 icon = painterResource(id = R.drawable.ic_bank)
             )
 
@@ -396,6 +473,7 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
 
 
             // To section
+
             TransactionDetailCard(
                 label = "To",
                 name = user.receivingAccount.cardHolder,
@@ -403,8 +481,7 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
                 icon = painterResource(id = R.drawable.ic_bank)
             )
             Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
+                contentAlignment = Alignment.Center, modifier = Modifier
                     .fillMaxWidth()
                     //.padding(vertical = 8.dp)
                     .offset(y = (-140).dp)
@@ -428,8 +505,7 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
 
                 },
                 shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
 
 
                 colors = ButtonDefaults.buttonColors(Maroon),
@@ -456,10 +532,7 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
                 colors = ButtonDefaults.buttonColors(White.copy(alpha = 0.1f)),
             ) {
                 Text(
-                    text = "Previous",
-                    Modifier.padding(12.dp),
-                    color = Maroon,
-                    fontSize = 18.sp
+                    text = "Previous", Modifier.padding(12.dp), color = Maroon, fontSize = 18.sp
                 )
 
             }
@@ -469,15 +542,22 @@ fun TransferScreenTwo(navController: NavController, modifier: Modifier = Modifie
 }
 
 @Composable
-fun TransferScreenThree(navController: NavController, modifier: Modifier = Modifier, user: User) {
+fun TransferScreenThree(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    user: User,
+    FavouriteViewModel: FavouritesViewModel = viewModel(),
+    TransferViewModel: TransferViewModel = viewModel(),
+    HomeViewModel: HomeViewModel = viewModel()
+) {
     val context = LocalContext.current
     if (!isInternetAvailable(context)) {
         navController.navigate(Route.INTERNET_ERROR)
     }
+    HomeViewModel.getBalance()
+
     Column(
-        modifier = modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CustomHeader(title = "Transfer") {
             navController.popBackStack()
@@ -499,8 +579,7 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.check_mark),
-                    contentDescription = ""
+                    painter = painterResource(id = R.drawable.check_mark), contentDescription = ""
                 )
                 Text(
                     text = "Your transfer was successful",
@@ -511,10 +590,11 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
             }
 
             // From section
+            val user2 by HomeViewModel.balance.collectAsState()
             TransactionDetailCard(
                 label = "From",
-                name = user.fullName,
-                account = user.defaultAccountNumber,
+                name = user2?.username ?: "",
+                account = user2?.accounts?.get(0)?.accountNumber ?: "",
                 icon = painterResource(id = R.drawable.ic_bank)
             )
 
@@ -529,8 +609,7 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
                 icon = painterResource(id = R.drawable.ic_bank)
             )
             Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
+                contentAlignment = Alignment.Center, modifier = Modifier
                     .fillMaxWidth()
                     //.padding(vertical = 8.dp)
                     .offset(y = (-140).dp)
@@ -565,7 +644,7 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
                     color = Black.copy(0.5f)
                 )
                 Text(
-                    text = "48,422 EGP",
+                    text = user.sendingAmount,
                     fontWeight = FontWeight(450),
                     fontSize = 18.sp,
                     color = Black.copy(0.5f)
@@ -583,8 +662,7 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
 
                 },
                 shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
 
 
                 colors = ButtonDefaults.buttonColors(Maroon),
@@ -597,15 +675,29 @@ fun TransferScreenThree(navController: NavController, modifier: Modifier = Modif
                 )
 
             }
+            FavouriteViewModel.getFavourites()
+            val favourites by FavouriteViewModel.favourites.collectAsState()
+            val error by FavouriteViewModel.error.collectAsState()
 
             Button(
                 onClick = {
-                    if (Favourite(user.receivingAccount.cardHolder, user.receivingAccount.accountNumber) !in user.favourites) {
+                    if (user.receivingAccount.accountNumber !in favourites.map { it.accountNumber }) {
 
-                        user.favourites.add(Favourite(user.receivingAccount.cardHolder, user.receivingAccount.accountNumber))
-                        Toast.makeText(context, "Added to favorites!", Toast.LENGTH_SHORT).show()
-                    }
-                    else {
+
+                        FavouriteViewModel.addFavourites(
+
+                            AddFavoriteRequest(
+                                user.receivingAccount.accountNumber,
+                                user.receivingAccount.cardHolder
+                            )
+                        )
+                        if (error.isEmpty()) {
+                            Toast.makeText(
+                                context, "Added to favorites!", Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                    } else {
                         Toast.makeText(context, "Already in favorites!", Toast.LENGTH_SHORT).show()
                     }
                     navController.navigate(HOME_SCREEN)
@@ -656,8 +748,7 @@ fun ProgressBar(mode: Int, modifier: Modifier = Modifier) {
 
 //experimental
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
         //.padding(horizontal = 8.dp),
 
     ) {
@@ -713,9 +804,7 @@ fun ProgressBar(mode: Int, modifier: Modifier = Modifier) {
                     color = backColourThree, radius = 20.dp.toPx()
                 )
                 drawCircle(
-                    color = colorThree,
-                    radius = 20.dp.toPx(),
-                    style = Stroke(width = 3.dp.toPx())
+                    color = colorThree, radius = 20.dp.toPx(), style = Stroke(width = 3.dp.toPx())
                 )
             })
         }
@@ -747,7 +836,9 @@ data class Currency(val code: String, val name: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CurrencyDropdown() {
+fun CurrencyDropdown(
+    onResult: (Pair<String, String>) -> Unit = {}
+) {
     val currencies = listOf(
         Pair("EGP", "🇪🇬"), // Egyptian Pound
         Pair("USD", "\uD83C\uDDFA\uD83C\uDDF8"), // US Dollar
@@ -820,7 +911,7 @@ fun CurrencyDropdown() {
                     )
                 }, onClick = {
                     selectedCurrency = Pair(first, second)
-
+                    onResult(selectedCurrency)
                     expanded = false
                 })
                 HorizontalDivider(modifier = Modifier.padding(16.dp))

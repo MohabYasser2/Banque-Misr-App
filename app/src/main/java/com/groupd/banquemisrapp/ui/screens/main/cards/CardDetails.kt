@@ -1,4 +1,4 @@
-package com.groupd.banquemisrapp.ui.screens.cards
+package com.groupd.banquemisrapp.ui.screens.main.cards
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,13 +32,10 @@ import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.AddAccountRequest
-import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.routes.Route.CARDS
-import com.groupd.banquemisrapp.routes.Route.OTP
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.namedField
-import com.groupd.banquemisrapp.ui.screens.main.Currency
 import com.groupd.banquemisrapp.ui.theme.Maroon
 
 

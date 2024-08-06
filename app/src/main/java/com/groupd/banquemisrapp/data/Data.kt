@@ -37,6 +37,7 @@ data class User(
     val dateOfBirth: String,
     val country: String,
     var receivingAccount: Account = Account("", ""),
+    var sendingAmount: String = "",
     var savingAccount: Account = Account("", ""),
     val accounts: MutableList<Account>,
     var defaultAccountNumber: String,

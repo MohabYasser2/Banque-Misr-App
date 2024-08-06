@@ -24,7 +24,6 @@ import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
-import com.groupd.banquemisrapp.ui.screens.main.HomeViewModel
 
 @Composable
 fun ProfileInformationScreen(
