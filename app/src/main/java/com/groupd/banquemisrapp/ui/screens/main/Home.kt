@@ -62,7 +62,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    val balance by viewModel.balance.collectAsState()
+    val customer by viewModel.balance.collectAsState()
 
     // Trigger the API call
     LaunchedEffect(Unit) {
@@ -92,11 +92,11 @@ fun HomeScreen(
                     .background(Maroon.copy(alpha = 0.1f)),
                 onClick = { navController.navigate(PROFILE) },
             ) {
-                val names = user.fullName.split(" ")
-                val intials = names.joinToString("") { it.first().toString() }
+                val names = customer?.username?.split(" ")
+                val intials = names?.joinToString("") { it.first().toString() }
 
                 Text(
-                    text = intials,
+                    text = intials?: "",
                     fontSize = 24.sp,
                     color = Maroon.copy(alpha = 0.6f),
                     fontWeight = FontWeight(500)
@@ -118,7 +118,7 @@ fun HomeScreen(
                     fontWeight = FontWeight(500)
                 )
                 Text(
-                    text = user.fullName,
+                    text = customer?.username?:"",
                     fontSize = 20.sp,
                     color = Color.Black,
                     fontWeight = FontWeight(500)
@@ -154,8 +154,8 @@ fun HomeScreen(
                     modifier = Modifier.padding(start = 16.dp, top = 16.dp),
                     fontWeight = FontWeight(350)
                 )
-                val formattedAmount = (balance?.accounts?.firstOrNull()?.accountCurrency
-                    ?: "USD") + " " + (balance?.accounts?.firstOrNull()?.balance?.toString() ?: "0")
+                val formattedAmount = (customer?.accounts?.firstOrNull()?.accountCurrency
+                    ?: "USD") + " " + (customer?.accounts?.firstOrNull()?.balance?.toString() ?: "0")
                 Text(
                     text = formattedAmount,
                     fontSize = 32.sp,

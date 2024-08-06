@@ -34,7 +34,7 @@ interface UserAPICallable {
     // Account Information
 
     @GET("/api/user")
-    suspend fun getBalance(): UserDTO
+    suspend fun getUser(): UserDTO
 
     @GET("/api/transactions")
     suspend fun getTransactions(): List<TransactionDTO>
