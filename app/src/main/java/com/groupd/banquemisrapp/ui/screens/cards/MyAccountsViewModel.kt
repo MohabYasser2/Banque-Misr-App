@@ -12,6 +12,7 @@ import com.groupd.banquemisrapp.api.TokenStorage
 import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.AccountDTO
 import com.groupd.banquemisrapp.data.AddAccountRequest
+import com.groupd.banquemisrapp.data.ChangeDefaultCardRequest
 import com.groupd.banquemisrapp.data.Country
 import com.groupd.banquemisrapp.data.Gender
 import com.groupd.banquemisrapp.data.RegisterRequest
@@ -47,12 +48,27 @@ class MyAccountsViewModel : ViewModel() {
             try {
                 val response =
                     UserAPIService.userAPI.addAccount(account)
-                _accounts.value = response
+
                 Log.d("TAG", "addAccount: $response")
             }
             catch (e: Exception) {
                 // Handle the error appropriately
                 Log.d("TAG", " error addAccount: $e")
+            }
+        }
+    }
+
+    fun makeDefaultAccount(accountNumber: ChangeDefaultCardRequest) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response =
+                    UserAPIService.userAPI.changeDefaultCard(accountNumber)
+                _accounts.value = response
+                Log.d("TAG", "makeDefaultAccount: $response")
+            }
+            catch (e: Exception) {
+                // Handle the error appropriately
+                Log.d("TAG", " error makeDefaultAccount: $e")
             }
         }
     }
