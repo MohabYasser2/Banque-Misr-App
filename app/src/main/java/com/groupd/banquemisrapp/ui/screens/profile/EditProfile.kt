@@ -17,6 +17,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,12 +27,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
+import com.groupd.banquemisrapp.data.MockData.user
+import com.groupd.banquemisrapp.data.UpdateAccountRequest
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
 import com.groupd.banquemisrapp.ui.partials.namedField
@@ -42,25 +48,45 @@ import java.util.Calendar
 @SuppressLint("SimpleDateFormat")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfileScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
+fun EditProfileScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    user: User,
+    viewModel: ProfileViewModel = viewModel()
+) {
+    val profile by viewModel.balance.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getProfile()
+    }
     val sheetStateOne = rememberModalBottomSheetState()
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
-    var selectedCountry by remember { mutableStateOf("") }
+    var selectedCountry by remember { mutableStateOf(profile?.country?:"") }
     val openDialog = remember { mutableStateOf(false) }
-    var selectedDate by remember { mutableStateOf("") }
+    var selectedDate by remember { mutableStateOf(profile?.dateOfBirth?:"") }
     val datePickerState = rememberDatePickerState()
-    val formatter = SimpleDateFormat("dd/MM/yyyy")
+    val formatter = SimpleDateFormat("yyyy-MM-dd")
+    var fullName by remember { mutableStateOf(profile?.username?:"") }
+    var email by remember { mutableStateOf(profile?.email?:"") }
+    val context = LocalContext.current
+
+
+    LaunchedEffect(profile) {
+        profile?.let {
+            fullName = it.username
+            email = it.email
+            selectedCountry = it.country
+            selectedDate = it.dateOfBirth
+        }
+    }
+
     Column(
         modifier = modifier
-            .fillMaxSize()
-            ,
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
-        var fullName by remember { mutableStateOf("") }
-        var email by remember { mutableStateOf("") }
-        var country by remember { mutableStateOf("") }
-        var dateOfBirth by remember { mutableStateOf("") }
+
 
         CustomHeader(title = "Edit Profile") {
             navController.popBackStack()
@@ -143,74 +169,79 @@ fun EditProfileScreen(navController: NavController, modifier: Modifier = Modifie
             }
 
 
-
-            Button(
-                onClick = { /*TODO*/ },
-                shape = RoundedCornerShape(8.dp),
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(24.dp),
-                colors = ButtonDefaults.buttonColors(Maroon),
-            ) {
-                Text(text = "Save", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
-
-            }
         }
-
-
-        }
-    }
-
-    @Composable
-    fun PasswordChangeScreen(
-        navController: NavController,
-        modifier: Modifier = Modifier,
-        user: User
-    ) {
-        Column(
+        Button(
+            onClick = {
+                val request = UpdateAccountRequest(
+                    username = fullName,
+                    email = email,
+                    country = selectedCountry,
+                    dateOfBirth = selectedDate)
+                viewModel.editProfile(request, context = context)
+            },
+            shape = RoundedCornerShape(8.dp),
             modifier = modifier
-                .fillMaxSize()
-                ,
-            horizontalAlignment = Alignment.CenterHorizontally,
+                .fillMaxWidth()
+                .padding(16.dp),
+            colors = ButtonDefaults.buttonColors(Maroon),
+        ) {
+            Text(text = "Save", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
 
-            ) {
-
-            var password by remember { mutableStateOf("") }
-            var secondPassword by remember { mutableStateOf("") }
-
+        }
 
 
-            CustomHeader(title = "Change Password") {
-                navController.popBackStack()
-            }
-            namedField(text = "Current Password",
-                message = "Enter your password",
-                value = password,
-                isPassord = true,
-                onValueChange = { password = it })
-            namedField(text = "New Password",
-                message = "Enter new password",
-                value = secondPassword,
-                isPassord = true,
-                onValueChange = { secondPassword = it })
+    }
+}
 
-            Button(
-                onClick = { /*TODO*/ },
-                shape = RoundedCornerShape(8.dp),
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(24.dp),
-                colors = ButtonDefaults.buttonColors(Maroon),
-            ) {
-                Text(text = "Save", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
+@Composable
+fun PasswordChangeScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    user: User
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
 
-            }
+        ) {
+
+        var password by remember { mutableStateOf("") }
+        var secondPassword by remember { mutableStateOf("") }
+
+
+
+        CustomHeader(title = "Change Password") {
+            navController.popBackStack()
+        }
+        namedField(text = "Current Password",
+            message = "Enter your password",
+            value = password,
+            isPassord = true,
+            onValueChange = { password = it })
+        namedField(text = "New Password",
+            message = "Enter new password",
+            value = secondPassword,
+            isPassord = true,
+            onValueChange = { secondPassword = it })
+
+        Button(
+            onClick = { /*TODO*/ },
+            shape = RoundedCornerShape(8.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            colors = ButtonDefaults.buttonColors(Maroon),
+        ) {
+            Text(text = "Save", Modifier.padding(12.dp), color = Color.White, fontSize = 18.sp)
+
         }
     }
+}
 
 
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileScreenPreview() {
-
+    EditProfileScreen(navController = NavController(LocalContext.current), user = user)
 }

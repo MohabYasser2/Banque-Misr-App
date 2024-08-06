@@ -92,15 +92,19 @@ fun HomeScreen(
                     .background(Maroon.copy(alpha = 0.1f)),
                 onClick = { navController.navigate(PROFILE) },
             ) {
-                val names = customer?.username?.split(" ")
-                val intials = names?.joinToString("") { it.first().toString() }
+                    val names = customer?.username?.split(" ")
+                val initials = customer?.username
+                    ?.takeIf { it.isNotEmpty() } // Ensure username is not empty
+                    ?.split(" ")
+                    ?.filter { it.isNotEmpty() } // Remove any empty strings from the list
+                    ?.joinToString("") { it.first().toString() }
 
-                Text(
-                    text = intials?: "",
-                    fontSize = 24.sp,
-                    color = Maroon.copy(alpha = 0.6f),
-                    fontWeight = FontWeight(500)
-                )
+                    Text(
+                        text = initials?: "",
+                        fontSize = 24.sp,
+                        color = Maroon.copy(alpha = 0.6f),
+                        fontWeight = FontWeight(500)
+                    )
 
 
             }
