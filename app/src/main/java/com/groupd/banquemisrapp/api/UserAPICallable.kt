@@ -4,6 +4,7 @@ import com.groupd.banquemisrapp.data.AccountDTO
 import com.groupd.banquemisrapp.data.AddAccountRequest
 import com.groupd.banquemisrapp.data.ChangeDefaultAccountRequest
 import com.groupd.banquemisrapp.data.ChangePasswordRequest
+import com.groupd.banquemisrapp.data.CountryDTO
 import com.groupd.banquemisrapp.data.LoginRequest
 import com.groupd.banquemisrapp.data.LoginResponseDTO
 import com.groupd.banquemisrapp.data.RegisterRequest
@@ -77,4 +78,8 @@ interface UserAPICallable {
 
     @POST("/api/transfer")
     suspend fun transfer(@Body transferRequest: TransferRequest): Any // Replace 'Any' with actual response type
+
+    //Countries
+    @POST("/db/countries")
+    suspend fun getCountries(): List<CountryDTO>
 }

@@ -30,6 +30,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -50,6 +51,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
@@ -67,6 +69,7 @@ import com.groupd.banquemisrapp.api.UserAPIService
 import com.groupd.banquemisrapp.data.RegisterRequest
 import com.groupd.banquemisrapp.data.UserDTO
 import com.groupd.banquemisrapp.routes.Route
+import com.groupd.banquemisrapp.routes.Route.SERVER_ERROR
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -447,6 +450,7 @@ fun SignUpSecond(
 
                     } catch (e: Exception) {
                         Log.d("TAG", "Logging in Error: ${e.message}")
+                        navController.navigate(SERVER_ERROR)
                     }
                 }
 
@@ -470,80 +474,70 @@ fun SignUpSecond(
 @Composable
 
 fun CountryList(
-    currentCountry: String = "", onCountrySelected: (String) -> Unit = {}
+    currentCountry: String = "", viewModel: CountryViewModel = viewModel(), onCountrySelected: (String) -> Unit = {}
 ) {
     val selectedCountry = remember { mutableStateOf("") }
-    val countries = listOf(
-        Pair("EGYPT", "🇪🇬"),
-        Pair("USA", "\uD83C\uDDFA\uD83C\uDDF8"),
-        Pair("Canada", "\uD83C\uDDE8\uD83C\uDDE6"),
-        Pair("India", "\uD83C\uDDEE\uD83C\uDDF3"),
+    viewModel.getCountries()
+    val countries by viewModel.countries.collectAsState()
+    val hasError by viewModel.hasError.collectAsState()
 
-        Pair("Germany", "\uD83C\uDDE9\uD83C\uDDEA"),
-        Pair("France", "\uD83C\uDDEB\uD83C\uDDF7"),
-        Pair("Japan", "\uD83C\uDDEF\uD83C\uDDF5"),
-        Pair("China", "\uD83C\uDDE8\uD83C\uDDF3"),
-        Pair("Brazil", "\uD83C\uDDE7\uD83C\uDDF7"),
-        Pair("Australia", "\uD83C\uDDE6\uD83C\uDDFA"),
-        Pair("Russia", "\uD83C\uDDF7\uD83C\uDDFA"),
-        Pair("UK", "\uD83C\uDDEC\uD83C\uDDE7"),
-        Pair("Spain", "\uD83C\uDDEA\uD83C\uDDF8"),
-        Pair("Italy", "\uD83C\uDDEE\uD83C\uDDF9"),
-        // i added them to test the scrolling
-        Pair("Mexico", "🇲🇽"),
-        Pair("Argentina", "🇦🇷"),
-        Pair("South Korea", "🇰🇷"),
-        Pair("KSA", "🇸🇦"),
-        Pair("South Africa", "🇿🇦"),
 
-        )
+    // Fetch countries when the screen is shown
+
+
+
+    if (hasError) {
+        // Show error message
+        Log.d("TAG", "Error fetching countries")
+    } else {
+        // Display countries
+        Log.d("TAG", "Countries fetched successfully ${countries}")
+    }
+
+
+
 
     LazyColumn(
         modifier = Modifier.heightIn(max = 400.dp)
     ) {
-        items(countries) { (country, flag) ->
-
+        items(countries) { countryDTO ->
             Card(
                 modifier = Modifier
                     .padding(vertical = 4.dp, horizontal = 16.dp)
                     .clickable {
-                        selectedCountry.value = country
-                        onCountrySelected(country)
-
+                        selectedCountry.value = countryDTO.country
+                        onCountrySelected(countryDTO.country)
                     },
-                colors = if (currentCountry == country) CardDefaults.cardColors(Maroon.copy(alpha = 0.2f)) else CardDefaults.cardColors(
-                    Color.White
-                ),
+                colors = if (currentCountry == countryDTO.country) CardDefaults.cardColors(
+                    Maroon.copy(alpha = 0.2f)
+                ) else CardDefaults.cardColors(Color.White),
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            vertical = 8.dp, horizontal = 16.dp
-                        ),
+                        .padding(vertical = 8.dp, horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
-
                         Text(
-
-                            text = flag, fontSize = 24.sp, modifier = Modifier.padding(end = 16.dp)
+                            text = countryDTO.flag,
+                            fontSize = 24.sp,
+                            modifier = Modifier.padding(end = 16.dp)
                         )
                         Text(
-                            text = country, fontWeight = FontWeight.Medium
+                            text = countryDTO.country,
+                            fontWeight = FontWeight.Medium
                         )
                     }
-                    if (currentCountry == country) {
+                    if (currentCountry == countryDTO.country) {
                         Icon(
                             imageVector = Icons.Default.Check,
                             contentDescription = null,
                             tint = Maroon,
                             modifier = Modifier.padding(start = 8.dp)
-
                         )
                     }
                 }
