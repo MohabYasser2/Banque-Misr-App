@@ -225,7 +225,6 @@ fun MainNavHost(
             TransactionsScreen(
                 navController = navController,
                 user = user,
-                modifier = modifier
             )
         }
         //composable(route = TRANSACTION_DETAILS) { TransactionDetailsScreen(transaction : Int ,navController = navController,user = user ,  modifier = modifier ) }
@@ -302,18 +301,21 @@ fun MainNavHost(
         }
 
         composable(
-            route = "$TRANSACTION_DETAILS/{id}",
+            route = "$TRANSACTION_DETAILS/{id}/{state}",
             arguments = listOf(
                 navArgument("id") { type = NavType.IntType },
+                navArgument("state") { type = NavType.StringType },
 
                 )
         ) {
             val id = it.arguments?.getInt("id")!!
+            val state = it.arguments?.getString("state")!!
             TransactionDetailsScreen(
                 transaction = id,
                 navController = navController,
                 user = user,
-                modifier = modifier
+                modifier = modifier,
+                state = state
             )
         }
     }

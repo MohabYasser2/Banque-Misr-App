@@ -31,7 +31,7 @@ data class Transaction(
 )
 
 data class User(
-    val fullName: String,
+    var fullName: String,
     val balance: String,
     val email: String,
     val dateOfBirth: String,
