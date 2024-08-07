@@ -104,12 +104,16 @@ fun TransferScreenOne(
     var tempName by remember { mutableStateOf("") }
     var tempAccount by remember { mutableStateOf("") }
     val countries by CountryViewModel.countries.collectAsState()
-    var selectedSentCountry by remember { mutableStateOf(
-        CountryDTO(0,"USD","US","United States","$",1.0)
-    ) }
-    var selectedRecivedCountry by remember { mutableStateOf(
-        CountryDTO(0,"USD","US","United States","$",1.0)
-    ) }
+    var selectedSentCountry by remember {
+        mutableStateOf(
+            CountryDTO(0, "USD", "US", "United States", "$", 1.0)
+        )
+    }
+    var selectedRecivedCountry by remember {
+        mutableStateOf(
+            CountryDTO(0, "USD", "US", "United States", "$", 1.0)
+        )
+    }
 
     val context = LocalContext.current
     if (!isInternetAvailable(context)) {
@@ -192,9 +196,10 @@ fun TransferScreenOne(
                     CurrencyDropdown(
                         onResult = {
                             selectedSentCountry = it
-                            if (sentValue.isNotEmpty())
-                            receivedValue = (sentValue.toDouble() * selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar).toString()
-                            rate = selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar
+                            if (sentValue.isNotEmpty()) receivedValue =
+                                (sentValue.toDouble() * selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar).toString()
+                            rate =
+                                selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar
                         }, countries = countries
 
                     )
@@ -202,8 +207,12 @@ fun TransferScreenOne(
                         value = sentValue,
                         onValueChange = {
                             sentValue = it
-                            receivedValue = (it.toDouble() * selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar).toString()
-                            rate = selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar
+                            if (sentValue.isNotEmpty()) {
+                                receivedValue =
+                                    (it.toDouble() * selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar).toString()
+                                rate =
+                                    selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar
+                            }
                         },
                         modifier = Modifier.padding(horizontal = 16.dp),
                         shape = RoundedCornerShape(8.dp),
@@ -225,9 +234,10 @@ fun TransferScreenOne(
                     CurrencyDropdown(
                         onResult = {
                             selectedRecivedCountry = it
-                            if (sentValue.isNotEmpty())
-                            receivedValue = (sentValue.toDouble() * selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar).toString()
-                            rate = selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar
+                            if (sentValue.isNotEmpty()) receivedValue =
+                                (sentValue.toDouble() * selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar).toString()
+                            rate =
+                                selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar
                         }, countries = countries
                     )
                     OutlinedTextField(
@@ -320,13 +330,13 @@ fun TransferScreenOne(
 
         Button(
             onClick = {
-                if (receivedValue.toDouble() > 5000.0) {
+                if (sentValue.toDouble() > 5000.0) {
                     Toast.makeText(context, "You can't send more than 5000 EGP", Toast.LENGTH_SHORT)
                         .show()
                 } else {
                     val transferRequest = TransferRequest(
                         receipientDTO(tempAccount, tempName),
-                        receivedValue.toDouble(),
+                        sentValue.toDouble(),
                         selectedSentCountry.currency,
                         selectedRecivedCountry.currency
                     )
@@ -336,13 +346,13 @@ fun TransferScreenOne(
 
                     TransferViewModel.saveReceiver(transferRequest)
                     TransferViewModel.transfer(transferRequest).onEach { success ->
-                            if (success) {
-                                navController.navigate(TRANSFER_TWO)
-                            } else {
-                                Toast.makeText(context, "Error , Check Details", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }.launchIn(TransferViewModel.viewModelScope)
+                        if (success) {
+                            navController.navigate(TRANSFER_TWO)
+                        } else {
+                            Toast.makeText(context, "Error , Check Details", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }.launchIn(TransferViewModel.viewModelScope)
                 }
             },
             shape = RoundedCornerShape(8.dp),
@@ -859,12 +869,12 @@ fun CurrencyDropdown(
 ) {
 
 
-
-
     var expanded by remember { mutableStateOf(false) }
-    var selectedCurrency by remember { mutableStateOf(
-        CountryDTO(0,"USD","\uD83C\uDDFA\uD83C\uDDF8","United States","$",1.0)
-    ) }
+    var selectedCurrency by remember {
+        mutableStateOf(
+            CountryDTO(0, "USD", "\uD83C\uDDFA\uD83C\uDDF8", "United States", "$", 1.0)
+        )
+    }
 
 
 
