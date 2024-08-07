@@ -79,13 +79,11 @@ fun HomeScreen(
 
 
     Column(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
 
 
         horizontalAlignment = Alignment.CenterHorizontally
-    )
-    {
+    ) {
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -101,11 +99,11 @@ fun HomeScreen(
                 onClick = { navController.navigate(PROFILE) },
             ) {
                 val names = customer?.username?.split(" ")
-                val initials = customer?.username
-                    ?.takeIf { it.isNotEmpty() } // Ensure username is not empty
-                    ?.split(" ")
-                    ?.filter { it.isNotEmpty() } // Remove any empty strings from the list
-                    ?.joinToString("") { it.first().toString() }
+                val initials =
+                    customer?.username?.takeIf { it.isNotEmpty() } // Ensure username is not empty
+                        ?.split(" ")
+                        ?.filter { it.isNotEmpty() } // Remove any empty strings from the list
+                        ?.joinToString("") { it.first().toString() }
 
                 Text(
                     text = initials ?: "",
@@ -137,13 +135,11 @@ fun HomeScreen(
                 )
                 user.fullName = customer?.username ?: ""
             }
-            Image(
-                painter = painterResource(id = R.drawable.ic_bell_2x),
+            Image(painter = painterResource(id = R.drawable.ic_bell_2x),
                 contentDescription = "bell icon",
                 Modifier
                     .size(40.dp)
-                    .clickable { navController.navigate(Route.NOTIFICATIONS) }
-            )
+                    .clickable { navController.navigate(Route.NOTIFICATIONS) })
         }
         Card(
             shape = RoundedCornerShape(10.dp),
@@ -152,11 +148,9 @@ fun HomeScreen(
                 .fillMaxWidth(),
             colors = CardDefaults.cardColors(Maroon),
             elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
-        )
-        {
+        ) {
             Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.Start
+                modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.Start
 
 
             ) {
@@ -188,8 +182,7 @@ fun HomeScreen(
                 .fillMaxWidth(),
             colors = CardDefaults.cardColors(White),
             elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
-        )
-        {
+        ) {
             Column {
                 Text(
                     text = "Services",
@@ -277,13 +270,11 @@ fun HomeScreen(
                 color = Color.Black,
                 fontWeight = FontWeight(500),
             )
-            Text(
-                text = "View All",
+            Text(text = "View All",
                 fontSize = 20.sp,
                 color = Color.Black.copy(alpha = 0.5f),
                 fontWeight = FontWeight(500),
-                modifier = Modifier.clickable { navController.navigate(Route.TRANSACTIONS) }
-            )
+                modifier = Modifier.clickable { navController.navigate(Route.TRANSACTIONS) })
         }
 
         val scrollableState = rememberScrollState()
@@ -322,13 +313,13 @@ fun HomeScreen(
 
                         TransactionItem(
                             transaction.recipientAccount.accountHolderName,
-                            "${transaction.recipientAccount.accountNumber}\n" +
-                                    "${formatDateString(transaction.transactionDate)} - $state",
-                            "EGP" + transaction.amount.toString(),
+                            "${transaction.recipientAccount.accountNumber}\n" + "${
+                                formatDateString(transaction.transactionDate)
+                            } - $state",
+                            if (state == "sent") transaction?.recipientAccount?.accountCurrency + transaction?.amount?.toString() else transaction?.senderAccount?.accountCurrency + transaction?.amount?.toString(),
                             painterResource(id = R.drawable.visa),
                         )
-                        if (transaction != transactions[transactions.size - n])
-                            HorizontalDivider()
+                        if (transaction != transactions[transactions.size - n]) HorizontalDivider()
 
                     }
 
@@ -345,21 +336,16 @@ fun HomeScreen(
 
 @Composable
 fun TransactionItem(
-    name: String,
-    details: String,
-    amount: String,
-    iconRes: Painter,
-    onClick: () -> Unit = {}
+    name: String, details: String, amount: String, iconRes: Painter, onClick: () -> Unit = {}
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
+    Card(modifier = Modifier
+        .fillMaxWidth()
+        .clickable { onClick() }
         //.padding(12.dp)
-        , elevation = CardDefaults.elevatedCardElevation(40.dp),
+        ,
+        elevation = CardDefaults.elevatedCardElevation(40.dp),
         shape = RoundedCornerShape(0.dp),
-        colors = CardDefaults.cardColors(Color.White)
-    ) {
+        colors = CardDefaults.cardColors(Color.White)) {
         Row(
             modifier = Modifier
                 .padding(16.dp)
@@ -373,8 +359,7 @@ fun TransactionItem(
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFDAC7CA))
             ) {
                 Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.End
+                    verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.End
                 ) {
                     Image(
                         painter = iconRes,

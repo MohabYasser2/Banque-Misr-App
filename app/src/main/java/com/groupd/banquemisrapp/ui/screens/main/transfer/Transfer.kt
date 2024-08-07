@@ -56,12 +56,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.activities.isInternetAvailable
-import com.groupd.banquemisrapp.data.AccountDTO
 import com.groupd.banquemisrapp.data.AddFavoriteRequest
+import com.groupd.banquemisrapp.data.CountryDTO
 import com.groupd.banquemisrapp.data.TransferRequest
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.data.receipientDTO
@@ -75,10 +76,13 @@ import com.groupd.banquemisrapp.ui.partials.namedField
 import com.groupd.banquemisrapp.ui.screens.favorites.FavouritesViewModel
 import com.groupd.banquemisrapp.ui.screens.main.transactions.TransactionDetailCard
 import com.groupd.banquemisrapp.ui.screens.main.home.HomeViewModel
+import com.groupd.banquemisrapp.ui.screens.signup.CountryViewModel
 import com.groupd.banquemisrapp.ui.theme.Black
 import com.groupd.banquemisrapp.ui.theme.Maroon
 import com.groupd.banquemisrapp.ui.theme.White
 import com.groupd.banquemisrapp.ui.theme.background
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -87,8 +91,11 @@ fun TransferScreenOne(
     modifier: Modifier = Modifier,
     user: User,
     FavouriteViewModel: FavouritesViewModel = viewModel(),
-    TransferViewModel: TransferViewModel = viewModel()
+    TransferViewModel: TransferViewModel = viewModel(),
+    CountryViewModel: CountryViewModel = viewModel()
 ) {
+    CountryViewModel.getCountries()
+    var rate by remember { mutableStateOf(1.0) }
     val scrollableState = rememberScrollState()
     var sentValue by remember { mutableStateOf("") }
     var receivedValue by remember { mutableStateOf("") }
@@ -96,13 +103,21 @@ fun TransferScreenOne(
     var isSheetOneOpen by rememberSaveable { mutableStateOf(false) }
     var tempName by remember { mutableStateOf("") }
     var tempAccount by remember { mutableStateOf("") }
-    var selectedSentCurrency by remember { mutableStateOf("EGP") }
-    var selectedRecivedCurrency by remember { mutableStateOf("EGP") }
+    val countries by CountryViewModel.countries.collectAsState()
+    var selectedSentCountry by remember { mutableStateOf(
+        CountryDTO(0,"USD","US","United States","$",1.0)
+    ) }
+    var selectedRecivedCountry by remember { mutableStateOf(
+        CountryDTO(0,"USD","US","United States","$",1.0)
+    ) }
 
     val context = LocalContext.current
     if (!isInternetAvailable(context)) {
         navController.navigate(Route.INTERNET_ERROR)
     }
+
+
+
 
     Column(
         modifier = modifier
@@ -145,7 +160,7 @@ fun TransferScreenOne(
 
 
                 Text(
-                    text = "1 USD = 48.4220 EGP",
+                    text = " 1 ${selectedSentCountry.currency} = $rate ${selectedRecivedCountry.currency}",
                     fontSize = 20.sp,
                     modifier = Modifier
                         .padding(8.dp)
@@ -174,16 +189,21 @@ fun TransferScreenOne(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CurrencyDropdown(onResult = {
-                        selectedSentCurrency = it.first
-                    }
+                    CurrencyDropdown(
+                        onResult = {
+                            selectedSentCountry = it
+                            if (sentValue.isNotEmpty())
+                            receivedValue = (sentValue.toDouble() * selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar).toString()
+                            rate = selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar
+                        }, countries = countries
 
                     )
                     OutlinedTextField(
                         value = sentValue,
                         onValueChange = {
                             sentValue = it
-                            receivedValue = it
+                            receivedValue = (it.toDouble() * selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar).toString()
+                            rate = selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar
                         },
                         modifier = Modifier.padding(horizontal = 16.dp),
                         shape = RoundedCornerShape(8.dp),
@@ -202,16 +222,17 @@ fun TransferScreenOne(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CurrencyDropdown(onResult = {
-                        selectedRecivedCurrency = it.first
-                    }
-
+                    CurrencyDropdown(
+                        onResult = {
+                            selectedRecivedCountry = it
+                            if (sentValue.isNotEmpty())
+                            receivedValue = (sentValue.toDouble() * selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar).toString()
+                            rate = selectedSentCountry.rateToDollar / selectedRecivedCountry.rateToDollar
+                        }, countries = countries
                     )
                     OutlinedTextField(
                         value = receivedValue,
                         onValueChange = {
-
-                            receivedValue = it
 
                         },
                         modifier = Modifier.padding(16.dp),
@@ -290,13 +311,12 @@ fun TransferScreenOne(
 
         )
 
-        if (tempAccount.length == 16 && tempName.isNotEmpty() && receivedValue.isNotEmpty())
-            isButtonEnabled = true
-        else
-            isButtonEnabled = false
+        if (tempAccount.length == 16 && tempName.isNotEmpty() && receivedValue.isNotEmpty()) isButtonEnabled =
+            true
+        else isButtonEnabled = false
 
 
-        val error2 by TransferViewModel.error.collectAsState()
+
 
         Button(
             onClick = {
@@ -304,39 +324,25 @@ fun TransferScreenOne(
                     Toast.makeText(context, "You can't send more than 5000 EGP", Toast.LENGTH_SHORT)
                         .show()
                 } else {
-                    TransferViewModel.saveAmount(
-                        receivedValue
+                    val transferRequest = TransferRequest(
+                        receipientDTO(tempAccount, tempName),
+                        receivedValue.toDouble(),
+                        selectedSentCountry.currency,
+                        selectedRecivedCountry.currency
                     )
-                    TransferViewModel.saveReceiver(
-                        TransferRequest(
-                            receipientDTO(
-                                tempAccount,
-                                tempName
-                            ),
-                            receivedValue.toDouble(),
-                            selectedSentCurrency,
-                            selectedRecivedCurrency
-                        ),
-                    )
-                    TransferViewModel.saveAmount(selectedRecivedCurrency + receivedValue)
-                    user.receivingAccount.cardHolder = tempName
+                    user.receivingAccount.accountHolderName = tempName
                     user.receivingAccount.accountNumber = tempAccount
-                    user.sendingAmount = "EGP" + receivedValue
+                    user.sendingAmount = selectedRecivedCountry.currency + receivedValue
 
-                    TransferViewModel.transfer(
-                        TransferRequest(
-                            receipientDTO(
-                                tempAccount,
-                                tempName
-                            ),
-                            receivedValue.toDouble(),
-                            selectedSentCurrency,
-                            selectedRecivedCurrency
-                        )
-
-
-                    )
-                    navController.navigate(TRANSFER_TWO)
+                    TransferViewModel.saveReceiver(transferRequest)
+                    TransferViewModel.transfer(transferRequest).onEach { success ->
+                            if (success) {
+                                navController.navigate(TRANSFER_TWO)
+                            } else {
+                                Toast.makeText(context, "Error , Check Details", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }.launchIn(TransferViewModel.viewModelScope)
                 }
             },
             shape = RoundedCornerShape(8.dp),
@@ -352,8 +358,6 @@ fun TransferScreenOne(
             )
 
         }
-
-
 
 
     }
@@ -491,7 +495,7 @@ fun TransferScreenTwo(
 
             TransactionDetailCard(
                 label = "To",
-                name = user.receivingAccount.cardHolder,
+                name = user.receivingAccount.accountHolderName,
                 account = user.receivingAccount.accountNumber,
                 icon = painterResource(id = R.drawable.ic_bank)
             )
@@ -570,7 +574,6 @@ fun TransferScreenThree(
         navController.navigate(Route.INTERNET_ERROR)
     }
     HomeViewModel.getBalance()
-
     Column(
         modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -619,7 +622,7 @@ fun TransferScreenThree(
             // To section
             TransactionDetailCard(
                 label = "To",
-                name = user.receivingAccount.cardHolder,
+                name = user.receivingAccount.accountHolderName,
                 account = user.receivingAccount.accountNumber,
                 icon = painterResource(id = R.drawable.ic_bank)
             )
@@ -703,7 +706,7 @@ fun TransferScreenThree(
 
                             AddFavoriteRequest(
                                 user.receivingAccount.accountNumber,
-                                user.receivingAccount.cardHolder
+                                user.receivingAccount.accountHolderName
                             )
                         )
                         if (error.isEmpty()) {
@@ -852,32 +855,16 @@ data class Currency(val code: String, val name: String)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrencyDropdown(
-    onResult: (Pair<String, String>) -> Unit = {}
+    onResult: (CountryDTO) -> Unit = {}, countries: List<CountryDTO>
 ) {
-    val currencies = listOf(
-        Pair("EGP", "🇪🇬"), // Egyptian Pound
-        /*Pair("USD", "\uD83C\uDDFA\uD83C\uDDF8"), // US Dollar
-        Pair("CAD", "\uD83C\uDDE8\uD83C\uDDE6"), // Canadian Dollar
-        Pair("INR", "\uD83C\uDDEE\uD83C\uDDF3"), // Indian Rupee
-        Pair("EUR", "\uD83C\uDDE9\uD83C\uDDEA"), // Euro (Germany, France, and others)
-        Pair("JPY", "\uD83C\uDDEF\uD83C\uDDF5"), // Japanese Yen
-        Pair("CNY", "\uD83C\uDDE8\uD83C\uDDF3"), // Chinese Yuan Renminbi
-        Pair("BRL", "\uD83C\uDDE7\uD83C\uDDF7"), // Brazilian Real
-        Pair("AUD", "\uD83C\uDDE6\uD83C\uDDFA"), // Australian Dollar
-        Pair("RUB", "\uD83C\uDDF7\uD83C\uDDFA"), // Russian Ruble
-        Pair("GBP", "\uD83C\uDDEC\uD83C\uDDE7"), // British Pound Sterling
-        Pair("EUR", "\uD83C\uDDEA\uD83C\uDDF8"), // Euro (Spain)
-        Pair("EUR", "\uD83C\uDDEE\uD83C\uDDF9"), // Euro (Italy)
-        Pair("MXN", "🇲🇽"), // Mexican Peso
-        Pair("ARS", "🇦🇷"), // Argentine Peso
-        Pair("KRW", "🇰🇷"), // South Korean Won
-        Pair("SAR", "🇸🇦"), // Saudi Riyal
-        Pair("ZAR", "🇿🇦"), // South African Rand*/
-    )
+
+
 
 
     var expanded by remember { mutableStateOf(false) }
-    var selectedCurrency by remember { mutableStateOf(currencies.first()) }
+    var selectedCurrency by remember { mutableStateOf(
+        CountryDTO(0,"USD","\uD83C\uDDFA\uD83C\uDDF8","United States","$",1.0)
+    ) }
 
 
 
@@ -887,7 +874,7 @@ fun CurrencyDropdown(
         onExpandedChange = { expanded = it },
     ) {
         BasicTextField(readOnly = true,
-            value = "${selectedCurrency.second} ${selectedCurrency.first}",
+            value = "${selectedCurrency.flag} ${selectedCurrency.currency}",
             onValueChange = {},
 
             modifier = Modifier.padding(16.dp),
@@ -897,7 +884,7 @@ fun CurrencyDropdown(
                     modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true)
                 ) {
                     Text(
-                        text = "${selectedCurrency.second} ${selectedCurrency.first}",
+                        text = "${selectedCurrency.flag} ${selectedCurrency.currency}",
                         fontSize = 24.sp,
                         modifier = Modifier.padding(end = 8.dp),
                         fontWeight = FontWeight.Bold,
@@ -915,17 +902,17 @@ fun CurrencyDropdown(
             expanded = false
         }) {
 
-            currencies.forEach { (first, second) ->
+            countries.forEach { country ->
                 DropdownMenuItem(text = {
                     Text(
-                        "$second $first",
+                        "${country.flag} ${country.currency}",
                         fontSize = 24.sp,
                         modifier = Modifier.padding(16.dp),
                         fontWeight = FontWeight.Bold,
                         color = Maroon
                     )
                 }, onClick = {
-                    selectedCurrency = Pair(first, second)
+                    selectedCurrency = country
                     onResult(selectedCurrency)
                     expanded = false
                 })

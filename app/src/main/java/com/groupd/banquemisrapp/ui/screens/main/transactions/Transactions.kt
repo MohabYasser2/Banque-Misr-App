@@ -127,7 +127,7 @@ fun TransactionList(
                 transaction.recipientAccount.accountHolderName,
                 "${transaction.recipientAccount.accountNumber}\n" +
                         "${formatDateString(transaction.transactionDate)} - $state",
-                "EGP" + transaction.amount.toString(),
+                if (state == "sent") transaction?.recipientAccount?.accountCurrency + transaction?.amount?.toString() else transaction?.senderAccount?.accountCurrency + transaction?.amount?.toString(),
                 painterResource(id = R.drawable.visa),
                 transaction.successful, // Assuming you want to highlight all items; adjust as needed
                 onClick = { navController.navigate("$TRANSACTION_DETAILS/${transaction.transactionId}/$state") }  // Pass the transaction to the onClick callback
@@ -265,7 +265,7 @@ fun TransactionDetailsScreen(
     modifier: Modifier = Modifier,
     user: User,
     TransactionViewModel: TransactionsViewModel = viewModel(),
-    state :String
+    state: String
 ) {
     TransactionViewModel.fetchTransactions()
     val transactions by TransactionViewModel.transactions.collectAsState()
@@ -274,11 +274,14 @@ fun TransactionDetailsScreen(
     val transaction = transactions.find { it.transactionId == transaction }
     val status = transaction?.successful ?: false
     val from = if (state == "sent") "You" else transaction?.senderAccount?.accountHolderName ?: ""
-    val fromAccount = if (state == "sent")  transaction?.senderAccount?.accountNumber ?: "" else transaction?.recipientAccount?.accountNumber ?: ""
+    val fromAccount = if (state == "sent") transaction?.senderAccount?.accountNumber
+        ?: "" else transaction?.recipientAccount?.accountNumber ?: ""
 
     val to = if (state == "sent") transaction?.recipientAccount?.accountHolderName ?: "" else "You"
-    val toAccount = if (state == "sent") transaction?.recipientAccount?.accountNumber ?: "" else transaction?.senderAccount?.accountNumber ?: ""
-    val amount = transaction?.amount.toString()
+    val toAccount = if (state == "sent") transaction?.recipientAccount?.accountNumber
+        ?: "" else transaction?.senderAccount?.accountNumber ?: ""
+    val amount =
+        if (state == "sent") transaction?.recipientAccount?.accountCurrency + transaction?.amount?.toString() else transaction?.senderAccount?.accountCurrency + transaction?.amount?.toString()
     var reference = transaction?.transactionId.toString()
 
 
@@ -312,7 +315,7 @@ fun TransactionDetailsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = amount + " EGP",
+            text = amount,
             fontWeight = FontWeight(550),
             fontSize = 28.sp,
             color = Color.Black
