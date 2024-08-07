@@ -13,12 +13,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,90 +32,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.groupd.banquemisrapp.R
 import com.groupd.banquemisrapp.data.User
 import com.groupd.banquemisrapp.routes.Route.TRANSACTION_DETAILS
 import com.groupd.banquemisrapp.ui.partials.CustomHeader
+import com.groupd.banquemisrapp.ui.screens.main.home.TransactionItem
+import com.groupd.banquemisrapp.ui.screens.main.transactions.TransactionsViewModel
+import com.groupd.banquemisrapp.ui.screens.main.transactions.formatDateString
 import com.groupd.banquemisrapp.ui.theme.Maroon
 
 @Composable
-fun NotificationScreen(navController: NavController, modifier: Modifier = Modifier, user: User) {
+fun NotificationScreen(
+    navController: NavController, modifier: Modifier = Modifier, user: User,
+    TransactionsViewModel: TransactionsViewModel = viewModel()
+) {
 
-    val notificationList = listOf(
-        mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),
-        mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),
-        mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),
-        mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),
-        mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),
-        mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),
-        mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),
-        mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),
-        mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),
-        mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),
-        mapOf(
-            "type" to "Recieve Transaction",
-            "details" to "You have recieved 1000 USD from Asmaa Dosuky 1234 xxx",
-            "date" to "12 jul 2024 09:00 PM",
-            "iconRes" to painterResource(id = R.drawable.ic_recieved)
-        ),
-        // ... add more notification items using the same structure
-    )
+
+    TransactionsViewModel.fetchTransactions()
+    val transactions by TransactionsViewModel.transactions.collectAsState()
+
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -121,28 +63,38 @@ fun NotificationScreen(navController: NavController, modifier: Modifier = Modifi
         CustomHeader(title = "Notifications", onBackClick = { navController.popBackStack() })
 
     }
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(8.dp).background(Color.White.copy(alpha = 0f)).padding(top = 60.dp),
-            contentPadding = PaddingValues(
-                horizontal = 8.dp,
-            ),
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+            .background(Color.White.copy(alpha = 0f))
+            .padding(top = 60.dp),
+        contentPadding = PaddingValues(
+            horizontal = 8.dp,
+        ),
 
         ) {
-            items(notificationList.size) { index ->
-                NotificationItem(
-                    type = notificationList[index].get("type").toString(),
-                    details = notificationList[index].get("details").toString(),
-                    date = notificationList[index].get("date").toString(),
-                    iconRes = notificationList[index].get("iconRes") as Painter,
-
-                ){
-                    navController.navigate(TRANSACTION_DETAILS)
-                }
+        items(transactions.reversed()) { transaction ->
+            var state =
+                if (transaction.senderAccount.accountHolderName == user.fullName) "Sent" else "Received"
+            var fromTo = if (state == "Sent") "To" else "From"
+            NotificationItem(
+                type = state,
+                details = "You have $state ${transaction.amount} EGP $fromTo ${transaction.recipientUser.username}",
+                date = formatDateString(transaction.transactionDate),
+                iconRes = if (state == "Received") painterResource(id = R.drawable.ic_recieved) else painterResource(
+                    id = R.drawable.ic_sent
+                )
+            ) {
 
             }
+
         }
 
+    }
 }
+
+
 
 @Composable
 fun NotificationItem(
@@ -150,8 +102,8 @@ fun NotificationItem(
     details: String,
     date: String,
     iconRes: Painter,
-    onClick :() -> Unit
-    ) {
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -191,9 +143,21 @@ fun NotificationItem(
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = type, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = details, color = Color.Black.copy(alpha = 0.8f), modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = date, color = Color.Black.copy(alpha = 0.6f), modifier = Modifier.padding(bottom = 8.dp))
+                Text(
+                    text = type + " Transaction",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = details,
+                    color = Color.Black.copy(alpha = 0.8f),
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = date,
+                    color = Color.Black.copy(alpha = 0.6f),
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
 
 
             }

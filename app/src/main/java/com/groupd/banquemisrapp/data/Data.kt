@@ -1,12 +1,7 @@
 package com.groupd.banquemisrapp.data
 
-import org.jetbrains.annotations.NotNull
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.UUID
-
 data class Account(
-    var cardHolder: String,
+    var accountHolderName: String,
     var accountNumber: String,
     var balance: String = "$0.0",
     var currency: String = "",
@@ -31,7 +26,7 @@ data class Transaction(
 )
 
 data class User(
-    val fullName: String,
+    var fullName: String,
     val balance: String,
     val email: String,
     val dateOfBirth: String,
@@ -42,7 +37,8 @@ data class User(
     val accounts: MutableList<Account>,
     var defaultAccountNumber: String,
     var favourites: MutableList<Favourite>,
-    val transactions: MutableList<Transaction>
+    val transactions: MutableList<Transaction>,
+    val sendingCurrency: String = "EGP",
 )
 
 

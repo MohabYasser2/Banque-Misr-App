@@ -61,6 +61,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.groupd.banquemisrapp.activities.isInternetAvailable
 import com.groupd.banquemisrapp.data.TransactionDTO
 import com.groupd.banquemisrapp.routes.Route
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 @Composable
@@ -102,7 +104,7 @@ fun TransactionsScreen(
                 .fillMaxWidth()
         )
 
-        TransactionList(transactions = transactions, navController = navController)
+        TransactionList(transactions = transactions, navController = navController, user = user)
 
     }
 }
@@ -113,22 +115,34 @@ fun TransactionList(
     transactions: List<TransactionDTO>,
     navController: NavController,
     modifier: Modifier = Modifier,
+    user: User
 ) {
 
     LazyColumn(modifier = modifier) {
-        items(transactions) { transaction ->
+
+        items(transactions.reversed()) { transaction ->
+            var state =
+                if (transaction.senderAccount.accountHolderName == user.fullName) "sent" else "received"
             TransactionItem(
                 transaction.recipientAccount.accountHolderName,
-                transaction.recipientAccount.accountNumber,
-                "EGP" + transaction.amount.toString(),
+                "${transaction.recipientAccount.accountNumber}\n" +
+                        "${formatDateString(transaction.transactionDate)} - $state",
+                if (state == "sent") transaction?.recipientAccount?.accountCurrency + transaction?.amount?.toString() else transaction?.senderAccount?.accountCurrency + transaction?.amount?.toString(),
                 painterResource(id = R.drawable.visa),
                 transaction.successful, // Assuming you want to highlight all items; adjust as needed
-                onClick = { navController.navigate("$TRANSACTION_DETAILS/${transaction.transactionId}") }  // Pass the transaction to the onClick callback
+                onClick = { navController.navigate("$TRANSACTION_DETAILS/${transaction.transactionId}/$state") }  // Pass the transaction to the onClick callback
             )
         }
     }
 
 
+}
+
+fun formatDateString(dateString: String): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+    val dateTime = LocalDateTime.parse(dateString, formatter)
+    val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    return dateTime.format(outputFormatter)
 }
 
 
@@ -180,7 +194,12 @@ fun TransactionItem(
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = name, fontWeight = FontWeight.Bold)
+                Text(
+                    text = name,
+                    fontWeight = FontWeight(550),
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
                 Text(text = details, color = Color.Gray)
 
             }
@@ -228,10 +247,10 @@ fun TransactionItem(
         Row {
             Text(
                 text = amount,
-                fontWeight = FontWeight(500),
+                fontWeight = FontWeight(550),
                 fontSize = 20.sp,
                 color = Maroon,
-                modifier = Modifier.padding(start = 80.dp, bottom = 8.dp)
+                modifier = Modifier.padding(start = 80.dp, bottom = 16.dp)
             )
         }
 
@@ -244,17 +263,26 @@ fun TransactionDetailsScreen(
     transaction: Int,
     navController: NavController,
     modifier: Modifier = Modifier,
-    user: User
+    user: User,
+    TransactionViewModel: TransactionsViewModel = viewModel(),
+    state: String
 ) {
+    TransactionViewModel.fetchTransactions()
+    val transactions by TransactionViewModel.transactions.collectAsState()
+    val hasError by TransactionViewModel.hasError.collectAsState()
 
-    val amount = user.transactions[transaction - 1].amount
-    val from = user.fullName
-    val fromAccount = user.defaultAccountNumber
-    val to = user.transactions[transaction - 1].accountName
-    val toAccount = user.transactions[transaction - 1].accountNumber
-    val reference = "$transaction"
-    val status = user.transactions[transaction - 1].successful
-    val date = "20 Jul 2024 7:50 PM"
+    val transaction = transactions.find { it.transactionId == transaction }
+    val status = transaction?.successful ?: false
+    val from = if (state == "sent") "You" else transaction?.senderAccount?.accountHolderName ?: ""
+    val fromAccount = if (state == "sent") transaction?.senderAccount?.accountNumber
+        ?: "" else transaction?.recipientAccount?.accountNumber ?: ""
+
+    val to = if (state == "sent") transaction?.recipientAccount?.accountHolderName ?: "" else "You"
+    val toAccount = if (state == "sent") transaction?.recipientAccount?.accountNumber
+        ?: "" else transaction?.senderAccount?.accountNumber ?: ""
+    val amount =
+        if (state == "sent") transaction?.recipientAccount?.accountCurrency + transaction?.amount?.toString() else transaction?.senderAccount?.accountCurrency + transaction?.amount?.toString()
+    var reference = transaction?.transactionId.toString()
 
 
     Column(
@@ -288,7 +316,7 @@ fun TransactionDetailsScreen(
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = amount,
-            fontWeight = FontWeight(500),
+            fontWeight = FontWeight(550),
             fontSize = 28.sp,
             color = Color.Black
         )
@@ -299,9 +327,11 @@ fun TransactionDetailsScreen(
             color = Color.Gray
         )
         Text(
-            text = "Send money",
+            text = "$state money",
             style = MaterialTheme.typography.bodyLarge,
-            color = Maroon
+            color = Maroon,
+            fontWeight = FontWeight(550),
+            fontSize = 20.sp
         )
         Spacer(modifier = Modifier.height(16.dp))
         TransactionDetails(

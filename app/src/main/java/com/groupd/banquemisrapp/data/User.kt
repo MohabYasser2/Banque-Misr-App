@@ -1,8 +1,6 @@
 package com.groupd.banquemisrapp.data
 
 import org.jetbrains.annotations.NotNull
-import java.time.LocalDateTime
-import java.util.UUID
 
 data class UserDTO(
     val id: Long,
@@ -125,12 +123,12 @@ data class TransferRequest(
 
 
 data class CountryDTO(
-     val id: Int,
-     val currency: String,
-     val flag: String,
-     val country: String,
-     val currencySymbol: String,
-     val rateToDollar: Double
+    val id: Int,
+    val currency: String,
+    val flag: String,
+    val country: String,
+    val currencySymbol: String,
+    val rateToDollar: Double
 )
 
 
